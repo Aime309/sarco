@@ -74,6 +74,12 @@
   padding: 0 26px;
   box-sizing: border-box;
   transition: 400ms height;
+  width: 100%;
+  height: 48px;
+}
+
+.input-group__input::placeholder {
+  opacity: 0;
 }
 
 .input-group__focus {
@@ -103,7 +109,8 @@
 }
 
 .input-group__input:focus~.input-group__label,
-.input-group__input--is-validated~.input-group__label {
+.input-group__input--is-validated~.input-group__label,
+.input-group__input:not(:placeholder-shown)~.input-group__label {
   top: 14px;
   font-size: 13px;
 }

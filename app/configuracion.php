@@ -2,6 +2,7 @@
 
 use Leaf\Auth;
 use Leaf\BareUI;
+use Leaf\Router;
 use Symfony\Component\Dotenv\Dotenv;
 
 (new Dotenv())->load(__DIR__ . '/../.env');
@@ -22,3 +23,4 @@ Auth::dbConnection(new PDO($dsn, $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']));
 Auth::useSession();
 
 BareUI::config('path', __DIR__ . '/../vistas');
+Router::setBasePath($basePath);

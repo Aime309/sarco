@@ -14,17 +14,17 @@
 </head>
 
 <body>
-  <form class="form form--full form--with-validation">
+  <form method="post" action="./ingresar" class="form form--full form--with-validation">
     <div class="form__background"></div>
     <div class="form__body">
       <h1 class="form__title">Inicia sesión para continuar</h1>
-      <label class="input-group input-group--with-validation" data-validate="Correo válido es requerido: ex@abc.xyz">
-        <input class="input-group__input" type="email" />
+      <label class="input-group input-group--with-validation" data-validate="La cédula es requerida">
+        <input class="input-group__input" type="number" min="0" name="cedula" placeholder="Cédula" />
         <span class="input-group__focus"></span>
-        <span class="input-group__label">Correo electrónico</span>
+        <span class="input-group__label">Cédula</span>
       </label>
       <label class="input-group input-group--with-validation" data-validate="La contraseña es requerida">
-        <input class="input-group__input" type="password" />
+        <input class="input-group__input" type="password" name="clave" placeholder="Contraseña" />
         <span class="input-group__focus"></span>
         <span class="input-group__label">Contraseña</span>
       </label>

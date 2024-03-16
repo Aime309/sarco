@@ -62,11 +62,19 @@ export default class Form {
   validate(input) {
     const patterns = Object.freeze({
       email:
-        /^([\w\-\.]+)@((\[[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[\d]{1,3})(\]?)$/
+        /^([\w\-\.]+)@((\[[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[\d]{1,3})(\]?)$/,
+      number: /^\d+$/
     })
 
     if (input.type === 'email') {
-      if (input.value.trim().match(patterns.email) == null) {
+      if (input.value.trim().match(patterns[input.type]) == null) {
+        return false
+      }
+    }
+
+    if (input.type === 'number') {
+      if (input.value.trim().match(patterns[input.type]) == null) {
+        console.info(input)
         return false
       }
     }
