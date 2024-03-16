@@ -1,0 +1,18 @@
+{
+  "require": {
+    "leafs/auth": "^2.3",
+    "leafs/router": "^0.2.3",
+    "symfony/dotenv": "^7.0",
+    "leafs/bareui": "^1.1"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php -r \"if (!file_exists('.env')) copy('.env.dist', '.env');\""
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "SARCO\\": "app"
+    }
+  }
+}
