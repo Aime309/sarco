@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "noty": "^3.2.0-beta-deprecated"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.6.1",
+    "typescript": "^5.4.2"
+  }
+}

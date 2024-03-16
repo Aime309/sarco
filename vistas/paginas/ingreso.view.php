@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="assets/css/button.css" />
   <link rel="stylesheet" href="assets/css/form.css" />
   <link rel="stylesheet" href="assets/css/responsive.css" />
+  <link rel="stylesheet" href="node_modules/noty/lib/noty.css" />
+  <link rel="stylesheet" href="node_modules/noty/lib/themes/semanticui.css" />
 </head>
 
 <body>
@@ -40,7 +42,11 @@
       <button class="button">Ingresar</button>
     </div>
   </form>
-  <script type="module" src="assets/js/login.js"></script>
+  <script>
+    window.messages = JSON.parse('<?= json_encode(compact('error', 'success')) ?>')
+  </script>
+  <script src="node_modules/noty/lib/noty.min.js"></script>
+  <script type="module" src="assets/js/ingreso.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,7 @@
+{
+  "include": [
+    "node_modules/**/*.d.ts",
+    "assets/**/*.d.ts"
+    "assets/js/**/*",
+  ]
+}
