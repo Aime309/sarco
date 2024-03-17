@@ -20,7 +20,7 @@
   <link rel="icon" href="assets/images/icons/favicon.ico" />
   <link rel="stylesheet" href="assets/libs/normalize/normalize.css" />
   <link rel="stylesheet" href="assets/libs/bootstrap/bootstrap.min.css" />
-  <link rel="stylesheet" href="assets/css/all.css" />
+  <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <script>
     window.messages = JSON.parse('<?= json_encode(compact('error', 'success')) ?>')
