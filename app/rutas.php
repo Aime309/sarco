@@ -70,6 +70,14 @@ Router::group(
     Autenticacion::bloquearNoAutenticados();
   }, function (): void {
     Router::get('/', function (): void {
+      $cantidadDeUsuarios = db()->select('usuarios')->count();
+
+      renderizar('inicio', 'Inicio', 'principal', compact('cantidadDeUsuarios'));
     });
   }]
 );
+
+Router::set404(function (): void {
+  Mensajes::capturarMensajes();
+  renderizar('404', '404 ~ No encontrado', 'errores');
+});
