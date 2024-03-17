@@ -25,7 +25,7 @@ global $usuario;
   <base href="<?= str_replace('index.php', '', $_SERVER['SCRIPT_NAME']) ?>" />
   <link rel="icon" href="assets/images/icons/favicon.ico" />
   <link rel="stylesheet" href="assets/libs/normalize/normalize.css" />
-  <link rel="stylesheet" href="assets/libs/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="assets/libs/bootstrap/bootstrap-material-design.min.css" />
   <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
   <link rel="stylesheet" href="assets/libs/sweetalert2/sweetalert2.min.css" />
@@ -47,7 +47,7 @@ global $usuario;
   <script src="assets/libs/jquery/jquery-3.4.1.min.js"></script>
   <script src="assets/libs/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
   <script src="assets/libs/popper/popper.min.js"></script>
-  <script src="assets/libs/bootstrap/bootstrap.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="assets/libs/bootstrap/bootstrap-material-design.min.js"></script>
   <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
   <script src="assets/js/cerrar-sesion.js"></script>
