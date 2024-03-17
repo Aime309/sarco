@@ -3,7 +3,6 @@
 namespace SARCO\Middlewares;
 
 use Leaf\Auth;
-use Leaf\BareUI;
 use Leaf\Http\Session;
 
 class Autenticacion {
@@ -14,7 +13,15 @@ class Autenticacion {
     $usuario = Auth::login(compact('cedula', 'clave'));
 
     if (!$usuario) {
-      exit(BareUI::render('paginas/ingreso'));
+      renderizar('ingreso', 'Ingreso');
+    }
+  }
+
+  static function redirigeAlRegistroSiNoHayUsuarios(): void {
+    $cantidadDeUsuarios = db()->select('usuarios')->count();
+
+    if (!$cantidadDeUsuarios) {
+      renderizar('registro', 'Regístrate');
     }
   }
 }

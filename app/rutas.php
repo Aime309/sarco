@@ -53,6 +53,7 @@ Router::group(
   '/',
   ['middleware' => function (): void {
     Mensajes::capturarMensajes();
+    Autenticacion::redirigeAlRegistroSiNoHayUsuarios();
     Autenticacion::bloquearNoAutenticados();
   }, function (): void {
     Router::get('/', function (): void {
