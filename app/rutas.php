@@ -3,6 +3,7 @@
 use Leaf\Auth;
 use Leaf\Form;
 use Leaf\Http\Request;
+use Leaf\Http\Response;
 use Leaf\Http\Session;
 use Leaf\Router;
 use SARCO\Middlewares\Autenticacion;
@@ -37,17 +38,29 @@ Router::post('/ingresar', function (): void {
   exit(Router::push('./'));
 });
 
-Router::group('/registrate', ['middleware' => [Mensajes::class, 'capturarMensajes'], function (): void {
-  Router::get('/', function (): void {
-    Auth::register([
-      'nombre' => 'Franyer',
-      'apellido' => 'Sánchez',
-      'cedula' => 28072391,
-      'clave' => 1234,
-      'id_rol' => 1
-    ]);
-  });
-}]);
+Router::post('/registrate', function (): void {
+  $info = Request::validate([
+    'nombre' => 'textonly',
+    'apellido' => 'textonly',
+    'cedula' => 'number',
+    'clave' => 'alphadash',
+    'id_rol' => 'number'
+  ]);
+
+  if ($errors = Form::errors()) {
+    @$errors['nombre'] && Session::set('error', $errors['nombre'][0]);
+    @$errors['apellido'] && Session::set('error', $errors['apellido'][0]);
+    @$errors['cedula'] && Session::set('error', $errors['cedula'][0]);
+    @$errors['clave'] && Session::set('error', $errors['clave'][0]);
+    @$errors['id_rol'] && Session::set('error', $errors['id_rol'][0]);
+
+    exit(Router::push('./'));
+  }
+
+  Auth::register($info);
+  Session::set('success', 'Cuenta creada exitósamente');
+  Router::push('./');
+});
 
 Router::group(
   '/',

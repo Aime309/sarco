@@ -3,6 +3,7 @@
 use Leaf\Auth;
 use Leaf\BareUI;
 use Leaf\Db;
+use Leaf\Form;
 use Leaf\Router;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -34,3 +35,6 @@ Auth::dbConnection(db()->connection());
 
 BareUI::config('path', __DIR__ . '/../vistas');
 Router::setBasePath($basePath);
+
+Form::rule('textonly', '/^[a-zA-ZáÁéÉíÍóÓúÚñÑ]+$/', '{Field} sólo puede contener letras');
+Form::message('alphadash', '{Field} sólo puede contener letras, números, guión (-) y guión bajo (_)');

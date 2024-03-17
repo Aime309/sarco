@@ -4,8 +4,8 @@ $scripts('assets/js/ingreso.js');
 
 ?>
 
-<form method="post" action="./ingresar" class="form form--full form--with-validation">
-  <div class="form__background"></div>
+<form method="post" action="ingresar" class="form form--full form--with-validation">
+  <div class="form__background" style="background-image: url(assets/images/bg-01.jpg)"></div>
   <div class="form__body">
     <h1 class="form__title">Inicia sesión para continuar</h1>
     <label class="input-group input-group--with-validation" data-validate="La cédula es requerida">
