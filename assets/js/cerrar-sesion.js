@@ -14,22 +14,7 @@ btnSalir.addEventListener('click', event => {
     cancelButtonText: 'No, cancelar'
   }).then(result => {
     if (result.value) {
-      const url = '<?php echo SERVERURL; ?>ajax/loginAjax.php'
-      const token = "<?php echo $lc->encryption($_SESSION['token_spm;(']); ?>')"
-      const usuario = "<?php echo $lc->encryption($_SESSION['usuario_spm;(']); ?>')"
-
-      const datos = new FormData()
-      datos.append('token', token)
-      datos.append('usuario', usuario)
-
-      fetch(url, {
-        method: 'POST',
-        body: datos
-      })
-        .then(respuesta => respuesta.json())
-        .then(respuesta => {
-          return alertas_ajax(respuesta)
-        })
+      location.href = './salir'
     }
   })
 })
