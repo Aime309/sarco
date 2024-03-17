@@ -12,7 +12,7 @@ use SARCO\Modelos\Usuario;
   <div class="full-box nav-lateral-content">
     <figure class="full-box nav-lateral-avatar">
       <i class="far fa-times-circle show-nav-lateral"></i>
-      <img src="assets/avatar/Avatar.png" class="img-fluid" />
+      <img src="assets/images/favicon.jpg" class="img-fluid rounded-circle" />
       <figcaption class="roboto-medium text-center d-flex flex-column">
         <?= $usuario->nombreCompleto() ?>
         <small class="roboto-condensed-light"><?= $usuario->rol->name ?></small>
