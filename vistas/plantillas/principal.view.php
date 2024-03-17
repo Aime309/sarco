@@ -44,7 +44,7 @@ global $usuario;
       <?= $pagina ?>
     </section>
   </main>
-  <script src="assets/libs/jquery/jquery-3.4.1.min.js"></script>
+  <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
   <script src="assets/libs/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
   <script src="assets/libs/popper/popper.min.js"></script>
   <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
