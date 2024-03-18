@@ -4,8 +4,41 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f57a3fb865f75295cc50f0ace40ce4fc",
+    "content-hash": "45de042123ac54067e2b9c1e5ffc7509",
     "packages": [
+        {
+            "name": "eyra/fecha_utils",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ElaRondon/fecha_utils.git",
+                "reference": "c535b423e8baf5abc06a0fb56e1db292cddd68f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ElaRondon/fecha_utils/zipball/c535b423e8baf5abc06a0fb56e1db292cddd68f5",
+                "reference": "c535b423e8baf5abc06a0fb56e1db292cddd68f5",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "funciones.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "ElaRondon",
+                    "email": "elainerondon2004@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/ElaRondon/fecha_utils/issues",
+                "source": "https://github.com/ElaRondon/fecha_utils/tree/v1.0.0"
+            },
+            "time": "2024-03-18T19:56:02+00:00"
+        },
         {
             "name": "leafs/anchor",
             "version": "v1.5.0",
