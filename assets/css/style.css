@@ -334,6 +334,8 @@ table form {
 
 .nav-lateral-menu {
   height: auto;
+  padding-bottom: 200px;
+  box-sizing: border-box;
 }
 
 .nav-lateral-menu ul {

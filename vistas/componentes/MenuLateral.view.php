@@ -30,7 +30,7 @@ use SARCO\Modelos\Usuario;
         <?php if ($usuario->rol === Rol::Director) : ?>
           <li>
             <a href="#" class="nav-btn-submenu">
-              <i class="fas  fa-user-secret fa-fw"></i>
+              <i class="fas  fa-users fa-fw"></i>
               Usuarios
               <i class="fas fa-chevron-down"></i>
             </a>

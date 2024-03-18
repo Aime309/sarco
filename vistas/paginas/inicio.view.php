@@ -5,7 +5,7 @@ use Leaf\BareUI;
 /** @var BareUI $template */
 
 $contadores = [
-  ['href' => '#', 'title' => 'Usuarios', 'icon' => '<i class="fas fa-user-secret fa-fw"></i>', 'footer' => "$cantidadDeUsuarios registrado" . ($cantidadDeUsuarios > 1 ? 's' : '')],
+  ['href' => '#', 'title' => 'Usuarios', 'icon' => '<i class="fas fa-users fa-fw"></i>', 'footer' => "$cantidadDeUsuarios registrado" . ($cantidadDeUsuarios > 1 ? 's' : '')],
 ];
 
 ?>
