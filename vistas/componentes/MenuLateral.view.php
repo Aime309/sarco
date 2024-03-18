@@ -7,7 +7,7 @@ use SARCO\Modelos\Usuario;
 
 ?>
 
-<section class="full-box nav-lateral">
+<aside class="full-box nav-lateral">
   <div class="full-box nav-lateral-bg show-nav-lateral"></div>
   <div class="full-box nav-lateral-content">
     <figure class="full-box nav-lateral-avatar">
@@ -59,4 +59,4 @@ use SARCO\Modelos\Usuario;
       </ul>
     </nav>
   </div>
-</section>
+</aside>

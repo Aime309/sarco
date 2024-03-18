@@ -74,6 +74,14 @@ Router::group(
 
       renderizar('inicio', 'Inicio', 'principal', compact('cantidadDeUsuarios'));
     });
+
+    Router::get('/asignar', function (): void {
+      renderizar('asignaciones', 'Asignar estudiante', 'principal');
+    });
+
+    Router::post('/asignar', function (): void {
+      (new Response)->json(Request::body());
+    });
   }]
 );
 
