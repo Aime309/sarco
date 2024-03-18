@@ -32,5 +32,5 @@ $scripts('assets/js/registro.js')
     <input hidden name="id_rol" value="<?= Rol::Director->value ?>" />
     <button class="button">Registrarse</button>
   </div>
-  <div class="form__background" style="background-image: url(login-register/Assets/Image/OIG1.jpeg)"></div>
+  <div class="form__background" style="background-image: url(assets/images/OIG1.jpeg)"></div>
 </form>
