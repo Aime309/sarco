@@ -7,7 +7,7 @@
     "maxSize": 1048576
   },
   "javascript": {
-    "globals": ["Noty", "messages", "Swal"],
+    "globals": ["Noty", "messages", "Swal", "jQuery", "$"],
     "parser": {
       "unsafeParameterDecoratorsEnabled": false
     },
