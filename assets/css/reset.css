@@ -46,7 +46,8 @@ li {
 }
 
 input,
-textarea {
+textarea,
+select {
   outline: none;
   border: none;
 }

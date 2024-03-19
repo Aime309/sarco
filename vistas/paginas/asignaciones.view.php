@@ -1,70 +1,65 @@
-<style>
-  .container {
-    width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-  }
+<?php
 
-  .form-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+use Leaf\BareUI;
 
-  label {
-    display: block;
-    margin-top: 10px;
-    width: 48%;
-  }
+/**
+ * @var BareUI $template
+ */
 
-  input[type="text"],
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-    -moz-appearance: textfield;
-    appearance: textfield;
-  }
+?>
 
-  input[type="submit"],
-  button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    width: 48%;
-  }
-</style>
-<div class="container">
-  <form action="./asignar" method="post">
-    <div class="form-container">
-      <label for="nombre">Nombre del Niño:</label>
-      <input id="nombre" name="nombre" required minlength="3" pattern="[A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]{2,}" title="El nombre sólo puede contener letras con la inicial en mayúscula" />
-
-      <label for="edad">Edad:</label>
-      <input type="number" id="edad" name="edad" min="1" max="18" required />
-
-      <label for="sala">Sala:</label>
-      <select id="sala" name="sala" required>
-        <option selected disabled>Selecciona una sala</option>
-        <option value="sala1">Sala 1</option>
-        <option value="sala2">Sala 2</option>
-        <option value="sala3">Sala 3</option>
-      </select>
-
-      <label for="periodo">Periodo:</label>
-      <input id="periodo" name="periodo" required minlength="9" maxlength="9" pattern="[0-9]{4}-[0-9]{4}" title="El período debe tener el formato 'AAAA-AAAA', ejemplo: 2023-2024" />
-
-      <label for="momento">Momento:</label>
-      <input id="momento" name="momento" required pattern="Momento [1-3]{1}" title="Ejemplo: Momento 1, 2 o 3" />
-
-      <button>Registrar</button>
-    </div>
-  </form>
-</div>
+<form action="./asignar" method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+  <?= $template::render(
+    'componentes/Input',
+    [
+      'textoDeValidacion' => 'El nombre sólo puede contener letras con la inicial en mayúscula',
+      'name' => 'nombre',
+      'placeholder' => 'Nombre del niño'
+    ]
+  ) ?>
+  <?= $template::render(
+    'componentes/Input',
+    [
+      'textoDeValidacion' => '',
+      'name' => 'edad',
+      'placeholder' => 'Edad',
+      'tipo' => 'number',
+      'min' => 1,
+      'max' => 18
+    ]
+  ) ?>
+  <?= $template::render(
+    'componentes/Select',
+    [
+      'textoDeValidacion' => '',
+      'name' => 'sala',
+      'placeholder' => 'Sala',
+      'opciones' => [
+        ['valor' => 1, 'texto' => 'Sala 1'],
+        ['valor' => 2, 'texto' => 'Sala 2'],
+        ['valor' => 3, 'texto' => 'Sala 3']
+      ]
+    ]
+  ) ?>
+  <?= $template::render(
+    'componentes/Input',
+    [
+      'textoDeValidacion' => "El período debe tener el formato 'AAAA-AAAA', ejemplo: 2023-2024",
+      'name' => 'periodo',
+      'placeholder' => 'Período',
+      'minlength' => 9,
+      'maxlength' => 9
+    ]
+  ) ?>
+  <?= $template::render(
+    'componentes/Input',
+    [
+      'textoDeValidacion' => 'Ejemplo: Momento 1, 2 o 3',
+      'name' => 'momento',
+      'placeholder' => 'Momento',
+      'minlength' => 9,
+      'maxlength' => 9
+    ]
+  ) ?>
+  <?= $template::render('componentes/Boton', ['tipo' => 'submit', 'contenido' => 'Registrar']) ?>
+</form>

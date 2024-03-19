@@ -13,6 +13,9 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: 400ms background;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .button:hover {

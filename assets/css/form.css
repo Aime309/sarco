@@ -16,6 +16,26 @@
   background-position: center;
 }
 
+.form--with-padding {
+  padding: 40px;
+}
+
+.form--half {
+  width: 50%;
+}
+
+.form--threequarter {
+  width: 75%;
+}
+
+.form--bordered {
+  border: thin solid darkgrey;
+}
+
+.form--centered {
+  margin: auto;
+}
+
 /*==================================================================
 [ Form ]*/
 .form__body {
@@ -52,6 +72,7 @@
   margin-bottom: 10px;
 }
 
+
 .input-group__label {
   cursor: text;
   font-size: 18px;
@@ -75,6 +96,21 @@
   transition: 400ms height;
   width: 100%;
   height: 48px;
+}
+
+.select-group {
+  position: relative;
+}
+
+.select-group::before {
+  content: url('../iconos/chevron-down.svg');
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  top: 50%;
+  right: 0;
+  transform: translateY(-25%);
 }
 
 .input-group__input::placeholder {

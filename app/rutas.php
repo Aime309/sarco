@@ -75,12 +75,58 @@ Router::group(
       renderizar('inicio', 'Inicio', 'principal', compact('cantidadDeUsuarios'));
     });
 
+    Router::get('/maestros', function (): void {
+      renderizar('asignaciones', 'Asignar estudiante', 'principal');
+    });
+
+    Router::post('/representantes', function (): void {
+      (new Response)->json(Request::body());
+    });
+
+    Router::get('/usuarios', function (): void {
+    });
+
+    Router::get('/estudiantes', function (): void {
+    });
+
+    Router::get('/periodos', function (): void {
+    });
+
+    Router::get('/momentos', function (): void {
+    });
+
+    Router::get('/salas', function (): void {
+    });
+
+    Router::get('/salas/registrar', function (): void {
+    });
+
+    Router::get('/momentos/registrar', function (): void {
+    });
+
+    Router::get('/periodos/registrar', function (): void {
+    });
+
+    Router::get('/estudiantes/registrar', function (): void {
+    });
+
+    Router::get('/usuarios/registrar', function (): void {
+    });
+
+    Router::get('/representantes/registrar', function (): void {
+    });
+
+    Router::get('/maestros/registrar', function (): void {
+    });
+
     Router::get('/asignar', function (): void {
       renderizar('asignaciones', 'Asignar estudiante', 'principal');
     });
 
     Router::post('/asignar', function (): void {
-      (new Response)->json(Request::body());
+      $body = Request::body();
+
+      (new Response)->json($body);
     });
   }]
 );
