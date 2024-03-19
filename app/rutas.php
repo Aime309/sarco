@@ -79,6 +79,9 @@ Router::group(
       renderizar('asignaciones', 'Asignar estudiante', 'principal');
     });
 
+    Router::get('/representantes', function (): void {
+    });
+
     Router::post('/representantes', function (): void {
       (new Response)->json(Request::body());
     });
@@ -113,7 +116,11 @@ Router::group(
     Router::get('/usuarios/registrar', function (): void {
     });
 
-    Router::get('/representantes/registrar', function (): void {
+    Router::get('/representantes/nuevo', function (): void {
+      renderizar('nuevo-representante', 'Nuevo representante', 'principal');
+    });
+
+    Router::post('/representantes/nuevo', function (): void {
     });
 
     Router::get('/maestros/registrar', function (): void {

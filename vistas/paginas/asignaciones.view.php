@@ -6,6 +6,8 @@ use Leaf\BareUI;
  * @var BareUI $template
  */
 
+$scripts('assets/js/asignaciones.js');
+
 ?>
 
 <form action="./asignar" method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
@@ -20,7 +22,7 @@ use Leaf\BareUI;
   <?= $template::render(
     'componentes/Input',
     [
-      'textoDeValidacion' => '',
+      'textoDeValidacion' => 'La edad es requerida',
       'name' => 'edad',
       'placeholder' => 'Edad',
       'tipo' => 'number',
@@ -31,7 +33,7 @@ use Leaf\BareUI;
   <?= $template::render(
     'componentes/Select',
     [
-      'textoDeValidacion' => '',
+      'textoDeValidacion' => 'La sala es requerida',
       'name' => 'sala',
       'placeholder' => 'Sala',
       'opciones' => [
