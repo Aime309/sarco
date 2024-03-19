@@ -76,14 +76,9 @@ Router::group(
     });
 
     Router::get('/maestros', function (): void {
-      renderizar('asignaciones', 'Asignar estudiante', 'principal');
     });
 
     Router::get('/representantes', function (): void {
-    });
-
-    Router::post('/representantes', function (): void {
-      (new Response)->json(Request::body());
     });
 
     Router::get('/usuarios', function (): void {
@@ -110,7 +105,8 @@ Router::group(
     Router::get('/periodos/registrar', function (): void {
     });
 
-    Router::get('/estudiantes/registrar', function (): void {
+    Router::get('/estudiantes/inscribir', function (): void {
+      renderizar('inscribir', 'Inscribir estudiante', 'principal');
     });
 
     Router::get('/usuarios/registrar', function (): void {
@@ -121,9 +117,25 @@ Router::group(
     });
 
     Router::post('/representantes/nuevo', function (): void {
+      $info = Request::body();
+
+      db()->insert('representantes')->params([
+        'cedula' => $info['cedula'],
+        'nombres' => $info['fullname'],
+        'apellidos' => $info['lastname'],
+        'sexo' => $info['sexo'],
+        'fecha_nacimiento' => $info['dob'],
+        'telefono' => $info['phone'],
+        'correo' => $info['email'],
+        'direccion' => $info['address']
+      ])->execute();
+
+      Session::set('success', 'Representante registrado exitósamente');
+      Router::push('./');
     });
 
     Router::get('/maestros/registrar', function (): void {
+
     });
 
     Router::get('/asignar', function (): void {
@@ -131,9 +143,6 @@ Router::group(
     });
 
     Router::post('/asignar', function (): void {
-      $body = Request::body();
-
-      (new Response)->json($body);
     });
   }]
 );

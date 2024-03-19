@@ -59,6 +59,18 @@ $scripts('assets/js/registrar-representante.js');
   <?= $template::render(
     'componentes/Select',
     [
+      'textoDeValidacion' => 'El sexo es requerido',
+      'name' => 'sexo',
+      'placeholder' => 'Sexo',
+      'opciones' => [
+        ['valor' => 'Masculino', 'texto' => 'Masculino'],
+        ['valor' => 'Femenino', 'texto' => 'Femenino']
+      ]
+    ]
+  ) ?>
+  <?= $template::render(
+    'componentes/Select',
+    [
       'textoDeValidacion' => 'El estado civil es requerido',
       'name' => 'marital_status',
       'placeholder' => 'Estado civil',
@@ -113,5 +125,14 @@ $scripts('assets/js/registrar-representante.js');
       'tipo' => 'email'
     ]
   ) ?>
+  <?= $template::render(
+    'componentes/Input',
+    [
+      'textoDeValidacion' => 'La dirección es requerida',
+      'name' => 'address',
+      'placeholder' => 'Dirección'
+    ]
+  ) ?>
+
   <?= $template::render('componentes/Boton', ['tipo' => 'submit', 'contenido' => 'Registrar']) ?>
 </form>
