@@ -8,7 +8,7 @@ $contadores = [
   ['href' => './usuarios', 'title' => 'Usuarios', 'icon' => '<i class="fas fa-users fa-fw"></i>', 'footer' => "$cantidadDeUsuarios registrado" . ($cantidadDeUsuarios > 1 ? 's' : '')],
   ['href' => './asignar', 'title' => 'Asignar sala', 'icon' => '<i class="fas fa-pen-to-square fa-fw"></i>'],
   ['href' => './estudiantes', 'title' => 'Estudiantes', 'icon' => '<i class="fas fa-graduation-cap fa-fw"></i>'],
-  ['href' => './representantes', 'title' => 'Representantes', 'icon' => '<i class="fas fa-people-roof fa-fw"></i>'],
+  ['href' => './representantes', 'title' => 'Representantes', 'icon' => '<i class="fas fa-people-roof fa-fw"></i>', 'footer' => "$cantidadDeRepresentantes registrado" . ($cantidadDeRepresentantes > 1 ? 's' : '')],
   ['href' => './maestros', 'title' => 'Maestros', 'icon' => '<i class="fas fa-person-chalkboard fa-fw"></i>'],
   ['href' => './periodos', 'title' => 'Períodos', 'icon' => '<i class="fas fa-calendar fa-fw"></i>'],
   ['href' => './momentos', 'title' => 'Momentos', 'icon' => '<i class="fas fa-calendar-days fa-fw"></i>'],

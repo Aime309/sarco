@@ -8,6 +8,8 @@ use Leaf\Http\Session;
 use Leaf\Router;
 use SARCO\Middlewares\Autenticacion;
 use SARCO\Middlewares\Mensajes;
+use SARCO\Modelos\Representante;
+use SARCO\Modelos\Sexo;
 
 Router::all('/salir', function (): void {
   Auth::logout('./');
@@ -71,14 +73,36 @@ Router::group(
   }, function (): void {
     Router::get('/', function (): void {
       $cantidadDeUsuarios = db()->select('usuarios')->count();
+      $cantidadDeRepresentantes = db()->select('representantes')->count();
 
-      renderizar('inicio', 'Inicio', 'principal', compact('cantidadDeUsuarios'));
+      renderizar(
+        'inicio',
+        'Inicio',
+        'principal',
+        compact('cantidadDeUsuarios', 'cantidadDeRepresentantes')
+      );
     });
 
     Router::get('/maestros', function (): void {
     });
 
     Router::get('/representantes', function (): void {
+      $representantes = array_map(function (array $representante): Representante {
+        return new Representante(
+          $representante['id'],
+          $representante['cedula'],
+          $representante['nombres'],
+          $representante['apellidos'],
+          Sexo::from($representante['sexo']),
+          new DateTimeImmutable($representante['fecha_nacimiento']),
+          $representante['telefono'],
+          $representante['correo'],
+          $representante['direccion'],
+          new DateTimeImmutable($representante['fecha_registro'])
+        );
+      }, db()->select('representantes')->all());
+
+      renderizar('listado-representantes', 'Representantes', 'principal', compact('representantes'));
     });
 
     Router::get('/usuarios', function (): void {
@@ -135,7 +159,6 @@ Router::group(
     });
 
     Router::get('/maestros/registrar', function (): void {
-
     });
 
     Router::get('/asignar', function (): void {
