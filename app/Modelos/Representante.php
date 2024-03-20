@@ -8,8 +8,8 @@ readonly class Representante {
   function __construct(
     public int $id,
     public int $cedula,
-    private string $nombres,
-    private string $apellidos,
+    public string $nombres,
+    public string $apellidos,
     public Sexo $sexo,
     public DateTimeImmutable $fechaNacimiento,
     public string $telefono,

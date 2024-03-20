@@ -9,6 +9,7 @@
  * @var ?string $max
  * @var ?string $minlength
  * @var ?string $maxlength
+ * @var ?string $value
  */
 
 ?>
@@ -19,6 +20,7 @@
     class="input-group__input"
     name="<?= $name ?>"
     placeholder="<?= $placeholder ?>"
+    value="<?= $value ?? '' ?>"
     <?= isset($min) ? "min='$min'" : '' ?>
     <?= isset($max) ? "max='$max'" : '' ?>
     <?= isset($minlength) ? "minlength='$minlength'" : '' ?>

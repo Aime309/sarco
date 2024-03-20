@@ -4,7 +4,7 @@
  * @var string $textoDeValidacion
  * @var string $name
  * @var string $placeholder
- * @var array<int, array{valor: string, texto: string}> $opciones
+ * @var array<int, array{valor: string, texto: string, selected: bool}> $opciones
  */
 
 ?>
@@ -22,7 +22,7 @@
   >
     <option selected disabled>Selecciona una opción</option>
     <?php foreach ($opciones as $opcion): ?>
-      <option value="<?= $opcion['valor'] ?>"><?= $opcion['texto'] ?></option>
+      <option selected="<?= @$opcion['selected'] ? 'true' : 'false' ?>" value="<?= $opcion['valor'] ?>"><?= $opcion['texto'] ?></option>
     <?php endforeach ?>
   </select>
   <span class="input-group__focus"></span>
