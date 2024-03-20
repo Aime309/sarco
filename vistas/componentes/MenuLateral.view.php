@@ -52,6 +52,11 @@ if ($usuario->rol === Rol::Director) {
     ['href' => './momentos/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Momento'],
   ]];
 
+  $enlaces[] = ['icono' => '<i class="fas fa-gears fa-fw"></i>', 'titulo' => 'Configuraciones', 'subenlaces' => [
+    ['href' => './respaldar', 'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>', 'titulo' => 'Respaldar sistema'],
+    ['href' => './restaurar', 'icono' => '<i class="fas fa-rotate-left fa-fw"></i>', 'titulo' => 'Restaurar sistema'],
+  ]];
+
 
 }
 

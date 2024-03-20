@@ -1,3 +1,7 @@
+import {mostrarPosiblesAlertas} from './globales.js'
+
+mostrarPosiblesAlertas()
+
 $(document).ready(() => {
   /*  Show/Hidden Submenus */
   $('.nav-btn-submenu').on('click', function (e) {
