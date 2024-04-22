@@ -3,7 +3,6 @@
 use Leaf\Auth;
 use Leaf\Form;
 use Leaf\Http\Request;
-use Leaf\Http\Response;
 use Leaf\Http\Session;
 use Leaf\Router;
 use SARCO\Middlewares\Autenticacion;
