@@ -2,21 +2,19 @@
 
 namespace SARCO\Mediadores;
 
+use Leaf\Http\Session;
 use Leaf\Router;
 use SARCOV2\Usuarios\Dominio\RepositorioDeUsuarios;
 use SARCOV2\Usuarios\Dominio\Rol;
 
 final readonly class AseguradorDeQueNoHayDirectoresActivos {
-  function __construct(private RepositorioDeUsuarios $repositorio) {
-  }
+  function __construct(RepositorioDeUsuarios $repositorio) {
+    $directores = $repositorio->obtenerTodosPorRol(Rol::Director);
 
-  function __invoke() {
-    $directores = $this->repositorio->obtenerTodosPorRol(Rol::Director);
+    if ($directores->hayActivos()) {
+      Session::set('error', 'Ya hay al menos 1 director activo');
 
-    if ($directores->count() > 0 && $directores->hayDirectoresActivos()) {
-      return Router::push('./ingresar');
+      return Router::push('./');
     }
-
-    renderizar('registro', 'Regístrate');
   }
 }

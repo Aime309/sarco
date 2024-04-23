@@ -5,65 +5,19 @@ use Leaf\Form;
 use Leaf\Http\Request;
 use Leaf\Http\Session;
 use Leaf\Router;
-use SARCO\Controladores\Web\ControladorDeUsuarios;
-use SARCO\Mediadores\AseguradorDeQueNoHayDirectoresActivos;
-use SARCO\Mediadores\ManejadorDeMensajes;
 use SARCO\Middlewares\Autenticacion;
 use SARCO\Middlewares\Mensajes;
 use SARCO\Modelos\Representante;
 use SARCO\Modelos\Sexo;
-use SARCOV2\Usuarios\Aplicacion\RegistradorDeUsuario;
-use SARCOV2\Usuarios\Infraestructura\RepositorioDeUsuariosPDO;
 
-$repositorio = new RepositorioDeUsuariosPDO(db()->connection());
-
-Router::group('/registrate', [
-  'middleware' => function () use ($repositorio): void {
-    ManejadorDeMensajes::capturarMensajes();
-    (new AseguradorDeQueNoHayDirectoresActivos($repositorio))();
-  },
-  function () use ($repositorio): void {
-    $controladorDeUsuarios = new ControladorDeUsuarios(new RegistradorDeUsuario($repositorio));
-
-    Router::get('/', [$controladorDeUsuarios, 'mostrarRegistroDirector']);
-    Router::post('/', [$controladorDeUsuarios, 'registrarDirector']);
-  }
-]);
-
-Router::all('/salir', function (): void {
-  Auth::logout('./');
-});
-
-Router::post('/ingresar', function (): void {
-  $credenciales = Request::validate([
-    'cedula' => 'number',
-    'clave' => 'alphadash'
-  ]);
-
-  if ($errors = Form::errors()) {
-    @$errors['cedula'] && Session::set('error', $errors['cedula'][0]);
-    @$errors['clave'] && Session::set('error', $errors['clave'][0]);
-
-    exit(Router::push('./'));
-  }
-
-  $usuario = Auth::login($credenciales);
-
-  if (!$usuario) {
-    Session::set('error', 'Cédula o contraseña incorrecta');
-    exit(Router::push('./'));
-  }
-
-  Session::set('credenciales.cedula', $usuario['user']['cedula']);
-  Session::set('credenciales.clave', $credenciales['clave']);
-  exit(Router::push('./'));
-});
+foreach (glob(__DIR__ . '/_*.php') as $definicion) {
+  require $definicion;
+}
 
 Router::group(
   '/',
   ['middleware' => function (): void {
     Mensajes::capturarMensajes();
-    Autenticacion::redirigeAlRegistroSiNoHayUsuarios();
     Autenticacion::bloquearNoAutenticados();
   }, function (): void {
     Router::get('/', function (): void {

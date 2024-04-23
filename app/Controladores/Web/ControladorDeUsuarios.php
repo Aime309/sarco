@@ -12,10 +12,10 @@ final readonly class ControladorDeUsuarios {
   }
 
   function mostrarRegistroDirector(): void {
-
+    renderizar('registro', 'Regístrate');
   }
 
-  function registrar(): void {
+  function registrarDirector(): void {
     $peticion = new Request;
 
     ($this->registrador)(
@@ -29,7 +29,7 @@ final readonly class ControladorDeUsuarios {
       $peticion->postData('correo'),
       $peticion->postData('usuario'),
       $peticion->postData('clave'),
-      Rol::from($peticion->postData('rol'))
+      Rol::Director
     );
   }
 }

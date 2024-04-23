@@ -9,7 +9,9 @@
 
 ?>
 
-<label class="select-group input-group input-group--with-validation" data-validate="<?= $textoDeValidacion ?>">
+<label
+  class="select-group input-group input-group--with-validation"
+  data-validate="<?= $textoDeValidacion ?>">
   <select
     type="<?= $tipo ?? 'text' ?>"
     class="input-group__input"
@@ -21,8 +23,12 @@
     <?= isset($maxlength) ? "maxlength='$maxlength'" : '' ?>
   >
     <option selected disabled>Selecciona una opción</option>
-    <?php foreach ($opciones as $opcion): ?>
-      <option selected="<?= @$opcion['selected'] ? 'true' : 'false' ?>" value="<?= $opcion['valor'] ?>"><?= $opcion['texto'] ?></option>
+    <?php foreach ($opciones as $opcion) : ?>
+      <option
+        <?= @$opcion['selected'] ? 'selected' : '' ?>
+        value="<?= $opcion['valor'] ?>">
+        <?= $opcion['texto'] ?>
+      </option>
     <?php endforeach ?>
   </select>
   <span class="input-group__focus"></span>

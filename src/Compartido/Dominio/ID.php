@@ -5,7 +5,7 @@ namespace SARCOV2\Compartido\Dominio;
 use Stringable;
 
 final readonly class ID implements Stringable {
-  private int $id;
+  private string $id;
 
   function __construct(string $id) {
     $this->id = $id;

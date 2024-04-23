@@ -21,10 +21,10 @@ final class Usuarios implements IteratorAggregate, Countable {
     return $this;
   }
 
-  function hayDirectoresActivos(): bool {
+  function hayActivos(): bool {
     return array_filter(
       $this->usuarios,
-      fn (Usuario $usuario): bool => $usuario->esDirectorActivo()
+      fn (Usuario $usuario): bool => $usuario->estaActivo()
     ) !== [];
   }
 

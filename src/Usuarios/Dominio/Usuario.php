@@ -85,8 +85,8 @@ final class Usuario {
     );
   }
 
-  function esDirectorActivo(): bool {
-    return $this->rol === Rol::Director && $this->estaActivo;
+  function estaActivo(): bool {
+    return $this->estaActivo;
   }
 
   function nombres(): string {
