@@ -1,5 +1,6 @@
 {
   "require": {
+    "php": ">=8.2",
     "leafs/auth": "^2.3",
     "leafs/router": "^0.2.3",
     "symfony/dotenv": "^7.0",
@@ -9,11 +10,21 @@
   "scripts": {
     "post-install-cmd": [
       "php -r \"if (!file_exists('.env')) copy('.env.dist', '.env');\""
-    ]
+    ],
+    "test": "phpunit"
   },
   "autoload": {
     "psr-4": {
-      "SARCO\\": "app"
+      "SARCO\\": "app",
+      "SARCOV2\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.1"
   }
 }

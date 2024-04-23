@@ -19,15 +19,15 @@ CREATE TABLE usuarios (
   nombres VARCHAR(40) NOT NULL CHECK (LENGTH(nombres) BETWEEN 3 AND 40),
   apellidos VARCHAR(40) NOT NULL CHECK (LENGTH(apellidos) BETWEEN 3 AND 40),
   cedula INT NOT NULL UNIQUE CHECK (cedula BETWEEN 1000000 AND 99999999),
-  usuario VARCHAR(20) NOT NULL UNIQUE CHECK (LENGTH(usuario) BETWEEN 3 AND 20),
-  clave TEXT NOT NULL CHECK (LENGTH(clave) >= 8),
-  rol ENUM('Director/a', 'Docente', 'Secretario/a') NOT NULL,
   fecha_nacimiento DATE NOT NULL CHECK (fecha_nacimiento >= '1906-01-01'),
   direccion TEXT NOT NULL CHECK (LENGTH(direccion) >= 3),
   telefono CHAR(16) NOT NULL UNIQUE CHECK (LENGTH(telefono) = 16 AND telefono LIKE '+__ ___ ___ ____' /* AND telefono REGEXP '^\+\d{2} \d{3} \d{3} \d{4}$' */),
   correo VARCHAR(255) NOT NULL UNIQUE CHECK (LENGTH(correo) >= 5 AND correo LIKE '%@%.%'),
-  fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00'),
+  usuario VARCHAR(20) NOT NULL UNIQUE CHECK (LENGTH(usuario) BETWEEN 3 AND 20),
+  clave TEXT NOT NULL CHECK (LENGTH(clave) >= 8),
+  rol ENUM('Director/a', 'Docente', 'Secretario/a') NOT NULL,
   esta_activo BOOL DEFAULT TRUE,
+  fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00'),
 
   UNIQUE (nombres, apellidos)
 );

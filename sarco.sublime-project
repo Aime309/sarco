@@ -1,0 +1,38 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "SARCO",
+    }
+  ],
+  "settings": {
+    "translate_tabs_to_spaces": true,
+    "tab_size": 2,
+    "detect_indentation": true,
+    "trim_automatic_white_space": true,
+    "ensure_newline_at_eof_on_save": true,
+    "default_line_ending": "unix",
+    "LSP": {
+      "formatters": {
+        "source.json.sublime": "LSP-json"
+      },
+      "LSP-intelephense": {
+        "settings": {
+          "intelephense.environment.phpVersion": "8.2.18",
+          "intelephense.format.braces": "k&r"
+        }
+      }
+    },
+  },
+  "connections": {
+    "sarco2": {
+      "type": "mysql",
+      "host": "localhost",
+      "port": 3306,
+      "database": "sarco2",
+      "username": "root",
+      "password": "",
+      "encoding": "utf-8"
+    },
+  }
+}

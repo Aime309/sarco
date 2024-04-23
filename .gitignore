@@ -1,7 +1,10 @@
-components
-sarco.sql
-vendor
+/components/
+/node_modules/
+/login-register/
+/PRESTAMOS/
+/vendor/
+
 .env
-node_modules
-login-register
-PRESTAMOS
+sarco.sql
+*.sublime-workspace
+*.cache
