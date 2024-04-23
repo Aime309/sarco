@@ -2,10 +2,7 @@
 
 use Leaf\BareUI;
 
-/**
- * @var BareUI $template
- */
-
+/** @var BareUI $template */
 
 $scripts('assets/js/ingreso.js');
 
@@ -34,15 +31,15 @@ $scripts('assets/js/ingreso.js');
         'tipo' => 'password'
       ]
     ) ?>
-    <!-- <div class="form__remember">
+    <div class="form__remember">
       <label class="checkbox">
         <input class="checkbox__input" type="checkbox" />
         <span class="checkbox__label">Recuérdame</span>
       </label>
-      <a href="#">
-        ¿Olvidó su contraseña?
+      <a href="./registrate">
+        ¿No tienes cuenta? Regístrate
       </a>
-    </div> -->
+    </div>
     <button class="button">Ingresar</button>
   </div>
 </form>

@@ -21,6 +21,13 @@ final class Usuarios implements IteratorAggregate, Countable {
     return $this;
   }
 
+  function hayDirectoresActivos(): bool {
+    return array_filter(
+      $this->usuarios,
+      fn (Usuario $usuario): bool => $usuario->esDirectorActivo()
+    ) !== [];
+  }
+
   function getIterator(): Traversable {
     return new ArrayIterator($this->usuarios);
   }

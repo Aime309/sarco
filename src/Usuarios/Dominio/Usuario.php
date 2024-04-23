@@ -14,6 +14,16 @@ use SARCOV2\Compartido\Dominio\{
   Nombres,
   Telefono
 };
+use SARCOV2\Compartido\Dominio\Excepciones\{
+  ApellidosInvalidos,
+  CedulaInvalida,
+  CorreoInvalido,
+  DireccionInvalida,
+  FechaDeNacimientoInvalida,
+  NombresInvalidos,
+  TelefonoInvalido
+};
+use SARCOV2\Usuarios\Dominio\Excepciones\{ClaveInvalida, UsuarioInvalido};
 
 final class Usuario {
   function __construct(
@@ -34,6 +44,17 @@ final class Usuario {
   ) {
   }
 
+  /**
+   * @throws NombresInvalidos
+   * @throws ApellidosInvalidos
+   * @throws CedulaInvalida
+   * @throws FechaDeNacimientoInvalida
+   * @throws DireccionInvalida
+   * @throws TelefonoInvalido
+   * @throws CorreoInvalido
+   * @throws UsuarioInvalido
+   * @throws ClaveInvalida
+   */
   static function instanciar(
     string $nombres,
     string $apellidos,
@@ -62,6 +83,10 @@ final class Usuario {
       $rol,
       FechaHora::actual()
     );
+  }
+
+  function esDirectorActivo(): bool {
+    return $this->rol === Rol::Director && $this->estaActivo;
   }
 
   function nombres(): string {

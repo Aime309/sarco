@@ -5,10 +5,30 @@ use Leaf\Form;
 use Leaf\Http\Request;
 use Leaf\Http\Session;
 use Leaf\Router;
+use SARCO\Controladores\Web\ControladorDeUsuarios;
+use SARCO\Mediadores\AseguradorDeQueNoHayDirectoresActivos;
+use SARCO\Mediadores\ManejadorDeMensajes;
 use SARCO\Middlewares\Autenticacion;
 use SARCO\Middlewares\Mensajes;
 use SARCO\Modelos\Representante;
 use SARCO\Modelos\Sexo;
+use SARCOV2\Usuarios\Aplicacion\RegistradorDeUsuario;
+use SARCOV2\Usuarios\Infraestructura\RepositorioDeUsuariosPDO;
+
+$repositorio = new RepositorioDeUsuariosPDO(db()->connection());
+
+Router::group('/registrate', [
+  'middleware' => function () use ($repositorio): void {
+    ManejadorDeMensajes::capturarMensajes();
+    (new AseguradorDeQueNoHayDirectoresActivos($repositorio))();
+  },
+  function () use ($repositorio): void {
+    $controladorDeUsuarios = new ControladorDeUsuarios(new RegistradorDeUsuario($repositorio));
+
+    Router::get('/', [$controladorDeUsuarios, 'mostrarRegistroDirector']);
+    Router::post('/', [$controladorDeUsuarios, 'registrarDirector']);
+  }
+]);
 
 Router::all('/salir', function (): void {
   Auth::logout('./');
@@ -37,30 +57,6 @@ Router::post('/ingresar', function (): void {
   Session::set('credenciales.cedula', $usuario['user']['cedula']);
   Session::set('credenciales.clave', $credenciales['clave']);
   exit(Router::push('./'));
-});
-
-Router::post('/registrate', function (): void {
-  $info = Request::validate([
-    'nombre' => 'textonly',
-    'apellido' => 'textonly',
-    'cedula' => 'number',
-    'clave' => 'alphadash',
-    'id_rol' => 'number'
-  ]);
-
-  if ($errors = Form::errors()) {
-    @$errors['nombre'] && Session::set('error', $errors['nombre'][0]);
-    @$errors['apellido'] && Session::set('error', $errors['apellido'][0]);
-    @$errors['cedula'] && Session::set('error', $errors['cedula'][0]);
-    @$errors['clave'] && Session::set('error', $errors['clave'][0]);
-    @$errors['id_rol'] && Session::set('error', $errors['id_rol'][0]);
-
-    exit(Router::push('./'));
-  }
-
-  Auth::register($info);
-  Session::set('success', 'Cuenta creada exitósamente');
-  Router::push('./');
 });
 
 Router::group(

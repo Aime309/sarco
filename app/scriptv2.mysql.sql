@@ -20,6 +20,7 @@ CREATE TABLE usuarios (
   apellidos VARCHAR(40) NOT NULL CHECK (LENGTH(apellidos) BETWEEN 3 AND 40),
   cedula INT NOT NULL UNIQUE CHECK (cedula BETWEEN 1000000 AND 99999999),
   fecha_nacimiento DATE NOT NULL CHECK (fecha_nacimiento >= '1906-01-01'),
+  genero ENUM('Femenino', 'Masculino') NOT NULL,
   direccion TEXT NOT NULL CHECK (LENGTH(direccion) >= 3),
   telefono CHAR(16) NOT NULL UNIQUE CHECK (LENGTH(telefono) = 16 AND telefono LIKE '+__ ___ ___ ____' /* AND telefono REGEXP '^\+\d{2} \d{3} \d{3} \d{4}$' */),
   correo VARCHAR(255) NOT NULL UNIQUE CHECK (LENGTH(correo) >= 5 AND correo LIKE '%@%.%'),
@@ -178,15 +179,15 @@ and (inscripciones.id_asignacion_docente = asignaciones_de_docentes.id_docente)
 ;
  */
 
- INSERT INTO usuarios (nombres,apellidos,cedula,usuario,clave,rol,fecha_nacimiento,direccion,telefono,correo,fecha_registro,esta_activo)
+ INSERT INTO usuarios (nombres,apellidos,cedula,usuario,clave,rol,fecha_nacimiento,direccion,telefono,correo,fecha_registro,esta_activo,genero)
  VALUES
-   ("TaShya Wheeler","Damon Cabrera",23371011,"EOPN","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Director/a","1993-06-30","6324 In, St.","+23 842 277 7185","eros.nec@yahoo.ca","2024-04-07 13:34:55",false),
-   ("Odette Thornton","Brian Hoffman",22244934,"MYCR","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Director/a","1996-10-27","Ap #385-8616 A, St.","+88 142 982 1625","proin.nisl@protonmail.ca","2024-03-25 17:35:51",false),
-   ("Kylie Kelley","Noble Hobbs",21108739,"XJLR","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1997-06-18","Ap #885-9597 Integer Rd.","+37 155 865 3327","urna.convallis.erat@aol.ca","2024-04-15 07:01:52",true),
-   ("Dennis Rocha","Ursa Porter",23790083,"BWWY","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1996-09-28","6083 Vel Ave","+55 284 442 8144","nunc@yahoo.org","2024-04-06 22:55:36",true),
-   ("Suki Frazier","Kerry Pittman",21531366,"FMQL","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1999-07-13","Ap #577-6943 Mauris Rd.","+56 193 291 8040","sit@protonmail.ca","2024-01-22 15:55:58",true),
-   ("Gary Goodwin","Kalia Lowe",24500477,"WQRH","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1999-01-14","Ap #746-4633 Et Rd.","+77 662 416 3284","ornare@aol.ca","2024-02-02 01:13:34",true),
-   ("Paloma Fitzpatrick","Harper Simpson",23266913,"FSJA","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1991-06-08","537-1030 Donec Street","+58 772 307 9515","euismod@icloud.edu","2024-01-04 19:02:10",false),
-   ("Patrick Edwards","Glenna Ryan",20207733,"ZBYO","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1994-04-27","Ap #979-602 Vitae, Rd.","+20 719 253 6134","arcu@google.org","2024-02-24 15:03:25",false),
-   ("Herrod Cruz","Amanda Martinez",22737463,"ESYQ","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1995-04-20","7511 Dolor Ave","+85 816 373 1923","euismod@google.org","2024-03-12 05:19:14",false),
-   ("Sierra Reed","Holmes Hewitt",22819616,"SNUL","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1995-03-03","Ap #503-7081 Amet, Av.","+82 127 321 2834","ipsum.donec@icloud.edu","2024-01-11 23:33:32",false);
+   ("TaShya Wheeler","Damon Cabrera",23371011,"EOPN","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Director/a","1993-06-30","6324 In, St.","+23 842 277 7185","eros.nec@yahoo.ca","2024-04-07 13:34:55",false, 'Femenino'),
+   ("Odette Thornton","Brian Hoffman",22244934,"MYCR","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Director/a","1996-10-27","Ap #385-8616 A, St.","+88 142 982 1625","proin.nisl@protonmail.ca","2024-03-25 17:35:51",false, 'Masculino'),
+   ("Kylie Kelley","Noble Hobbs",21108739,"XJLR","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1997-06-18","Ap #885-9597 Integer Rd.","+37 155 865 3327","urna.convallis.erat@aol.ca","2024-04-15 07:01:52",true, 'Femenino'),
+   ("Dennis Rocha","Ursa Porter",23790083,"BWWY","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1996-09-28","6083 Vel Ave","+55 284 442 8144","nunc@yahoo.org","2024-04-06 22:55:36",true, 'Femenino'),
+   ("Suki Frazier","Kerry Pittman",21531366,"FMQL","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1999-07-13","Ap #577-6943 Mauris Rd.","+56 193 291 8040","sit@protonmail.ca","2024-01-22 15:55:58",true, 'Femenino'),
+   ("Gary Goodwin","Kalia Lowe",24500477,"WQRH","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1999-01-14","Ap #746-4633 Et Rd.","+77 662 416 3284","ornare@aol.ca","2024-02-02 01:13:34",true, 'Masculino'),
+   ("Paloma Fitzpatrick","Harper Simpson",23266913,"FSJA","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1991-06-08","537-1030 Donec Street","+58 772 307 9515","euismod@icloud.edu","2024-01-04 19:02:10",false, 'Masculino'),
+   ("Patrick Edwards","Glenna Ryan",20207733,"ZBYO","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Secretario/a","1994-04-27","Ap #979-602 Vitae, Rd.","+20 719 253 6134","arcu@google.org","2024-02-24 15:03:25",false, 'Masculino'),
+   ("Herrod Cruz","Amanda Martinez",22737463,"ESYQ","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1995-04-20","7511 Dolor Ave","+85 816 373 1923","euismod@google.org","2024-03-12 05:19:14",false, 'Masculino'),
+   ("Sierra Reed","Holmes Hewitt",22819616,"SNUL","$2y$10$bXIDLzJuwR8xVTJOVm9thuk38BaY2jNxN/4kaoeBeCslncRxDzdQS","Docente","1995-03-03","Ap #503-7081 Amet, Av.","+82 127 321 2834","ipsum.donec@icloud.edu","2024-01-11 23:33:32",false, 'Femenino');

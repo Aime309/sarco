@@ -3,26 +3,16 @@
 namespace SARCOV2\Usuarios\Infraestructura;
 
 use PDO;
-use SARCOV2\Compartido\Dominio\{
-  Apellidos,
-  Cedula,
-  Correo,
-  Direccion,
-  FechaHora,
-  FechaNacimiento,
-  Genero,
-  ID,
-  Nombres,
-  Telefono
-};
-use SARCOV2\Usuarios\Dominio\{
-  Apodo,
-  Clave,
-  RepositorioDeUsuarios,
-  Rol,
-  Usuario,
-  Usuarios
-};
+use PDOException;
+use SARCOV2\Compartido\Dominio\{Apellidos, Cedula, Correo, Direccion};
+use SARCOV2\Compartido\Dominio\Excepciones\CedulaDuplicada;
+use SARCOV2\Compartido\Dominio\Excepciones\CorreoDuplicado;
+use SARCOV2\Compartido\Dominio\Excepciones\NombreCompletoDuplicado;
+use SARCOV2\Compartido\Dominio\Excepciones\TelefonoDuplicado;
+use SARCOV2\Compartido\Dominio\{FechaHora, FechaNacimiento, Genero, ID, Nombres, Telefono};
+use SARCOV2\Usuarios\Dominio\{Apodo, Clave, Rol, Usuario, Usuarios};
+use SARCOV2\Usuarios\Dominio\Excepciones\UsuarioDuplicado;
+use SARCOV2\Usuarios\Dominio\RepositorioDeUsuarios;
 
 final readonly class RepositorioDeUsuariosPDO implements RepositorioDeUsuarios {
   function __construct(private PDO $conexion) {
@@ -34,24 +24,18 @@ final readonly class RepositorioDeUsuariosPDO implements RepositorioDeUsuarios {
     $consulta = "SELECT * FROM {$this->tabla()}";
 
     foreach ($this->conexion->query($consulta) as $info) {
-      $usuario = new Usuario(
-        new ID($info['id']),
-        Nombres::instanciar($info['nombres']),
-        Apellidos::instanciar($info['apellidos']),
-        new Cedula($info['cedula']),
-        FechaNacimiento::instanciar('Y-m-d', $info['fecha_nacimiento']),
-        Genero::Masculino,
-        new Direccion($info['direccion']),
-        new Telefono($info['telefono']),
-        new Correo($info['correo']),
-        new Apodo($info['usuario']),
-        new Clave($info['clave']),
-        Rol::Docente,
-        FechaHora::instanciar('Y-m-d H:i:s', $info['fecha_registro']),
-        $info['esta_activo']
-      );
+      $coleccion->añadir($this->mapear($info));
+    }
 
-      $coleccion->añadir($usuario);
+    return $coleccion;
+  }
+
+  function obtenerTodosPorRol(Rol $rol): Usuarios {
+    $coleccion = new Usuarios;
+    $consulta = "SELECT * FROM {$this->tabla()} WHERE rol = '$rol->value'";
+
+    foreach ($this->conexion->query($consulta) as $info) {
+      $coleccion->añadir($this->mapear($info));
     }
 
     return $coleccion;
@@ -78,10 +62,51 @@ final readonly class RepositorioDeUsuariosPDO implements RepositorioDeUsuarios {
     $sentencia->bindValue(':direccion', $usuario->direccion());
     $sentencia->bindValue(':telefono', $usuario->telefono());
     $sentencia->bindValue(':correo', $usuario->correo());
-    $sentencia->execute();
+
+    try {
+      $sentencia->execute();
+    } catch (PDOException $excepcion) {
+      static $excepciones = [
+        'nombres' => NombreCompletoDuplicado::class,
+        'cedula' => CedulaDuplicada::class,
+        'usuario' => UsuarioDuplicado::class,
+        'telefono' => TelefonoDuplicado::class,
+        'correo' => CorreoDuplicado::class
+      ];
+
+      $mensaje = $excepcion->getMessage();
+      $tabla = $this->tabla();
+
+      foreach ($excepciones as $campo => $clase) {
+        if (str_contains($mensaje, "$tabla.$campo")) {
+          throw new $clase;
+        }
+      }
+
+      throw $excepcion;
+    }
   }
 
   private function tabla(): string {
     return 'usuarios';
+  }
+
+  private function mapear(array $info): Usuario {
+    return new Usuario(
+      new ID($info['id']),
+      Nombres::instanciar($info['nombres']),
+      Apellidos::instanciar($info['apellidos']),
+      new Cedula($info['cedula']),
+      FechaNacimiento::instanciar('Y-m-d', $info['fecha_nacimiento']),
+      Genero::Masculino,
+      new Direccion($info['direccion']),
+      new Telefono($info['telefono']),
+      new Correo($info['correo']),
+      new Apodo($info['usuario']),
+      new Clave($info['clave']),
+      Rol::Docente,
+      FechaHora::instanciar('Y-m-d H:i:s', $info['fecha_registro']),
+      $info['esta_activo']
+    );
   }
 }

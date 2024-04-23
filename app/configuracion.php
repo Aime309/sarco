@@ -1,11 +1,9 @@
 <?php
 
-use Leaf\Auth;
-use Leaf\BareUI;
-use Leaf\Db;
-use Leaf\Form;
-use Leaf\Router;
+use Leaf\{Auth, BareUI, Db, Form, Router};
 use Symfony\Component\Dotenv\Dotenv;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
 
 (new Dotenv())->load(__DIR__ . '/../.env');
 
@@ -38,3 +36,7 @@ Router::setBasePath($basePath);
 
 Form::rule('textonly', '/^[a-zA-ZáÁéÉíÍóÓúÚñÑ]+$/', '{Field} sólo puede contener letras');
 Form::message('alphadash', '{Field} sólo puede contener letras, números, guión (-) y guión bajo (_)');
+
+$whoops = new Run;
+$whoops->pushHandler(new PrettyPageHandler);
+$whoops->register();
