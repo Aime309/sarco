@@ -4,7 +4,6 @@
  * @var string $titulo
  * @var callable(?string $script): string[] $scripts
  * @var string $pagina
- * @var BareUI $template
  */
 
 ?>

@@ -1,17 +1,15 @@
 <?php
 
-use Leaf\BareUI;
-use SARCO\Modelos\Usuario;
+use flight\template\View;
+use SARCOV2\Usuarios\Dominio\Usuario;
 
 /**
  * @var string $titulo
  * @var callable(?string $script): string[] $scripts
  * @var string $pagina
- * @var BareUI $template
+ * @var View $template
+ * @var Usuario $usuario
  */
-
-/** @var Usuario $usuario */
-global $usuario;
 
 ?>
 
@@ -43,9 +41,9 @@ global $usuario;
 
 <body>
   <main class="full-box main-container">
-    <?= $template::render('componentes/MenuLateral', compact('usuario')) ?>
+    <?= $template->fetch('componentes/MenuLateral', compact('usuario')) ?>
     <section class="full-box page-content">
-      <?= $template::render('componentes/BarraSuperior') ?>
+      <?= $template->fetch('componentes/BarraSuperior') ?>
       <?= $pagina ?>
     </section>
   </main>

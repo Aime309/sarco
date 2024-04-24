@@ -97,6 +97,10 @@ final class Usuario {
     return $this->apellidos;
   }
 
+  function nombreCompleto(): string {
+    return "$this->nombres $this->apellidos";
+  }
+
   function cedula(): int {
     return (int) $this->cedula->__toString();
   }
@@ -111,6 +115,10 @@ final class Usuario {
 
   function rol(): Rol {
     return $this->rol;
+  }
+
+  function rolPorGenero(): string {
+    return $this->rol->valor($this->genero);
   }
 
   function fechaNacimiento(string $formato): string {
