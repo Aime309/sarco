@@ -2,6 +2,7 @@
 
 namespace SARCOV2\Compartido\Dominio;
 
+use SARCOV2\Compartido\Dominio\Excepciones\CorreoInvalido;
 use Stringable;
 
 final readonly class Correo implements Stringable {
@@ -18,6 +19,8 @@ final readonly class Correo implements Stringable {
   }
 
   private static function asegurarValidez(string $correo): void {
-    // TODO: validar $correo
+    if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+      throw new CorreoInvalido($correo);
+    }
   }
 }

@@ -20,7 +20,10 @@ $scripts('assets/js/registro.js')
       [
         'textoDeValidacion' => 'Los nombres son requeridos',
         'name' => 'nombres',
-        'placeholder' => 'Nombres'
+        'placeholder' => 'Nombres',
+        'minlength' => 3,
+        'maxlength' => 40,
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
       ]
     );
 
@@ -29,7 +32,10 @@ $scripts('assets/js/registro.js')
       [
         'textoDeValidacion' => 'Los apellidos son requeridos',
         'name' => 'apellidos',
-        'placeholder' => 'Apellidos'
+        'placeholder' => 'Apellidos',
+        'minlength' => 3,
+        'maxlength' => 40,
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
       ]
     );
 
@@ -117,7 +123,6 @@ $scripts('assets/js/registro.js')
     );
 
     ?>
-    <input hidden name="id_rol" value="<?= Rol::Director->value ?>" />
     <button class="button">Registrarse</button>
   </div>
   <div class="form__background" style="background-image: url(assets/images/OIG1.jpeg)"></div>

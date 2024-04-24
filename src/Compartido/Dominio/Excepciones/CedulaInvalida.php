@@ -2,7 +2,8 @@
 
 namespace SARCOV2\Compartido\Dominio\Excepciones;
 
-use InvalidArgumentException;
-
-final class CedulaInvalida extends InvalidArgumentException {
+final class CedulaInvalida extends ObjetoDeValorInvalido {
+  protected static function mensaje(): string {
+    return 'Cédula inválida';
+  }
 }

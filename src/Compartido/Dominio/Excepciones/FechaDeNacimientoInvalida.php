@@ -2,7 +2,8 @@
 
 namespace SARCOV2\Compartido\Dominio\Excepciones;
 
-use InvalidArgumentException;
-
-final class FechaDeNacimientoInvalida extends InvalidArgumentException {
+final class FechaDeNacimientoInvalida extends FechaInvalida {
+  protected static function mensaje(): string {
+    return 'Fecha de nacimiento inválida';
+  }
 }

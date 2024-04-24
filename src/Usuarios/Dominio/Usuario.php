@@ -19,7 +19,7 @@ use SARCOV2\Compartido\Dominio\Excepciones\{
   CedulaInvalida,
   CorreoInvalido,
   DireccionInvalida,
-  FechaDeNacimientoInvalida,
+  FechaInvalida,
   NombresInvalidos,
   TelefonoInvalido
 };
@@ -48,7 +48,7 @@ final class Usuario {
    * @throws NombresInvalidos
    * @throws ApellidosInvalidos
    * @throws CedulaInvalida
-   * @throws FechaDeNacimientoInvalida
+   * @throws FechaInvalida
    * @throws DireccionInvalida
    * @throws TelefonoInvalido
    * @throws CorreoInvalido

@@ -18,7 +18,7 @@ Router::group(
   '/',
   ['middleware' => function (): void {
     Mensajes::capturarMensajes();
-    Autenticacion::bloquearNoAutenticados();
+    // Autenticacion::bloquearNoAutenticados();
   }, function (): void {
     Router::get('/', function (): void {
       $cantidadDeUsuarios = db()->select('usuarios')->count();

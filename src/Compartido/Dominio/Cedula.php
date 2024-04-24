@@ -2,15 +2,12 @@
 
 namespace SARCOV2\Compartido\Dominio;
 
+use SARCOV2\Compartido\Dominio\Excepciones\CedulaInvalida;
 use Stringable;
 
 final readonly class Cedula implements Stringable {
-  private int $cedula;
-
-  function __construct(int $cedula) {
+  function __construct(private int $cedula) {
     self::asegurarValidez($cedula);
-
-    $this->cedula = $cedula;
   }
 
   function __toString(): string {
@@ -18,6 +15,8 @@ final readonly class Cedula implements Stringable {
   }
 
   private static function asegurarValidez(int $cedula): void {
-    // TODO: validar $cedula
+    if ($cedula < 1_000_000 || $cedula > 99_999_999) {
+      throw new CedulaInvalida($cedula);
+    }
   }
 }

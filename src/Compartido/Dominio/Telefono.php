@@ -2,6 +2,7 @@
 
 namespace SARCOV2\Compartido\Dominio;
 
+use SARCOV2\Compartido\Dominio\Excepciones\TelefonoInvalido;
 use Stringable;
 
 final readonly class Telefono implements Stringable {
@@ -11,6 +12,7 @@ final readonly class Telefono implements Stringable {
 
   function __construct(string $telefono) {
     $telefono = str_replace([' ', '-', '/', '+', '_'], '', $telefono);
+    self::asegurarValidez($telefono);
 
     $this->codigoPais = self::obtenerCodigoPais($telefono);
     $this->codigoTelefonica = self::obtenerCodigoTelefonica($telefono);
@@ -33,5 +35,11 @@ final readonly class Telefono implements Stringable {
 
   private static function obtenerNumero(string $telefono): string {
     return substr($telefono, 5);
+  }
+
+  private static function asegurarValidez(string $telefono): void {
+    if (!preg_match('/^\d{12}$/', $telefono)) {
+      throw (new TelefonoInvalido($telefono))->debidoA('Debe seguir el formato +XX XXX XXX XXXX');
+    }
   }
 }

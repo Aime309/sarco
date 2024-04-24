@@ -2,6 +2,7 @@
 
 namespace SARCOV2\Compartido\Dominio;
 
+use SARCOV2\Compartido\Dominio\Excepciones\NombresInvalidos;
 use Stringable;
 
 final readonly class Nombres implements Stringable {
@@ -16,9 +17,12 @@ final readonly class Nombres implements Stringable {
   }
 
   function __toString(): string {
-    return $this->segundoNombre === null
-      ? $this->primerNombre
-      : "$this->primerNombre $this->segundoNombre";
+    return mb_convert_case(
+      $this->segundoNombre === null
+        ? $this->primerNombre
+        : "$this->primerNombre $this->segundoNombre",
+      MB_CASE_TITLE
+    );
   }
 
   static function instanciar(string $nombres): self {
@@ -27,8 +31,17 @@ final readonly class Nombres implements Stringable {
 
   private static function asegurarValidez(
     string $primerNombre,
-    ?string $segundoNombre
+    ?string $segundoNombre = null
   ): void {
-    // TODO: validar parámetros
+    $nombres = "$primerNombre $segundoNombre";
+    $excepcion = new NombresInvalidos("$primerNombre $segundoNombre");
+
+    if (
+      strlen($nombres) < 3
+      || strlen($nombres) > 40
+      || !preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚ]{3,20}(\s?|\s?[a-zA-ZáéíóúÁÉÍÓÚ]{3,20})$/', $nombres)
+    ) {
+      throw $excepcion->debidoA('Debe tener entre 3 y 40 letras');
+    }
   }
 }

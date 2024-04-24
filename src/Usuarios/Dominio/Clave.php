@@ -2,20 +2,22 @@
 
 namespace SARCOV2\Usuarios\Dominio;
 
+use SARCOV2\Usuarios\Dominio\Excepciones\ClaveInvalida;
 use Stringable;
 
 final readonly class Clave implements Stringable {
-  private string $claveEncriptada;
   private const ALGORITMO = PASSWORD_DEFAULT;
 
-  function __construct(string $claveEncriptada) {
+  function __construct(private string $claveEncriptada) {
     self::asegurarQueEstaEncriptada($claveEncriptada);
-
-    $this->claveEncriptada = $claveEncriptada;
   }
 
   function __toString(): string {
     return $this->claveEncriptada;
+  }
+
+  function esValida(string $clave): bool {
+    return password_verify($clave, $this->claveEncriptada);
   }
 
   static function encriptar(string $clave): self {
@@ -25,10 +27,14 @@ final readonly class Clave implements Stringable {
   }
 
   private static function asegurarQueEstaEncriptada(string $clave): void {
-    // TODO: verificar si $clave está encriptada
+    if (!str_starts_with($clave, '$' . self::ALGORITMO)) {
+      throw (new ClaveInvalida($clave))->debidoA('Clave no encriptada inválida');
+    }
   }
 
   private static function asegurarValidez(string $claveSinEncriptar): void {
-    // TODO: validar $claveSinEncriptar
+    if (!preg_match('/^(?!.*[<>]).{8,20}$/', $claveSinEncriptar)) {
+      throw (new ClaveInvalida($claveSinEncriptar))->debidoA('Debe tener entre 3 y 20 letras');
+    }
   }
 }

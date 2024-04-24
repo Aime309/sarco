@@ -2,7 +2,8 @@
 
 namespace SARCOV2\Compartido\Dominio\Excepciones;
 
-use InvalidArgumentException;
-
-final class TelefonoInvalido extends InvalidArgumentException {
+final class TelefonoInvalido extends ObjetoDeValorInvalido {
+  protected static function mensaje(): string {
+    return 'Teléfono inválido';
+  }
 }

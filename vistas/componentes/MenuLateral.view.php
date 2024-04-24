@@ -1,7 +1,7 @@
 <?php
 
-use SARCO\Modelos\Rol;
-use SARCO\Modelos\Usuario;
+use SARCOV2\Usuarios\Dominio\Usuario;
+use SARCOV2\Usuarios\Dominio\Rol;
 
 /** @var Usuario $usuario */
 
@@ -9,7 +9,7 @@ $enlaces = [
   ['href' => './', 'icono' => '<i class="fab fa-dashcube fa-fw"></i>', 'titulo' => 'Inicio']
 ];
 
-if ($usuario->rol === Rol::Director) {
+if ($usuario?->rol() === Rol::Director) {
   $enlaces[] = ['icono' => '<i class="fas fa-users fa-fw"></i>', 'titulo' => 'Usuarios', 'subenlaces' => [
     ['href' => './usuarios/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Nuevo usuario'],
     ['href' => './usuarios', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de usuario'],
@@ -56,8 +56,6 @@ if ($usuario->rol === Rol::Director) {
     ['href' => './respaldar', 'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>', 'titulo' => 'Respaldar sistema'],
     ['href' => './restaurar', 'icono' => '<i class="fas fa-rotate-left fa-fw"></i>', 'titulo' => 'Restaurar sistema'],
   ]];
-
-
 }
 
 ?>
@@ -69,8 +67,8 @@ if ($usuario->rol === Rol::Director) {
       <i class="far fa-times-circle show-nav-lateral"></i>
       <img src="assets/images/favicon.jpg" class="img-fluid rounded-circle" />
       <figcaption class="roboto-medium text-center d-flex flex-column">
-        <?= $usuario->nombreCompleto() ?>
-        <small class="roboto-condensed-light"><?= $usuario->rol->name ?></small>
+        <?= $usuario?->nombres() ?>
+        <small class="roboto-condensed-light"><?= $usuario?->rol()?->name ?></small>
       </figcaption>
     </figure>
     <div class="full-box nav-lateral-bar"></div>
@@ -92,7 +90,7 @@ if ($usuario->rol === Rol::Director) {
                 <i class="fas fa-chevron-down"></i>
               </a>
               <ul>
-                <?php foreach ($enlace['subenlaces'] as $subenlace): ?>
+                <?php foreach ($enlace['subenlaces'] as $subenlace) : ?>
                   <li>
                     <a href="<?= $subenlace['href'] ?>">
                       <?= $subenlace['icono'] ?>

@@ -2,6 +2,7 @@
 
 namespace SARCOV2\Compartido\Dominio;
 
+use SARCOV2\Compartido\Dominio\Excepciones\DireccionInvalida;
 use Stringable;
 
 final readonly class Direccion implements Stringable {
@@ -14,10 +15,12 @@ final readonly class Direccion implements Stringable {
   }
 
   function __toString(): string {
-    return $this->direccion;
+    return strtoupper($this->direccion[0]) . substr($this->direccion, 1);
   }
 
   private static function asegurarValidez(string $direccion): void {
-    // TODO: validar $direccion
+    if (!preg_match('/^(?!.*[<>]).{3,}$/', $direccion)) {
+      throw (new DireccionInvalida($direccion))->debidoA('Debe tener al menos 3 letras');
+    }
   }
 }

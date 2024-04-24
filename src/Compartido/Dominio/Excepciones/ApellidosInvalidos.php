@@ -2,7 +2,8 @@
 
 namespace SARCOV2\Compartido\Dominio\Excepciones;
 
-use InvalidArgumentException;
-
-final class ApellidosInvalidos extends InvalidArgumentException {
+final class ApellidosInvalidos extends ObjetoDeValorInvalido {
+  protected static function mensaje(): string {
+    return 'Apellidos inválidos';
+  }
 }

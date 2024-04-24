@@ -3,6 +3,7 @@
 namespace SARCOV2\Compartido\Dominio;
 
 use DateTimeImmutable;
+use SARCOV2\Compartido\Dominio\Excepciones\FechaInvalida;
 
 readonly class Fecha {
   public int $año;
@@ -10,8 +11,8 @@ readonly class Fecha {
   public int $dia;
 
   function __construct(int $año, int $mes, int $dia) {
-    static::asegurarValidez($año, $mes, $dia);
     $this->inicializar($año, $mes, $dia);
+    $this->asegurarValidez($año, $mes, $dia);
   }
 
   function formatear(string $formato = 'Y-m-d'): string {
@@ -35,7 +36,15 @@ readonly class Fecha {
     $this->dia = $dia;
   }
 
-  protected static function asegurarValidez(int $año, int $mes, int $dia): void {
-    // TODO: validar parámetros
+  protected function asegurarValidez(int $año, int $mes, int $dia): void {
+    $fecha = DateTimeImmutable::createFromFormat('Y-m-d', "$año-$mes-$dia");
+
+    if (
+      $fecha->format('Y') != $año
+      || $fecha->format('m') != $mes
+      || $fecha->format('j') != $dia
+    ) {
+      throw new FechaInvalida($fecha->format('Y-m-d'));
+    }
   }
 }

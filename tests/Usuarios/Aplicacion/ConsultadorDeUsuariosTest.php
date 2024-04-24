@@ -16,6 +16,6 @@ final class ConsultadorDeUsuariosTest extends TestCase {
       'root'
     )));
 
-    self::assertCount(10, $consultador->obtenerTodos());
+    self::assertCount(11, $consultador->obtenerTodos());
   }
 }

@@ -62,7 +62,7 @@ final readonly class FechaHora extends Fecha {
     $this->segundos = $segundos;
   }
 
-  protected static function asegurarValidez(
+  protected function asegurarValidez(
     int $año,
     int $mes,
     int $dia,
