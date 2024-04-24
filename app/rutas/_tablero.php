@@ -1,6 +1,7 @@
 <?php
 
 use SARCO\Controladores\Web\ControladorDelDelPanelPrincipal;
+use SARCO\Mediadores\AseguradorQueElUsuarioEstaAutenticado;
 use SARCO\Mediadores\AseguraQueElUsuarioEstaAutenticado;
 
 Flight::group('/', function (): void {
@@ -42,4 +43,4 @@ Flight::group('/', function (): void {
 
   Flight::post('/asignar', function (): void {
   });
-}, [AseguraQueElUsuarioEstaAutenticado::class]);
+}, [AseguradorQueElUsuarioEstaAutenticado::class]);

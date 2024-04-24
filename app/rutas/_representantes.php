@@ -1,7 +1,7 @@
 <?php
 
 use SARCO\Controladores\Web\ControladorDeRepresentantes;
-use SARCO\Mediadores\AseguraQueElUsuarioEstaAutenticado;
+use SARCO\Mediadores\AseguradorQueElUsuarioEstaAutenticado;
 use SARCO\Mediadores\Autorizador;
 use SARCOV2\Usuarios\Dominio\Rol;
 
@@ -14,6 +14,6 @@ Flight::group('/representantes', function (): void {
     Flight::route('POST /editar', [ControladorDeRepresentantes::class, 'procesarEdicion']);
   });
 }, [
-  AseguraQueElUsuarioEstaAutenticado::class,
+  AseguradorQueElUsuarioEstaAutenticado::class,
   Autorizador::autorizarRoles(Rol::Secretario)
 ]);

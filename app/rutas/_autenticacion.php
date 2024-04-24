@@ -11,9 +11,9 @@ Flight::group('/ingresar', function (): void {
   Flight::route('POST /', [ControladorDeAutenticacion::class, 'procesarCredenciales']);
   Flight::route('GET /', [ControladorDeAutenticacion::class, 'mostrarIngreso']);
 }, [
-  function (): void {
-    if (key_exists('credenciales.cedula', $_SESSION)) {
-      Flight::redirect('/');
+  function () {
+    if (!empty($_SESSION['credenciales.cedula'])) {
+      exit(Flight::redirect('/'));
     }
   }
 ]);

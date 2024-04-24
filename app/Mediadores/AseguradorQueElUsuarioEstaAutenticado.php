@@ -9,7 +9,7 @@ use SARCOV2\Usuarios\Dominio\RepositorioDeUsuarios;
 use SARCOV2\Usuarios\Dominio\UsuarioNoExiste;
 use TypeError;
 
-final class AseguraQueElUsuarioEstaAutenticado {
+final class AseguradorQueElUsuarioEstaAutenticado {
   static function before(): void {
     $cedula = @$_SESSION['credenciales.cedula'];
     $repositorio = Container::getInstance()->get(RepositorioDeUsuarios::class);
@@ -17,7 +17,7 @@ final class AseguraQueElUsuarioEstaAutenticado {
     try {
       Flight::view()->set('usuario', $repositorio->encontrarPorCedula(new Cedula($cedula)));
     } catch (UsuarioNoExiste | TypeError) {
-      Flight::redirect('/ingresar');
+      exit(Flight::redirect('/ingresar'));
     }
   }
 }
