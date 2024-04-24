@@ -128,4 +128,8 @@ final class Usuario {
   function correo(): string {
     return $this->correo;
   }
+
+  function claveEsValida(string $clave): bool {
+    return $this->clave->esValida($clave);
+  }
 }

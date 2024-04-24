@@ -1,8 +1,17 @@
 <?php
 
-use Leaf\{Auth, Router};
+use Leaf\Router;
 use SARCO\Controladores\Web\ControladorDeAutenticacion;
 
-Router::all('/salir', fn () => Auth::logout('./'));
+Router::all('/salir', function (): void {
+  unset($_SESSION['credenciales.cedula']);
+});
 
-Router::post('/ingresar', [ControladorDeAutenticacion::class, 'procesarCredenciales']);
+Router::group('/ingresar', [
+  function (): void {
+    $controlador = contenedor()->get(ControladorDeAutenticacion::class);
+
+    Router::post('/', [$controlador, 'procesarCredenciales']);
+    Router::get('/', [$controlador, 'mostrarIngreso']);
+  }
+]);

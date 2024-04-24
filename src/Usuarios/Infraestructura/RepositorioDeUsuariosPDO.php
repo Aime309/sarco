@@ -10,7 +10,7 @@ use SARCOV2\Compartido\Dominio\Excepciones\CorreoDuplicado;
 use SARCOV2\Compartido\Dominio\Excepciones\NombreCompletoDuplicado;
 use SARCOV2\Compartido\Dominio\Excepciones\TelefonoDuplicado;
 use SARCOV2\Compartido\Dominio\{FechaHora, FechaNacimiento, Genero, ID, Nombres, Telefono};
-use SARCOV2\Usuarios\Dominio\{Apodo, Clave, Rol, Usuario, Usuarios};
+use SARCOV2\Usuarios\Dominio\{Apodo, Clave, Rol, Usuario, UsuarioNoExiste, Usuarios};
 use SARCOV2\Usuarios\Dominio\Excepciones\UsuarioDuplicado;
 use SARCOV2\Usuarios\Dominio\RepositorioDeUsuarios;
 
@@ -39,6 +39,23 @@ final readonly class RepositorioDeUsuariosPDO implements RepositorioDeUsuarios {
     }
 
     return $coleccion;
+  }
+
+  function buscarPorCedula(Cedula $cedula): ?Usuario {
+    $consulta = "SELECT * FROM {$this->tabla()} WHERE cedula = $cedula";
+    $resultado = $this->conexion->query($consulta);
+
+    $info = $resultado->fetch();
+
+    if (!$info) {
+      return null;
+    }
+
+    return $this->mapear($info);
+  }
+
+  function encontrarPorCedula(Cedula $cedula): Usuario {
+    return $this->buscarPorCedula($cedula) ?? throw new UsuarioNoExiste;
   }
 
   function guardar(Usuario $usuario): void {
