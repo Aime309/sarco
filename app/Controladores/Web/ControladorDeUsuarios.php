@@ -2,6 +2,7 @@
 
 namespace SARCO\Controladores\Web;
 
+use Flight;
 use InvalidArgumentException;
 use Leaf\Http\Request;
 use Leaf\Http\Session;
@@ -19,28 +20,28 @@ final readonly class ControladorDeUsuarios {
   }
 
   function registrarDirector(): void {
-    $peticion = new Request;
+    $info = Flight::request()->data;
 
     try {
       ($this->registrador)(
-        $peticion->postData('nombres'),
-        $peticion->postData('apellidos'),
-        $peticion->postData('cedula'),
-        FechaNacimiento::instanciar('Y-m-d', $peticion->postData('fecha_nacimiento')),
-        Genero::from($peticion->postData('genero')),
-        $peticion->postData('direccion'),
-        $peticion->postData('telefono'),
-        $peticion->postData('correo'),
-        $peticion->postData('usuario'),
-        $peticion->postData('clave'),
+        $info['nombres'],
+        $info['apellidos'],
+        $info['cedula'],
+        FechaNacimiento::instanciar('Y-m-d', $info['fecha_nacimiento']),
+        Genero::from($info['genero']),
+        $info['direccion'],
+        $info['telefono'],
+        $info['correo'],
+        $info['usuario'],
+        $info['clave'],
         Rol::Director
       );
 
-      Session::set('success', 'Director registrado exitósamente');
-      Router::push('./');
+      $_SESSION['success'] = 'Director registrado exitósamente';
+      Flight::redirect('/');
     } catch (InvalidArgumentException $excepcion) {
-      Session::set('error', $excepcion->getMessage());
-      Router::push('./registrate');
+      $_SESSION['error'] = $excepcion->getMessage();
+      Flight::redirect('/registrate');
     }
   }
 }

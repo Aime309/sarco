@@ -1,10 +1,9 @@
 {
   "require": {
     "php": ">=8.2",
-    "leafs/router": "^0.2.3",
     "symfony/dotenv": "^7.0",
-    "leafs/bareui": "^1.1",
-    "illuminate/container": "^11.5"
+    "illuminate/container": "^11.5",
+    "flightphp/core": "^3.8"
   },
   "scripts": {
     "post-install-cmd": [

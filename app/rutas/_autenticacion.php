@@ -1,17 +1,19 @@
 <?php
 
-use Leaf\Router;
 use SARCO\Controladores\Web\ControladorDeAutenticacion;
 
-Router::all('/salir', function (): void {
+Flight::route('/salir', function (): void {
   unset($_SESSION['credenciales.cedula']);
+  Flight::redirect('/');
 });
 
-Router::group('/ingresar', [
+Flight::group('/ingresar', function (): void {
+  Flight::route('POST /', [ControladorDeAutenticacion::class, 'procesarCredenciales']);
+  Flight::route('GET /', [ControladorDeAutenticacion::class, 'mostrarIngreso']);
+}, [
   function (): void {
-    $controlador = contenedor()->get(ControladorDeAutenticacion::class);
-
-    Router::post('/', [$controlador, 'procesarCredenciales']);
-    Router::get('/', [$controlador, 'mostrarIngreso']);
+    if (key_exists('credenciales.cedula', $_SESSION)) {
+      Flight::redirect('/');
+    }
   }
 ]);

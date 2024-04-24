@@ -2,11 +2,9 @@
 
 namespace SARCO\Controladores\Web;
 
-use Leaf\Form;
-use Leaf\Http\Request;
-use Leaf\Http\Session;
-use Leaf\Router;
+use Flight;
 use SARCOV2\Compartido\Dominio\Cedula;
+use SARCOV2\Usuarios\Dominio\Excepciones\ClaveInvalida;
 use SARCOV2\Usuarios\Dominio\RepositorioDeUsuarios;
 use SARCOV2\Usuarios\Dominio\UsuarioNoExiste;
 
@@ -15,31 +13,28 @@ final readonly class ControladorDeAutenticacion {
   }
 
   function procesarCredenciales() {
-    $credenciales = Request::validate([
-      'cedula' => 'number',
-      'clave' => 'alphadash'
-    ]);
-
-    if ($errors = Form::errors()) {
-      @$errors['cedula'] && Session::set('error', $errors['cedula'][0]);
-      @$errors['clave'] && Session::set('error', $errors['clave'][0]);
-
-      return Router::push('./');
-    }
+    $credenciales = Flight::request()->data;
 
     try {
       $usuario = $this->repositorio->encontrarPorCedula(new Cedula($credenciales['cedula']));
 
       if (!$usuario->claveEsValida($credenciales['clave'])) {
-        throw new UsuarioNoExiste;
+        throw new ClaveInvalida($credenciales['clave']);
       }
-
-      Session::set('credenciales.cedula', $usuario->cedula());
-      Router::push('./');
     } catch (UsuarioNoExiste) {
-      Session::set('error', 'Cédula o contraseña incorrecta');
-      Router::push('./');
+      $_SESSION['error'] = 'Cédula o contraseña incorrecta';
+
+      return Flight::redirect('/ingresar');
     }
+
+    if (!$usuario->estaActivo()) {
+      $_SESSION['error'] = 'Este usuario se encuentra desactivado';
+
+      return Flight::redirect('/ingresar');
+    }
+
+    $_SESSION['credenciales.cedula'] = $usuario->cedula();
+    Flight::redirect('/');
   }
 
   function mostrarIngreso(): void {

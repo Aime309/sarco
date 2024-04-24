@@ -1,9 +1,7 @@
 <?php
 
-use Leaf\BareUI;
-
 function renderizar(string $vista, string $titulo, string $plantilla = 'basica', array $datos = []): never {
-  $scripts = function (?string $script = null): array {
+  $datos['scripts'] = function (?string $script = null): array {
     static $scripts = [];
 
     if ($script) {
@@ -13,12 +11,6 @@ function renderizar(string $vista, string $titulo, string $plantilla = 'basica',
     return $scripts;
   };
 
-  $datos['scripts'] = $scripts;
-  $datos['error'] ??= @$_SESSION['error'];
-  $datos['success'] ??= @$_SESSION['success'];
-  unset($_SESSION['error']);
-  unset($_SESSION['success']);
-  $pagina = BareUI::render("paginas/$vista", $datos);
-
-  exit(BareUI::render("plantillas/$plantilla", compact('titulo', 'pagina', 'scripts') + $datos));
+  Flight::render("paginas/$vista", $datos, 'pagina');
+  exit(Flight::render("plantillas/$plantilla", compact('titulo')));
 }

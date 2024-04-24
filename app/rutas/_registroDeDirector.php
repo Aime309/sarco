@@ -1,19 +1,22 @@
 <?php
 
-use Leaf\Router;
+use Illuminate\Container\Container;
 use SARCO\Controladores\Web\ControladorDeUsuarios;
-use SARCO\Mediadores\AseguradorDeQueNoHayDirectoresActivos;
-use SARCO\Mediadores\ManejadorDeMensajes;
+use SARCOV2\Usuarios\Dominio\RepositorioDeUsuarios;
+use SARCOV2\Usuarios\Dominio\Rol;
 
-Router::group('/registrate', [
-  'middleware' => function (): void {
-    ManejadorDeMensajes::capturarMensajes();
-    contenedor()->get(AseguradorDeQueNoHayDirectoresActivos::class);
-  },
+Flight::group('/registrate', function (): void {
+  Flight::route('GET /', [ControladorDeUsuarios::class, 'mostrarRegistroDirector']);
+  Flight::route('POST /', [ControladorDeUsuarios::class, 'registrarDirector']);
+}, [
   function (): void {
-    $controladorDeUsuarios = contenedor()->get(ControladorDeUsuarios::class);
+    $directores = Container::getInstance()
+      ->get(RepositorioDeUsuarios::class)
+      ->obtenerTodosPorRol(Rol::Director);
 
-    Router::get('/', [$controladorDeUsuarios, 'mostrarRegistroDirector']);
-    Router::post('/', [$controladorDeUsuarios, 'registrarDirector']);
+    if ($directores->hayActivos()) {
+      $_SESSION['error'] = 'Ya hay al menos 1 director activo';
+      Flight::redirect('/');
+    }
   }
 ]);
