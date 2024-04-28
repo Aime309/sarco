@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af235c4f6b90ea123c28300c65e41aae",
+    "content-hash": "e7f003d3334f822e087aa1ca95fb101e",
     "packages": [
         {
             "name": "flightphp/core",
-            "version": "v3.8.1",
+            "version": "dev-fix/bug-with-multiple-view-renders",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "0011efd42c40f4c600612e425ad598ec8cd6bae7"
+                "reference": "276a9e69f3993da79e18caf2dd239823d27f7cd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/0011efd42c40f4c600612e425ad598ec8cd6bae7",
-                "reference": "0011efd42c40f4c600612e425ad598ec8cd6bae7",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/276a9e69f3993da79e18caf2dd239823d27f7cd3",
+                "reference": "276a9e69f3993da79e18caf2dd239823d27f7cd3",
                 "shasum": ""
             },
             "require": {
@@ -75,9 +75,9 @@
             "homepage": "http://flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.8.1"
+                "source": "https://github.com/flightphp/core/tree/fix/bug-with-multiple-view-renders"
             },
-            "time": "2024-04-11T04:28:40+00:00"
+            "time": "2024-04-25T01:03:44+00:00"
         },
         {
             "name": "illuminate/container",
@@ -2276,7 +2276,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "flightphp/core": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

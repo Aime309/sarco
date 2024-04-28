@@ -12,5 +12,5 @@ function renderizar(string $vista, string $titulo, string $plantilla = 'basica',
   };
 
   Flight::render("paginas/$vista", $datos, 'pagina');
-  exit(Flight::render("plantillas/$plantilla", compact('titulo')));
+  exit(Flight::render("plantillas/$plantilla", compact('titulo') + $datos));
 }

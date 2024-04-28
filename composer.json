@@ -3,7 +3,7 @@
     "php": ">=8.2",
     "symfony/dotenv": "^7.0",
     "illuminate/container": "^11.5",
-    "flightphp/core": "^3.8"
+    "flightphp/core": "dev-fix/bug-with-multiple-view-renders"
   },
   "scripts": {
     "post-install-cmd": [

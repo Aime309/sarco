@@ -33,6 +33,7 @@ Flight::set('flight.views.extension', '.view.php');
 Flight::view()->set('error', @$_SESSION['error']);
 Flight::view()->set('success', @$_SESSION['success']);
 Flight::view()->set('template', Flight::view());
+Flight::view()->preserveVars = false;
 
 unset($_SESSION['error']);
 unset($_SESSION['success']);
