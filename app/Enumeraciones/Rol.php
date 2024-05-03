@@ -2,10 +2,10 @@
 
 namespace SARCO\Enumeraciones;
 
-enum Rol {
-  case Director;
-  case Secretario;
-  case Docente;
+enum Rol: string {
+  case Director = 'Director';
+  case Secretario = 'Secretario';
+  case Docente = 'Docente';
 
   function obtenerPorGenero(Genero $genero): string {
     if ($genero === Genero::Masculino || $this === self::Docente) {
@@ -24,14 +24,5 @@ enum Rol {
       'Secretario' => [self::Docente],
       default => []
     };
-  }
-
-  static function obtenerPorNombre(string $nombre): ?self {
-    $roles = array_filter(
-      self::cases(),
-      static fn (self $rol): bool => $rol->name === $nombre
-    );
-
-    return @$roles[1];
   }
 }

@@ -82,6 +82,11 @@ App::post('/ingresar', function (): void {
     App::redirect('/');
 
     exit;
+  } elseif (!$usuarioEncontrado['esta_activo']) {
+    $_SESSION['mensajes.error'] = 'Este usuario se encuentra desactivado';
+    App::redirect('/');
+
+    exit;
   }
 
   if (key_exists('recordar', $credenciales)) {
@@ -131,7 +136,7 @@ App::group('/', function (Router $router): void {
     $router->post('/', function (): void {
       $usuario = App::request()->data->getData();
       $genero = Genero::from($usuario['genero']);
-      $rol = Rol::obtenerPorNombre($usuario['rol'])->obtenerPorGenero($genero);
+      $rol = Rol::from($usuario['rol'])->obtenerPorGenero($genero);
       $clave = password_hash($usuario['clave'], PASSWORD_DEFAULT);
 
       $sentencia = bd()->prepare("
@@ -269,6 +274,22 @@ App::group('/', function (Router $router): void {
     $router->get('/nuevo', function (): void {
       App::render('paginas/representantes/nuevo', [], 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Nuevo representante']);
+    });
+  });
+
+  $router->group('maestros', function (Router $router): void {
+    $router->get('/', function (): void {
+      $idAutenticado = App::view()->get('usuario')->id;
+
+      $maestros = bd()->query("
+        SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
+        direccion, telefono, correo, rol, esta_activo as estaActivo,
+        fecha_registro as fechaRegistro
+        FROM usuarios WHERE rol = 'Docente' AND id != $idAutenticado
+      ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
+
+      App::render('paginas/maestros/listado', compact('maestros'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Maestros']);
     });
   });
 }, [function (): void {
