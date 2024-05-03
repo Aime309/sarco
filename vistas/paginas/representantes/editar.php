@@ -4,8 +4,10 @@ use flight\template\View;
 use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
+use SARCO\Modelos\Representante;
 
 assert($vistas instanceof View);
+assert($representante instanceof Representante);
 scripts('./recursos/js/validarFormulario.js');
 
 ?>
@@ -13,12 +15,12 @@ scripts('./recursos/js/validarFormulario.js');
 <header class="full-box page-header">
   <h1 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
-    Registro de representante
+    Editar representante
   </h1>
   <p class="text-justify"></p>
 </header>
 
-<form method="post" action="./representantes" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+<form method="post" action="./representantes/<?= $representante->cedula ?>" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <?php
 
   $vistas->render('componentes/Input', [
@@ -27,7 +29,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Nombres',
     'minlength' => 3,
     'maxlength' => 40,
-    'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+    'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+    'value' => $representante->nombres
   ]);
 
   $vistas->render('componentes/Input', [
@@ -36,7 +39,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Apellidos',
     'minlength' => 3,
     'maxlength' => 40,
-    'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+    'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+    'value' => $representante->apellidos
   ]);
 
   $vistas->render('componentes/Input', [
@@ -45,14 +49,16 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Cédula',
     'type' => 'number',
     'min' => 1000000,
-    'max' => 99999999
+    'max' => 99999999,
+    'value' => $representante->cedula
   ]);
 
   $vistas->render('componentes/Input', [
     'validacion' => 'La fecha de nacimiento es requerida',
     'name' => 'fecha_nacimiento',
     'placeholder' => 'Fecha de nacimiento',
-    'type' => 'date'
+    'type' => 'date',
+    'value' => $representante->fechaNacimiento
   ]);
 
   $vistas->render('componentes/Select', [
@@ -61,7 +67,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Género',
     'opciones' => array_map(static fn (Genero $genero): array => [
       'value' => $genero->name,
-      'children' => $genero->name
+      'children' => $genero->name,
+      'selected' => $representante->genero()->esIgualA($genero)
     ], Genero::cases())
   ]);
 
@@ -71,7 +78,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Estado civil',
     'opciones' => array_map(static fn (EstadoCivil $estado): array => [
       'value' => $estado->name,
-      'children' => $estado->name
+      'children' => $estado->name,
+      'selected' => $representante->estadoCivil()->esIgualA($estado)
     ], EstadoCivil::cases())
   ]);
 
@@ -81,7 +89,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Nacionalidad',
     'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
       'value' => $nacionalidad->name,
-      'children' => $nacionalidad->name
+      'children' => $nacionalidad->name,
+      'selected' => $representante->nacionalidad()->esIgualA($nacionalidad)
     ], Nacionalidad::cases())
   ]);
 
@@ -92,7 +101,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Teléfono',
     'minlength' => 15,
     'maxlength' => 15,
-    'pattern' => '\+\d{2} \d{3}-\d{7}'
+    'pattern' => '\+\d{2} \d{3}-\d{7}',
+    'value' => $representante->telefono
   ]);
 
   $vistas->render('componentes/Input', [
@@ -100,12 +110,13 @@ scripts('./recursos/js/validarFormulario.js');
     'type' => 'email',
     'name' => 'correo',
     'placeholder' => 'Correo',
-    'minlength' => 5
+    'minlength' => 5,
+    'value' => $representante->correo
   ]);
 
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
-    'contenido' => 'Registrar'
+    'contenido' => 'Actualizar'
   ]);
 
   ?>

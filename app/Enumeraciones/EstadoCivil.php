@@ -8,6 +8,8 @@ enum EstadoCivil: string {
   case Divorciado = 'Divorciado';
   case Viudo = 'Viudo';
 
+  use EnumUtils;
+
   function obtenerPorGenero(Genero $genero): string {
     if ($genero === Genero::Masculino) {
       return $this->name;

@@ -4,15 +4,13 @@ namespace SARCO\Modelos;
 
 use DateTime;
 
-abstract class Persona {
-  public int $id;
+abstract class Persona extends Modelo {
   public string $nombres;
   public string $apellidos;
   public int $cedula;
   public string $fechaNacimiento;
   public string $telefono;
   public string $correo;
-  public string $fechaRegistro;
 
   function nombreCompleto(): string {
     return "$this->nombres $this->apellidos";

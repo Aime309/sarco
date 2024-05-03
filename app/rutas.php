@@ -6,6 +6,7 @@ use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Representante;
 use SARCO\Modelos\Usuario;
 
@@ -71,7 +72,7 @@ App::post('/ingresar', function (): void {
   $credenciales = App::request()->data->getData();
 
   $sentencia = bd()->prepare(<<<sql
-    SElECT id, clave FROM usuarios WHERE cedula = ?
+    SElECT id, clave, esta_activo FROM usuarios WHERE cedula = ?
   sql);
 
   $sentencia->execute([$credenciales['cedula']]);
@@ -107,9 +108,17 @@ App::group('/', function (Router $router): void {
       ->query('SELECT COUNT(id) FROM representantes')
       ->fetchColumn();
 
+    $cantidadDeMaestros = (int) bd()
+      ->query("SELECT COUNT(id) FROM usuarios WHERE rol = 'Docente'")
+      ->fetchColumn();
+
     App::render(
       'paginas/inicio',
-      compact('cantidadDeUsuarios', 'cantidadDeRepresentantes'),
+      compact(
+        'cantidadDeUsuarios',
+        'cantidadDeRepresentantes',
+        'cantidadDeMaestros'
+      ),
       'pagina'
     );
 
@@ -275,6 +284,64 @@ App::group('/', function (Router $router): void {
       App::render('paginas/representantes/nuevo', [], 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Nuevo representante']);
     });
+
+    $router->group('/@cedula:[0-9]{7,8}', function (Router $router): void {
+      $router->get('/editar', function (int $cedula): void {
+        $representante = bd()
+          ->query("
+            SELECT id, nombres, apellidos, cedula,
+            fecha_nacimiento as fechaNacimiento, estado_civil as estadoCivil,
+            nacionalidad, telefono, correo, fecha_registro as fechaRegistro
+            FROM representantes WHERE cedula = $cedula
+          ")->fetchObject(Representante::class);
+
+        App::render('paginas/representantes/editar', compact('representante'), 'pagina');
+        App::render('plantillas/privada', ['titulo' => 'Editar representante']);
+      });
+
+      $router->post('/', function (int $cedula): void {
+        $representante = App::request()->data->getData();
+
+        $sentencia = bd()
+          ->prepare("
+            UPDATE representantes SET nombres = :nombres, apellidos = :apellidos,
+            cedula = :cedula, fecha_nacimiento = :fechaNacimiento,
+            estado_civil = :estadoCivil, nacionalidad = :nacionalidad,
+            telefono = :telefono, correo = :correo
+            WHERE cedula = $cedula
+          ");
+
+        $sentencia->bindValue(':nombres', $representante['nombres']);
+        $sentencia->bindValue(':apellidos', $representante['apellidos']);
+        $sentencia->bindValue(':cedula', $representante['cedula']);
+        $sentencia->bindValue(':fechaNacimiento', $representante['fecha_nacimiento']);
+        $sentencia->bindValue(':estadoCivil', $representante['estado_civil']);
+        $sentencia->bindValue(':nacionalidad', $representante['nacionalidad']);
+        $sentencia->bindValue(':telefono', $representante['telefono']);
+        $sentencia->bindValue(':correo', $representante['correo']);
+
+        try {
+          $sentencia->execute();
+          $_SESSION['mensajes.exito'] = 'Representante actualizado exitósamente';
+          App::redirect('/representantes');
+        } catch (PDOException $error) {
+          if (str_contains($error, 'representantes.nombres')) {
+            $nombreCompleto = "{$representante['nombres']} {$representante['apellidos']}";
+            $_SESSION['mensajes.error'] = "Representante $nombreCompleto ya existe";
+          } elseif (str_contains($error, 'representantes.cedula')) {
+            $_SESSION['mensajes.error'] = "Representante {$representante['cedula']} ya existe";
+          } elseif (str_contains($error, 'representantes.telefono')) {
+            $_SESSION['mensajes.error'] = "Teléfono {$representante['telefono']} ya existe";
+          } elseif (str_contains($error, 'representantes.correo')) {
+            $_SESSION['mensajes.error'] = "Correo {$representante['correo']} ya existe";
+          } else {
+            throw $error;
+          }
+
+          App::redirect("/representantes/$cedula/editar");
+        }
+      });
+    });
   });
 
   $router->group('maestros', function (Router $router): void {
@@ -290,6 +357,23 @@ App::group('/', function (Router $router): void {
 
       App::render('paginas/maestros/listado', compact('maestros'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Maestros']);
+    });
+  });
+
+  $router->group('periodos', function (Router $router): void {
+    $router->get('/', function (): void {
+      $periodos = bd()->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos
+      ")->fetchAll(PDO::FETCH_CLASS, Periodo::class);
+
+      App::render('paginas/periodos/listado', compact('periodos'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Períodos']);
+    });
+
+    $router->get('/nuevo', function (): void {
+      App::render('paginas/periodos/nuevo', [], 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Nuevo período']);
     });
   });
 }, [function (): void {

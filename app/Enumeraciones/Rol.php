@@ -7,6 +7,8 @@ enum Rol: string {
   case Secretario = 'Secretario';
   case Docente = 'Docente';
 
+  use EnumUtils;
+
   function obtenerPorGenero(Genero $genero): string {
     if ($genero === Genero::Masculino || $this === self::Docente) {
       return $this->name;
@@ -20,8 +22,8 @@ enum Rol: string {
 
   static function menoresQue(string $rol): array {
     return match ($rol) {
-      'Director' => [self::Secretario, self::Docente],
-      'Secretario' => [self::Docente],
+      'Director', 'Directora' => [self::Secretario, self::Docente],
+      'Secretario', 'Secretaria' => [self::Docente],
       default => []
     };
   }
