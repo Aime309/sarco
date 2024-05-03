@@ -65,9 +65,6 @@ $usuarioAutenticado = $usuario;
             <td><?= $usuarioIterado->direccion ?></td>
             <td><?= $usuarioIterado->rol ?></td>
             <td>
-              <a href="./usuarios/<?= $usuarioIterado->cedula ?>/editar" class="btn btn-success">
-                Editar
-              </a>
               <?php if ($usuarioIterado->estaActivo) : ?>
                 <a href="./usuarios/<?= $usuarioIterado->cedula ?>/desactivar" class="btn btn-danger">
                   Desactivar

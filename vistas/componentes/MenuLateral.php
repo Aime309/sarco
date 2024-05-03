@@ -43,7 +43,7 @@ $enlaces[] = ['icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'titu
 $enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
   ['href' => 'representantes/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Representante'],
   ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
-  ['href' => 'representantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Representante'],
+  // ['href' => 'representantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Representante'],
 ]];
 
 $enlaces[] = ['icono' => '<i class="fas fa-calendar fa-fw"></i>', 'titulo' => 'Periodos', 'subenlaces' => [

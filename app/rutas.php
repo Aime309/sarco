@@ -2,8 +2,11 @@
 
 use flight\net\Router;
 use SARCO\App;
+use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
+use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Representante;
 use SARCO\Modelos\Usuario;
 
 App::route('GET /salir', function (): void {
@@ -126,7 +129,6 @@ App::group('/', function (Router $router): void {
     });
 
     $router->post('/', function (): void {
-
       $usuario = App::request()->data->getData();
       $genero = Genero::from($usuario['genero']);
       $rol = Rol::obtenerPorNombre($usuario['rol'])->obtenerPorGenero($genero);
@@ -190,6 +192,83 @@ App::group('/', function (Router $router): void {
         $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
         App::redirect('/usuarios');
       });
+    });
+  });
+
+  $router->group('representantes', function (Router $router): void {
+    $router->get('/', function (): void {
+      $representantes = bd()
+        ->query("
+          SELECT id, nombres, apellidos, cedula,
+          fecha_nacimiento as fechaNacimiento, estado_civil as estadoCivil,
+          nacionalidad, telefono, correo, fecha_registro as fechaRegistro
+          FROM representantes
+        ")->fetchAll(PDO::FETCH_CLASS, Representante::class);
+
+      App::render(
+        'paginas/representantes/listado',
+        compact('representantes'),
+        'pagina'
+      );
+
+      App::render('plantillas/privada', ['titulo' => 'Representantes']);
+    });
+
+    $router->post('/', function (): void {
+      $representante = App::request()->data->getData();
+      $genero = Genero::from($representante['genero']);
+
+      $estadoCivil = EstadoCivil::from($representante['estado_civil'])
+        ->obtenerPorGenero($genero);
+
+      $nacionalidad = Nacionalidad::from($representante['nacionalidad'])
+        ->obtenerPorGenero($genero);
+
+      $sentencia = bd()->prepare("
+        INSERT INTO representantes (
+          nombres, apellidos, cedula, fecha_nacimiento, estado_civil,
+          nacionalidad, telefono, correo
+        ) VALUES (
+          :nombres, :apellidos, :cedula, :fechaNacimiento, :estadoCivil,
+          :nacionalidad, :telefono, :correo
+        )
+      ");
+
+      $sentencia->bindValue(':nombres', $representante['nombres']);
+      $sentencia->bindValue(':apellidos', $representante['apellidos']);
+      $sentencia->bindValue(':cedula', $representante['cedula'], PDO::PARAM_INT);
+      $sentencia->bindValue(':fechaNacimiento', $representante['fecha_nacimiento']);
+      $sentencia->bindValue(':estadoCivil', $estadoCivil);
+      $sentencia->bindValue(':nacionalidad', $nacionalidad);
+      $sentencia->bindValue(':telefono', $representante['telefono']);
+      $sentencia->bindValue(':correo', $representante['correo']);
+
+      try {
+        $sentencia->execute();
+        $mensaje = $genero === Genero::Femenino ? 'registrada' : 'registrado';
+        $_SESSION['mensajes.exito'] = "Representante $mensaje exitósamente";
+        App::redirect('/representantes');
+      } catch (PDOException $error) {
+        if (str_contains($error, 'representantes.nombres')) {
+          $nombreCompleto = "{$representante['nombres']} {$representante['apellidos']}";
+          $_SESSION['mensajes.error'] = "Representante $nombreCompleto ya existe";
+        } elseif (str_contains($error, 'representantes.cedula')) {
+          $_SESSION['mensajes.error'] = "Representante {$representante['cedula']} ya existe";
+        } elseif (str_contains($error, 'representantes.telefono')) {
+          $_SESSION['mensajes.error'] = "Teléfono {$representante['telefono']} ya existe";
+        } elseif (str_contains($error, 'representantes.correo')) {
+          $_SESSION['mensajes.error'] = "Correo {$representante['correo']} ya existe";
+        } else {
+          throw $error;
+        }
+
+        App::redirect('/representantes/nuevo');
+      }
+    });
+
+    $router->get('/nuevo', function (): void {
+      App::render('paginas/representantes/nuevo', [], 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Nuevo representante']);
     });
   });
 }, [function (): void {
