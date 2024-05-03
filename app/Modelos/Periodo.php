@@ -2,6 +2,16 @@
 
 namespace SARCO\Modelos;
 
-final class Periodo extends Modelo {
+use Stringable;
+
+final class Periodo extends Modelo implements Stringable {
   public int $inicio;
+
+  function siguientePeriodo(): int {
+    return $this->inicio + 1;
+  }
+
+  function __toString(): string {
+    return "$this->inicio-{$this->siguientePeriodo()}";
+  }
 }

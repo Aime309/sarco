@@ -1,8 +1,11 @@
 <?php
 
+use SARCO\Modelos\Periodo;
+
 assert(is_int($cantidadDeUsuarios));
 assert(is_int($cantidadDeRepresentantes));
 assert(is_int($cantidadDeMaestros));
+assert($ultimoPeriodo instanceof Periodo || $ultimoPeriodo === null);
 
 $contadores = [
   ['href' => './usuarios', 'title' => 'Usuarios', 'icon' => '<i class="fas fa-users fa-fw"></i>', 'footer' => "$cantidadDeUsuarios registrado" . ($cantidadDeUsuarios > 1 ? 's' : '')],
@@ -10,7 +13,6 @@ $contadores = [
   ['href' => './estudiantes', 'title' => 'Estudiantes', 'icon' => '<i class="fas fa-graduation-cap fa-fw"></i>'],
   ['href' => './representantes', 'title' => 'Representantes', 'icon' => '<i class="fas fa-people-roof fa-fw"></i>', 'footer' => "$cantidadDeRepresentantes registrado" . ($cantidadDeRepresentantes > 1 ? 's' : '')],
   ['href' => './maestros', 'title' => 'Maestros', 'icon' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'footer' => "$cantidadDeMaestros registrado" . ($cantidadDeMaestros > 1 ? 's' : '')],
-  ['href' => './periodos', 'title' => 'Períodos', 'icon' => '<i class="fas fa-calendar fa-fw"></i>'],
   ['href' => './momentos', 'title' => 'Momentos', 'icon' => '<i class="fas fa-calendar-days fa-fw"></i>'],
   ['href' => './salas', 'title' => 'Salas', 'icon' => '<i class="fas fa-school-flag fa-fw"></i>'],
 ];
@@ -18,9 +20,18 @@ $contadores = [
 ?>
 
 <header class="full-box page-header">
-  <h1 class="text-left">
-    <i class="fab fa-dashcube fa-fw"></i>
-    Panel de administración
+  <h1 class="text-left d-flex justify-content-between align-items-center">
+    <span>
+      <i class="fab fa-dashcube fa-fw"></i>
+      Panel de administración
+    </span>
+    <?php if ($ultimoPeriodo): ?>
+      <small class="fw-bold">
+        <?= $ultimoPeriodo ?>
+      </small>
+    <?php else: ?>
+      <a href="./periodos/nuevo" style="font-size: .65em">Aperturar período</a>
+    <?php endif ?>
   </h1>
   <p class="text-justify"></p>
 </header>

@@ -1,8 +1,10 @@
 <?php
 
 use flight\template\View;
+use SARCO\Modelos\Periodo;
 
 assert($vistas instanceof View);
+assert($ultimoPeriodo instanceof Periodo || $ultimoPeriodo === null);
 scripts('./recursos/js/validarFormulario.js');
 
 ?>
@@ -24,7 +26,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Año de inicio',
     'type' => 'number',
     'min' => 2006,
-    'max' => date('Y') + 1
+    'max' => date('Y') + 1,
+    'value' => $ultimoPeriodo?->siguientePeriodo() ?? date('Y')
   ]);
 
   $vistas->render('componentes/Boton', [

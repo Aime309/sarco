@@ -112,12 +112,19 @@ App::group('/', function (Router $router): void {
       ->query("SELECT COUNT(id) FROM usuarios WHERE rol = 'Docente'")
       ->fetchColumn();
 
+    $ultimoPeriodo = bd()
+      ->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos ORDER BY inicio DESC LIMIT 1
+      ")->fetchObject(Periodo::class) ?: null;
+
     App::render(
       'paginas/inicio',
       compact(
         'cantidadDeUsuarios',
         'cantidadDeRepresentantes',
-        'cantidadDeMaestros'
+        'cantidadDeMaestros',
+        'ultimoPeriodo'
       ),
       'pagina'
     );
@@ -364,15 +371,39 @@ App::group('/', function (Router $router): void {
     $router->get('/', function (): void {
       $periodos = bd()->query("
         SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
-        FROM periodos
+        FROM periodos ORDER BY inicio DESC
       ")->fetchAll(PDO::FETCH_CLASS, Periodo::class);
 
       App::render('paginas/periodos/listado', compact('periodos'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Períodos']);
     });
 
+    $router->post('/', function (): void {
+      $añoInicio = (int) App::request()->data['anio_inicio'];
+
+      try {
+        bd()->query("INSERT INTO periodos (anio_inicio) VALUES ($añoInicio)");
+        $_SESSION['mensajes.exito'] = "Período $añoInicio aperturado exitósamente";
+        App::redirect('/periodos');
+      } catch (PDOException $error) {
+        if (str_contains($error, 'periodos.anio_inicio')) {
+          $_SESSION['mensajes.error'] = "Periodo $añoInicio ya fue aperturado";
+        } else {
+          throw $error;
+        }
+
+        App::redirect('/periodos/nuevo');
+      }
+    });
+
     $router->get('/nuevo', function (): void {
-      App::render('paginas/periodos/nuevo', [], 'pagina');
+      $ultimoPeriodo = bd()->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos
+        ORDER BY inicio DESC LIMIT 1
+      ")->fetchObject(Periodo::class) ?: null;
+
+      App::render('paginas/periodos/nuevo', compact('ultimoPeriodo'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Nuevo período']);
     });
   });

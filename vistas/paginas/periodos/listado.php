@@ -27,12 +27,6 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
         &nbsp; Lista de períodos
       </a>
     </li>
-    <!-- <li>
-      <a href="./usuarios/buscar">
-        <i class="fas fa-search fa-fw"></i>
-        &nbsp; Buscar usuario
-      </a>
-    </li> -->
   </ul>
 </div>
 
@@ -41,6 +35,7 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
+          <th></th>
           <th>ID</th>
           <th>Año de inicio</th>
           <th>Fecha de registro</th>
@@ -49,6 +44,11 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
       <tbody>
         <?php foreach ($periodos as $periodo) : ?>
           <tr class="text-center">
+            <td>
+              <?php if ($periodo == $periodos[0]) : ?>
+                <span class="badge bg-dark text-white">Actual</span>
+              <?php endif ?>
+            </td>
             <td><?= $periodo->id ?></td>
             <td><?= $periodo->inicio ?></td>
             <td><?= $periodo->fechaRegistro() ?></td>
