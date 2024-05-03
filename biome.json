@@ -3,11 +3,13 @@
   "files": {
     "ignore": ["node_modules", "vendor"],
     "ignoreUnknown": true,
-    "include": [],
+    "include": [
+      "globals.d.ts"
+    ],
     "maxSize": 1048576
   },
   "javascript": {
-    "globals": ["Noty", "messages", "Swal", "jQuery", "$"],
+    "globals": [],
     "parser": {
       "unsafeParameterDecoratorsEnabled": false
     },
@@ -23,12 +25,12 @@
       "indentWidth": 2,
       "jsxQuoteStyle": "single",
       "lineEnding": "lf",
-      "lineWidth": 90,
+      "lineWidth": 85,
       "quoteProperties": "asNeeded"
     }
   },
   "formatter": {
-    "lineWidth": 90,
+    "lineWidth": 85,
     "enabled": true,
     "formatWithErrors": true,
     "indentStyle": "space",
@@ -74,7 +76,7 @@
       "indentStyle": "space",
       "indentWidth": 2,
       "lineEnding": "lf",
-      "lineWidth": 90
+      "lineWidth": 85
     },
     "parser": {
       "allowComments": true,

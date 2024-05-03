@@ -1,10 +1,6 @@
-/components/
-/node_modules/
-/login-register/
-/PRESTAMOS/
 /vendor/
+/node_modules/
 
 .env
-sarco.sql
 *.sublime-workspace
-*.cache
+*.db

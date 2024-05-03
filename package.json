@@ -1,15 +1,13 @@
 {
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.5.1",
+    "@fortawesome/fontawesome-free": "^6.5.2",
     "bootstrap": "^5.3.3",
     "jquery": "^3.7.1",
-    "normalize.css": "^8.0.1",
     "noty": "^3.2.0-beta-deprecated",
     "sweetalert2": "^10.16.11"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1",
-    "@types/jquery": "^3.5.29",
-    "typescript": "^5.4.2"
+    "@biomejs/biome": "^1.7.1",
+    "@types/jquery": "^3.5.29"
   }
 }

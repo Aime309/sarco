@@ -12,16 +12,22 @@
     "trim_automatic_white_space": true,
     "ensure_newline_at_eof_on_save": true,
     "default_line_ending": "unix",
+    "rulers": [
+      80
+    ],
     "LSP": {
       "formatters": {
-        "source.json.sublime": "LSP-json"
+        "source.json.sublime": "LSP-json",
+        "source.json.composer": "LSP-json",
+        "source.js": "LSP-biome",
+        "source.ts": "LSP-biome",
       },
       "LSP-intelephense": {
         "settings": {
           "intelephense.environment.phpVersion": "8.2.18",
-          "intelephense.format.braces": "k&r"
-        }
-      }
+          "intelephense.format.braces": "k&r",
+        },
+      },
     },
   },
   "connections": {
@@ -32,7 +38,11 @@
       "database": "sarco2",
       "username": "root",
       "password": "",
-      "encoding": "utf-8"
+      "encoding": "utf-8",
     },
-  }
+    "sarco": {
+      "type": "sqlite",
+      "database": "C:\\xampp\\htdocs\\proyectos\\sarco\\base de datos\\sarco.db",
+    },
+  },
 }

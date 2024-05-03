@@ -9,21 +9,15 @@
     "post-install-cmd": [
       "php -r \"if (!file_exists('.env')) copy('.env.dist', '.env');\""
     ],
-    "test": "phpunit"
+    "dev": "start php -S localhost:80"
   },
   "autoload": {
     "psr-4": {
       "SARCO\\": "app",
-      "SARCOV2\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests"
+      "SARCO\\Vistas\\": "vistas"
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "^11.1",
     "filp/whoops": "^2.15",
     "symfony/var-dumper": "^7.0"
   }

@@ -1,0 +1,25 @@
+/*------------------------------------------------------------------
+[ Responsive ]*/
+@media (max-width: 992px) {
+  .form__background {
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .form__body {
+    width: 100%;
+  }
+
+  .form__background {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .form__body {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 70px;
+  }
+}
