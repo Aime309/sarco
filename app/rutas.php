@@ -9,6 +9,7 @@ use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Representante;
+use SARCO\Modelos\Sala;
 use SARCO\Modelos\Usuario;
 
 App::route('GET /salir', function (): void {
@@ -113,6 +114,10 @@ App::group('/', function (Router $router): void {
       ->query("SELECT COUNT(id) FROM usuarios WHERE rol = 'Docente'")
       ->fetchColumn();
 
+    $cantidadDeSalas = (int) bd()
+      ->query("SELECT COUNT(id) FROM salas")
+      ->fetchColumn();
+
     $ultimoPeriodo = bd()->query("
       SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
       FROM periodos ORDER BY inicio DESC LIMIT 1
@@ -141,12 +146,46 @@ App::group('/', function (Router $router): void {
         'cantidadDeRepresentantes',
         'cantidadDeMaestros',
         'ultimoPeriodo',
-        'ultimoMomento'
+        'ultimoMomento',
+        'cantidadDeSalas'
       ),
       'pagina'
     );
 
     App::render('plantillas/privada', ['titulo' => 'Inicio']);
+  });
+
+  $router->get('respaldar', function (): void {
+    if (strtolower($_ENV['DB_CONNECTION']) === 'mysql') {
+      $backupPath = dirname(__DIR__) . '/base de datos/backups/backup.mysql.sql';
+
+      `{$_ENV['MYSQLDUMP_PATH']} --user={$_ENV['DB_USERNAME']} --password={$_ENV['DB_PASSWORD']} {$_ENV['DB_DATABASE']} > '$backupPath'`;
+    } elseif (strtolower($_ENV['DB_CONNECTION']) === 'sqlite') {
+      copy($_ENV['DB_DATABASE'], $_ENV['DB_DATABASE'] . '.backup');
+    }
+
+    $_SESSION['mensajes.exito'] = 'Base de datos respaldada exitósamente';
+    App::redirect('/');
+  });
+
+  $router->get('restaurar', function (): void {
+    if (strtolower($_ENV['DB_CONNECTION']) === 'mysql') {
+      $queries = explode(
+        ';',
+        file_get_contents(__DIR__ . '/../base de datos/backups/backup.mysql.sql')
+      );
+
+      foreach ($queries as $query) {
+        bd()->query($query);
+      }
+    } elseif (strtolower($_ENV['DB_CONNECTION']) === 'sqlite') {
+      bd(cerrar: true);
+      unlink($_ENV['DB_DATABASE']);
+      rename($_ENV['DB_DATABASE'] . '.backup', $_ENV['DB_DATABASE']);
+    }
+
+    $_SESSION['mensajes.exito'] = 'Base de datos restaurada exitósamente';
+    App::redirect('/');
   });
 
   $router->group('usuarios', function (Router $router): void {
@@ -396,7 +435,6 @@ App::group('/', function (Router $router): void {
     });
 
     $router->post('/', function (): void {
-      // $momentos = App::request()->data['periodos'];
       $añoInicio = (int) App::request()->data['anio_inicio'];
       bd()->beginTransaction();
 
@@ -409,15 +447,6 @@ App::group('/', function (Router $router): void {
           (3, 9, 1, $idDelPeriodo)
         ");
 
-        // $sentencia = bd()->prepare("
-        //   INSERT INTO momentos (numero_momento, mes_inicio, dia_inicio, id_periodo)
-        //   VALUES (1, :mes1, :dia1, $idDelPeriodo),
-        //   (2, :mes2, :dia2, $idDelPeriodo),
-        //   (3, :mes3, :dia3, $idDelPeriodo)
-        // ");
-
-        // dd($idDelPeriodo);
-        // exit;
         bd()->commit();
         $_SESSION['mensajes.exito'] = "Período $añoInicio aperturado exitósamente";
         App::redirect('/periodos');
@@ -538,6 +567,132 @@ App::group('/', function (Router $router): void {
 
       $_SESSION['mensajes.exito'] = 'Contraseña actualizada exitósamente';
       App::redirect('/perfil');
+    });
+  });
+
+  $router->group('salas', function (Router $router): void {
+    $router->get('/', function (): void {
+      $salas = bd()->query("
+        SELECT id, nombre, edad_minima as edadMinima, edad_maxima as edadMaxima,
+        esta_activa as estaActiva, fecha_registro as fechaRegistro FROM salas
+      ")->fetchAll(PDO::FETCH_CLASS, Sala::class);
+
+      App::render('paginas/salas/listado', compact('salas'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Salas']);
+    });
+
+    $router->post('/', function (): void {
+      $sala = App::request()->data->getData();
+
+      $sentencia = bd()->prepare('
+        INSERT INTO salas (nombre, edad_minima, edad_maxima)
+        VALUES (:nombre, :edadMinima, :edadMaxima)
+      ');
+
+      $sentencia->bindValue(':nombre', $sala['nombre']);
+      $sentencia->bindValue(':edadMinima', $sala['edad_minima'], PDO::PARAM_INT);
+      $sentencia->bindValue(':edadMaxima', $sala['edad_maxima'], PDO::PARAM_INT);
+
+      try {
+        $sentencia->execute();
+        $_SESSION['mensajes.exito'] = 'Sala aperturada exitósamente';
+        App::redirect('/salas');
+      } catch (PDOException $error) {
+        if (str_contains($error, 'salas.nombre')) {
+          $_SESSION['mensajes.error'] = "Sala {$sala['nombre']} ya existe";
+        } else {
+          throw $error;
+        }
+
+        App::redirect('/salas/nueva');
+      }
+    });
+
+    $router->get('/nueva', function (): void {
+      App::render('paginas/salas/nueva', [], 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Aperturar sala']);
+    });
+
+    $router->group('/@id:[0-9]{1,}', function (Router $router): void {
+      $router->get('/', function (int $id): void {
+        $sala = bd()->query("
+          SELECT id, nombre, edad_minima as edadMinima, edad_maxima as edadMaxima,
+          esta_activa as estaActiva, fecha_registro as fechaRegistro FROM salas
+          WHERE id = $id
+        ")->fetchObject(Sala::class);
+
+        App::render('paginas/salas/editar', compact('sala'), 'pagina');
+        App::render('plantillas/privada', ['titulo' => 'Editar sala']);
+      });
+
+      $router->post('/', function (int $id): void {
+        $sala = App::request()->data->getData();
+
+        $sentencia = bd()->prepare("
+          UPDATE salas SET nombre = :nombre, edad_minima = :edadMinima,
+          edad_maxima = :edadMaxima WHERE id = $id
+        ");
+
+        $sentencia->bindValue(':nombre', $sala['nombre']);
+        $sentencia->bindValue(':edadMinima', $sala['edad_minima'], PDO::PARAM_INT);
+        $sentencia->bindValue(':edadMaxima', $sala['edad_maxima'], PDO::PARAM_INT);
+
+        try {
+          $sentencia->execute();
+          $_SESSION['mensajes.exito'] = 'Sala actualizada exitósamente';
+          App::redirect('/salas');
+        } catch (PDOException $error) {
+          if (str_contains($error, 'salas.nombre')) {
+            $_SESSION['mensajes.error'] = "Sala {$sala['nombre']} ya existe";
+          } else {
+            throw $error;
+          }
+
+          App::redirect("/salas/$id");
+        }
+      });
+
+      $router->get('/habilitar', function (int $id): void {
+        bd()->query("UPDATE salas SET esta_activa = TRUE WHERE id = $id");
+        $_SESSION['mensajes.exito'] = 'Sala habilitada exitósamente';
+        App::redirect('/salas');
+      });
+
+      $router->get('/inhabilitar', function (int $id): void {
+        bd()->query("UPDATE salas SET esta_activa = FALSE WHERE id = $id");
+        $_SESSION['mensajes.exito'] = 'Sala inhabilitada exitósamente';
+        App::redirect('/salas');
+      });
+    });
+  });
+
+  $router->group('momentos', function (Router $router): void {
+    $router->get('/', function (): void {
+      $momentos = bd()->query("
+        SELECT m.id, numero_momento as numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio, m.fecha_registro as fechaRegistro,
+        anio_inicio as periodo FROM momentos m JOIN periodos p
+        ON m.id_periodo = p.id ORDER BY m.id
+      ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
+
+      $mesActual = (int) date('m');
+
+      $ultimoMomento = bd()->query("
+        SELECT id, numero_momento as numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio, fecha_registro as fechaRegistro,
+        id_periodo as idPeriodo FROM momentos
+        WHERE mesInicio >= $mesActual
+        ORDER BY idPeriodo, mesInicio
+        LIMIT 1
+      ")->fetchObject(Momento::class);
+
+      App::render(
+        'paginas/momentos/listado',
+        compact('momentos', 'ultimoMomento'),
+        'pagina'
+      );
+
+      App::render('plantillas/privada', ['titulo' => 'Momentos']);
     });
   });
 }, [function (): void {

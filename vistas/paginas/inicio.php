@@ -6,6 +6,7 @@ use SARCO\Modelos\Periodo;
 assert(is_int($cantidadDeUsuarios));
 assert(is_int($cantidadDeRepresentantes));
 assert(is_int($cantidadDeMaestros));
+assert(is_int($cantidadDeSalas));
 assert($ultimoPeriodo instanceof Periodo || $ultimoPeriodo === null);
 assert($ultimoMomento instanceof Momento || $ultimoMomento === null);
 
@@ -15,7 +16,7 @@ $contadores = [
   ['href' => './estudiantes', 'title' => 'Estudiantes', 'icon' => '<i class="fas fa-graduation-cap fa-fw"></i>'],
   ['href' => './representantes', 'title' => 'Representantes', 'icon' => '<i class="fas fa-people-roof fa-fw"></i>', 'footer' => "$cantidadDeRepresentantes registrado" . ($cantidadDeRepresentantes > 1 ? 's' : '')],
   ['href' => './maestros', 'title' => 'Maestros', 'icon' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'footer' => "$cantidadDeMaestros registrado" . ($cantidadDeMaestros > 1 ? 's' : '')],
-  ['href' => './salas', 'title' => 'Salas', 'icon' => '<i class="fas fa-school-flag fa-fw"></i>'],
+  ['href' => './salas', 'title' => 'Salas', 'icon' => '<i class="fas fa-school-flag fa-fw"></i>', 'footer' => "$cantidadDeSalas registrada" . ($cantidadDeSalas > 1 ? 's' : '')],
 ];
 
 ?>

@@ -14,7 +14,7 @@ scripts('./recursos/js/validarFormulario.js');
 <header class="full-box page-header">
   <h1 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
-    Registro de usuario
+    Registro de <?= @$_GET['rol'] === 'maestro' ? 'maestro' : 'usuario' ?>
   </h1>
   <p class="text-justify"></p>
 </header>
@@ -64,7 +64,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Rol',
     'opciones' => array_map(static fn (Rol $rol): array => [
       'value' => $rol->name,
-      'children' => $rol->name
+      'children' => $rol->name,
+      'selected' => @$_GET['rol'] === 'maestro'
     ], Rol::menoresQue($usuario->rol))
   ]);
 

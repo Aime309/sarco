@@ -3,8 +3,9 @@
 namespace SARCO\Modelos;
 
 use DateTimeImmutable;
+use stdClass;
 
-abstract class Modelo {
+abstract class Modelo extends stdClass {
   public int $id;
   public string $fechaRegistro;
 

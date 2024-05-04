@@ -65,8 +65,9 @@ CREATE TABLE estudiantes (
 CREATE TABLE salas (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   nombre VARCHAR(20) NOT NULL UNIQUE CHECK (LENGTH(nombre) BETWEEN 3 AND 20),
-  edad_minima INTEGER NOT NULL CHECK (edad_minima > 0 AND edad_minima < edad_maxima),
-  edad_maxima INTEGER NOT NULL CHECK (edad_maxima <= 10 AND edad_maxima > edad_minima),
+  edad_minima INTEGER NOT NULL CHECK (edad_minima >= 0 AND edad_minima <= edad_maxima),
+  edad_maxima INTEGER NOT NULL CHECK (edad_maxima <= 10 AND edad_maxima >= edad_minima),
+  esta_activa BOOL NOT NULL DEFAULT TRUE,
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00')
 );
 

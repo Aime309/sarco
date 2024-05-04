@@ -1,7 +1,7 @@
 <?php
 
 /** Obtiene una conexión a la `Base de Datos` */
-function bd(): PDO {
+function bd(bool $cerrar = false): ?PDO {
   static $conexion = null;
 
   if (!$conexion) {
@@ -13,6 +13,10 @@ function bd(): PDO {
     $conexion = new PDO($dsn, @$_ENV['DB_USERNAME'], @$_ENV['DB_PASSWORD'], [
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
+  }
+
+  if ($cerrar) {
+    $conexion = null;
   }
 
   return $conexion;

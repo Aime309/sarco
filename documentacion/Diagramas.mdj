@@ -1353,6 +1353,21 @@
 										},
 										{
 											"_type": "ERDColumnView",
+											"_id": "AAAAAAGPQaS9eQcmaXk=",
+											"_parent": {
+												"$ref": "AAAAAAGOWX3vmmNPXsY="
+											},
+											"model": {
+												"$ref": "AAAAAAGPQaS9KAcjoxQ="
+											},
+											"font": "Roboto;13;0",
+											"left": 277,
+											"top": 616,
+											"width": 135.4765625,
+											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
 											"_id": "AAAAAAGOWX49zGNqefM=",
 											"_parent": {
 												"$ref": "AAAAAAGOWX3vmmNPXsY="
@@ -1362,7 +1377,7 @@
 											},
 											"font": "Roboto;13;0",
 											"left": 277,
-											"top": 616,
+											"top": 631,
 											"width": 135.4765625,
 											"height": 13
 										}
@@ -1371,14 +1386,14 @@
 									"left": 272,
 									"top": 551,
 									"width": 145.4765625,
-									"height": 83
+									"height": 98
 								}
 							],
 							"font": "Roboto;13;0",
 							"left": 272,
 							"top": 528,
 							"width": 145.4765625,
-							"height": 106,
+							"height": 121,
 							"autoResize": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGOWX3vmmNOlOA="
@@ -2443,7 +2458,7 @@
 									"visible": false,
 									"font": "Roboto;13;0",
 									"left": 380,
-									"top": 669,
+									"top": 677,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -2460,7 +2475,7 @@
 									},
 									"font": "Roboto;13;0",
 									"left": 381,
-									"top": 652,
+									"top": 667,
 									"height": 13,
 									"autoResize": true,
 									"alpha": 0.5235987755982988,
@@ -2496,7 +2511,7 @@
 								"$ref": "AAAAAAGOWX3vmWNNMik="
 							},
 							"lineStyle": 2,
-							"points": "366:633;366:720",
+							"points": "366:648;366:720",
 							"nameLabel": {
 								"$ref": "AAAAAAGOWZ/QFWYM5Nc="
 							},
@@ -3624,6 +3639,15 @@
 							"name": "edad maxima",
 							"length": 0,
 							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGPQaS9KAcjoxQ=",
+							"_parent": {
+								"$ref": "AAAAAAGOWX3vmWNLFaE="
+							},
+							"name": "está activa",
+							"length": 0
 						},
 						{
 							"_type": "ERDColumn",

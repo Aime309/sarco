@@ -62,8 +62,9 @@ CREATE TABLE estudiantes (
 CREATE TABLE salas (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre VARCHAR(20) NOT NULL UNIQUE CHECK (LENGTH(nombre) BETWEEN 3 AND 20),
-  edad_minima INTEGER NOT NULL CHECK (edad_minima > 0 AND edad_minima < edad_maxima),
-  edad_maxima INTEGER NOT NULL CHECK (edad_maxima <= 10 AND edad_maxima > edad_minima),
+  edad_minima INTEGER NOT NULL CHECK (edad_minima >= 0 AND edad_minima <= edad_maxima),
+  edad_maxima INTEGER NOT NULL CHECK (edad_maxima <= 10 AND edad_maxima >= edad_minima),
+  esta_activa BOOL NOT NULL DEFAULT TRUE,
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00')
 );
 
@@ -155,6 +156,10 @@ CREATE TABLE asignaciones_de_salas (
   FOREIGN KEY (id_aula) REFERENCES aulas (id),
   FOREIGN KEY (id_periodo) REFERENCES periodos (id)
 );
+
+INSERT INTO salas (nombre, edad_minima, edad_maxima)
+VALUES ('Maternal', 0, 2), ('De 3 Única', 3, 3), ('Mixta', 3, 4),
+('De 4 Única', 4, 4), ('De 5 Única', 5, 5);
 
 /*
 CHULETA: Extraer los docentes de una inscripción

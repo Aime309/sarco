@@ -4,3 +4,4 @@
 .env
 *.sublime-workspace
 *.db
+*.backup

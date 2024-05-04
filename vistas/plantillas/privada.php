@@ -40,6 +40,13 @@ scripts('recursos/js/cerrar-sesion.js');
   <link rel="stylesheet" href="recursos/css/tema.css" />
   <link rel="stylesheet" href="recursos/css/formularios.css" />
   <link rel="stylesheet" href="recursos/css/botones.css" />
+  <style>
+    th,
+    td {
+      vertical-align: middle !important;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 
 <body>
