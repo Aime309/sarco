@@ -7,7 +7,7 @@ function bd(): PDO {
   if (!$conexion) {
     $dsn = match (strtolower($_ENV['DB_CONNECTION'])) {
       'sqlite' => 'sqlite:' . $_ENV['DB_DATABASE'],
-      'mysql' => "mysql:host={$_ENV['DB_HOST']}; dbname={$_ENV['DB_NAME']}; charset=utf; port={$_ENV['DB_PORT']}"
+      'mysql' => "mysql:host={$_ENV['DB_HOST']}; dbname={$_ENV['DB_DATABASE']}; charset=utf8; port={$_ENV['DB_PORT']}"
     };
 
     $conexion = new PDO($dsn, @$_ENV['DB_USERNAME'], @$_ENV['DB_PASSWORD'], [

@@ -34,7 +34,7 @@ CREATE TABLE representantes (
   cedula INTEGER NOT NULL UNIQUE CHECK (cedula BETWEEN 1000000 AND 99999999),
   fecha_nacimiento DATE NOT NULL CHECK (fecha_nacimiento >= '1906-01-01'),
   estado_civil VARCHAR(12) NOT NULL CHECK (estado_civil IN ('Casado', 'Casada', 'Soltero', 'Soltera', 'Divorciado', 'Divorciada', 'Viudo', 'Viuda')),
-  nacionalidad NOT NULL CHECK (nacionalidad IN ('Venezolano', 'Venezolana', 'Extranjero', 'Extrajera')),
+  nacionalidad CHAR(10) NOT NULL CHECK (nacionalidad IN ('Venezolano', 'Venezolana', 'Extranjero', 'Extrajera')),
   telefono CHAR(15) NOT NULL UNIQUE CHECK (LENGTH(telefono) = 15 AND telefono LIKE '+__ ___-_______' /* AND telefono REGEXP '^\+\d{2} \d{3}-\d{7}$' */),
   correo VARCHAR(255) NOT NULL UNIQUE CHECK (LENGTH(correo) >= 5 AND correo LIKE '%@%.%'),
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00'),
@@ -50,7 +50,7 @@ CREATE TABLE estudiantes (
   fecha_nacimiento DATE NOT NULL CHECK (fecha_nacimiento >= '1996-01-01'),
   lugar_nacimiento TEXT NOT NULL CHECK (LENGTH(lugar_nacimiento) >= 3),
   genero VARCHAR(9) NOT NULL CHECK (genero IN ('Femenino', 'Masculino')),
-  tipo_sangre NOT NULL CHECK (tipo_sangre IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')),
+  tipo_sangre CHAR(3) NOT NULL CHECK (tipo_sangre IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')),
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00'),
   id_mama INTEGER NOT NULL,
   id_papa INTEGER,
@@ -100,7 +100,7 @@ CREATE TABLE inscripciones (
 
 CREATE TABLE momentos (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  numero_momento NOT NULL CHECK (numero_momento BETWEEN 1 AND 3),
+  numero_momento INTEGER NOT NULL CHECK (numero_momento BETWEEN 1 AND 3),
   mes_inicio INTEGER NOT NULL CHECK (mes_inicio BETWEEN 1 AND 12),
   -- dia_inicio INTEGER NOT NULL CHECK (CASE
   --   WHEN mes_inicio IN (1, 3, 5, 7, 8, 10, 12) THEN dia_inicio BETWEEN 1 AND 31
@@ -142,7 +142,7 @@ CREATE TABLE boletines (
 CREATE TABLE aulas (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   codigo_sala VARCHAR(20) NOT NULL UNIQUE CHECK (LENGTH(codigo_sala) BETWEEN 1 AND 20),
-  tipo NOT NULL CHECK (tipo IN ('Pequeña', 'Grande'))
+  tipo VARCHAR(7) NOT NULL CHECK (tipo IN ('Pequeña', 'Grande'))
 );
 
 CREATE TABLE asignaciones_de_salas (

@@ -28,6 +28,26 @@
           "intelephense.format.braces": "k&r",
         },
       },
+      "LSP-eslint":
+      {
+				"enabled": false,
+			},
+      "LSP-rome":
+      {
+				"enabled": false,
+			},
+      "LSP-stylelint":
+      {
+				"enabled": false,
+			},
+      "LSP-tailwindcss":
+      {
+				"enabled": false,
+			},
+      "ltex-ls":
+      {
+				"enabled": false,
+			},
     },
   },
   "connections": {

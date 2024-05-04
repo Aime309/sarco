@@ -6,6 +6,7 @@ use SARCO\Modelos\Periodo;
 assert($vistas instanceof View);
 assert($ultimoPeriodo instanceof Periodo || $ultimoPeriodo === null);
 scripts('./recursos/js/validarFormulario.js');
+$ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
 
 ?>
 
@@ -27,8 +28,71 @@ scripts('./recursos/js/validarFormulario.js');
     'type' => 'number',
     'min' => 2006,
     'max' => date('Y') + 1,
-    'value' => $ultimoPeriodo?->siguientePeriodo() ?? date('Y')
+    'value' => $ultimoAño
   ]);
+
+  // echo <<<html
+  // <hr />
+  // <h5>Primer momento</h5>
+  // <div class="row">
+  //   {$vistas->fetch('componentes/Input', [
+  //     'class' => 'col mr-2',
+  //     'validacion' => 'La fecha de inicio es requerida',
+  //     'name' => 'periodos[1][inicio]',
+  //     'placeholder' => 'Inicio',
+  //     'type' => 'date',
+  //     'value' => "$ultimoAño-01-01"
+  //   ])}
+  //   {$vistas->fetch('componentes/Input', [
+  //     'class' => 'col ml-2',
+  //     'validacion' => 'La fecha de fin es requerida',
+  //     'name' => 'periodos[1][fin]',
+  //     'placeholder' => 'Fin',
+  //     'type' => 'date',
+  //     'value' => "$ultimoAño-04-30"
+  //   ])}
+  // </div>
+  // <hr />
+  // <h5>Segundo momento</h5>
+  // <div class="row">
+  //   {$vistas->fetch('componentes/Input', [
+  //     'class' => 'col mr-2',
+  //     'validacion' => 'La fecha de inicio es requerida',
+  //     'name' => 'periodos[2][inicio]',
+  //     'placeholder' => 'Inicio',
+  //     'type' => 'date',
+  //     'value' => "$ultimoAño-05-01"
+  //   ])}
+  //   {$vistas->fetch('componentes/Input', [
+  //     'class' => 'col ml-2',
+  //     'validacion' => 'La fecha de fin es requerida',
+  //     'name' => 'periodos[2][fin]',
+  //     'placeholder' => 'Fin',
+  //     'type' => 'date',
+  //     'value' => "$ultimoAño-07-31"
+  //   ])}
+  // </div>
+  // <hr />
+  // <h5>Tercer momento</h5>
+  // <div class="row">
+  //   {$vistas->fetch('componentes/Input', [
+  //     'class' => 'col mr-2',
+  //     'validacion' => 'La fecha de inicio es requerida',
+  //     'name' => 'periodos[3][inicio]',
+  //     'placeholder' => 'Inicio',
+  //     'type' => 'date',
+  //     'value' => "$ultimoAño-08-01"
+  //   ])}
+  //   {$vistas->fetch('componentes/Input', [
+  //     'class' => 'col ml-2',
+  //     'validacion' => 'La fecha de fin es requerida',
+  //     'name' => 'periodos[3][fin]',
+  //     'placeholder' => 'Fin',
+  //     'type' => 'date',
+  //     'value' => "$ultimoAño-12-31"
+  //   ])}
+  // </div>
+  // html;
 
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',

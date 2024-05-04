@@ -5,7 +5,7 @@ namespace SARCO\Modelos;
 use Stringable;
 
 final class Periodo extends Modelo implements Stringable {
-  public int $inicio;
+  public readonly int $inicio;
 
   function siguientePeriodo(): int {
     return $this->inicio + 1;

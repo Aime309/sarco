@@ -6,6 +6,7 @@ use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Representante;
 use SARCO\Modelos\Usuario;
@@ -112,11 +113,26 @@ App::group('/', function (Router $router): void {
       ->query("SELECT COUNT(id) FROM usuarios WHERE rol = 'Docente'")
       ->fetchColumn();
 
-    $ultimoPeriodo = bd()
-      ->query("
-        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
-        FROM periodos ORDER BY inicio DESC LIMIT 1
-      ")->fetchObject(Periodo::class) ?: null;
+    $ultimoPeriodo = bd()->query("
+      SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+      FROM periodos ORDER BY inicio DESC LIMIT 1
+    ")->fetchObject(Periodo::class) ?: null;
+
+    $ultimoMomento = null;
+
+    if ($ultimoPeriodo instanceof Periodo) {
+      $mesActual = (int) date('m');
+
+      $ultimoMomento = bd()->query("
+        SELECT id, numero_momento as numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio, fecha_registro as fechaRegistro,
+        id_periodo as idPeriodo FROM momentos
+        WHERE idPeriodo = {$ultimoPeriodo->id}
+        AND mesInicio >= $mesActual
+        ORDER BY mesInicio ASC
+        LIMIT 1
+      ")->fetchObject(Momento::class);
+    }
 
     App::render(
       'paginas/inicio',
@@ -124,7 +140,8 @@ App::group('/', function (Router $router): void {
         'cantidadDeUsuarios',
         'cantidadDeRepresentantes',
         'cantidadDeMaestros',
-        'ultimoPeriodo'
+        'ultimoPeriodo',
+        'ultimoMomento'
       ),
       'pagina'
     );
@@ -379,13 +396,34 @@ App::group('/', function (Router $router): void {
     });
 
     $router->post('/', function (): void {
+      // $momentos = App::request()->data['periodos'];
       $añoInicio = (int) App::request()->data['anio_inicio'];
+      bd()->beginTransaction();
 
       try {
         bd()->query("INSERT INTO periodos (anio_inicio) VALUES ($añoInicio)");
+        $idDelPeriodo = bd()->lastInsertId();
+        bd()->query("
+          INSERT INTO momentos (numero_momento, mes_inicio, dia_inicio, id_periodo)
+          VALUES (1, 1, 1, $idDelPeriodo), (2, 5, 1, $idDelPeriodo),
+          (3, 9, 1, $idDelPeriodo)
+        ");
+
+        // $sentencia = bd()->prepare("
+        //   INSERT INTO momentos (numero_momento, mes_inicio, dia_inicio, id_periodo)
+        //   VALUES (1, :mes1, :dia1, $idDelPeriodo),
+        //   (2, :mes2, :dia2, $idDelPeriodo),
+        //   (3, :mes3, :dia3, $idDelPeriodo)
+        // ");
+
+        // dd($idDelPeriodo);
+        // exit;
+        bd()->commit();
         $_SESSION['mensajes.exito'] = "Período $añoInicio aperturado exitósamente";
         App::redirect('/periodos');
       } catch (PDOException $error) {
+        bd()->rollBack();
+
         if (str_contains($error, 'periodos.anio_inicio')) {
           $_SESSION['mensajes.error'] = "Periodo $añoInicio ya fue aperturado";
         } else {
@@ -406,6 +444,101 @@ App::group('/', function (Router $router): void {
       App::render('paginas/periodos/nuevo', compact('ultimoPeriodo'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Nuevo período']);
     });
+
+    // $router->get('/@periodo:[0-9]{4}', function (int $periodo): void {
+    //   $periodo = bd()
+    //     ->query("
+    //       SELECT p.id, p.anio_inicio as inicio, p.fecha_registro as fechaRegistro
+    //       FROM periodos p
+    //       JOIN momentos m
+    //       ON p.id = m.id_periodo
+    //       WHERE inicio = $periodo
+    //     ")->fetchAll();
+
+    //   dd($periodo);
+    //   exit;
+
+    //   App::render('paginas/periodos/editar', compact('periodo'), 'pagina');
+    //   App::render('plantillas/privada', ['titulo' => 'Editar momentos']);
+    // });
+  });
+
+  $router->group('perfil', function (Router $router): void {
+    $router->get('/', function (): void {
+      App::render('paginas/usuarios/perfil', [], 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Mi perfil']);
+    });
+
+    $router->post('/', function (): void {
+      $usuario = App::request()->data->getData();
+
+      $sentencia = bd()->prepare("
+        UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos,
+        cedula = :cedula, fecha_nacimiento = :fechaNacimiento,
+        direccion = :direccion, telefono = :telefono, correo = :correo
+      ");
+
+      $sentencia->bindValue(':nombres', $usuario['nombres']);
+      $sentencia->bindValue(':apellidos', $usuario['apellidos']);
+      $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
+      $sentencia->bindValue(':fechaNacimiento', $usuario['fecha_nacimiento']);
+      $sentencia->bindValue(':direccion', $usuario['direccion']);
+      $sentencia->bindValue(':telefono', $usuario['telefono']);
+      $sentencia->bindValue(':correo', $usuario['correo']);
+
+      try {
+        $sentencia->execute();
+        $_SESSION['mensajes.exito'] = 'Perfil actualizado exitósamente';
+      } catch (PDOException $error) {
+        if (str_contains($error, 'usuarios.nombres')) {
+          $nombreCompleto = "{$usuario['nombres']} {$usuario['apellidos']}";
+          $_SESSION['mensajes.error'] = "Usuario $nombreCompleto ya existe";
+        } elseif (str_contains($error, 'usuarios.cedula')) {
+          $_SESSION['mensajes.error'] = "Usuario {$usuario['cedula']} ya existe";
+        } elseif (str_contains($error, 'usuarios.telefono')) {
+          $_SESSION['mensajes.error'] = "Teléfono {$usuario['telefono']} ya existe";
+        } elseif (str_contains($error, 'usuarios.correo')) {
+          $_SESSION['mensajes.error'] = "Correo {$usuario['correo']} ya existe";
+        } else {
+          throw $error;
+        }
+      }
+
+      App::redirect('/perfil');
+    });
+
+    $router->post('/actualizar-clave', function (): void {
+      // TODO: no está actualizando clave
+      $claves = App::request()->data->getData();
+      $usuario = App::view()->get('usuario');
+      $nuevaClave = Usuario::encriptar($claves['nueva_clave']);
+
+      assert($usuario instanceof Usuario);
+
+      if ($usuario->validarClave($claves['antigua_clave'])) {
+        $_SESSION['mensajes.error'] = 'Antigua contraseña incorrecta';
+      } elseif ($claves['antigua_clave'] === $claves['nueva_clave']) {
+        $_SESSION['mensajes.error'] = 'La nueva contraseña no puede ser igual a la anterior';
+      } elseif ($claves['nueva_clave'] !== $claves['confirmar_clave']) {
+        $_SESSION['mensajes.error'] = 'La nueva contraseña y su confirmación no coinciden';
+      }
+
+      if (key_exists('mensajes.error', $_SESSION)) {
+        App::redirect('/perfil');
+
+        return;
+      }
+
+      $sentencia = bd()
+        ->prepare('UPDATE usuarios SET clave = :clave WHERE cedula = :cedula');
+
+      $sentencia->bindValue(':clave', $nuevaClave);
+      $sentencia->bindValue(':cedula', $usuario->cedula, PDO::PARAM_INT);
+      $sentencia->execute();
+
+      $_SESSION['mensajes.exito'] = 'Contraseña actualizada exitósamente';
+      App::redirect('/perfil');
+    });
   });
 }, [function (): void {
   if (!key_exists('usuario.id', $_SESSION)) {
@@ -417,7 +550,7 @@ App::group('/', function (Router $router): void {
   $sentencia = bd()->prepare('
     SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
     direccion, telefono, correo, rol, esta_activo as estaActivo,
-    fecha_registro as fechaRegistro
+    fecha_registro as fechaRegistro, clave
     FROM usuarios
     WHERE id = ?
   ');
