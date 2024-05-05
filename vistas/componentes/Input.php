@@ -9,6 +9,7 @@ if (!enum_exists(InputType::class)) {
     case Month = 'month';
     case Tel = 'tel';
     case Email = 'email';
+    case Search = 'search';
   }
 }
 
@@ -25,6 +26,7 @@ $pattern = isset($pattern) ? (string) $pattern : null;
 $required = isset($required) ? (bool) $required : true;
 $readonly = isset($readonly) ? (bool) $readonly : false;
 $class = isset($class) ? (string) $class : null;
+$list = isset($list) ? (string) $list : null;
 
 $type = (isset($type) and is_string($type))
   ? InputType::from($type)
@@ -33,7 +35,7 @@ $type = (isset($type) and is_string($type))
 ?>
 
 <label class="input-group input-group--with-validation <?= $class ?>" data-validate="<?= $validacion ?>">
-  <input <?= $readonly ? 'readonly' : '' ?> type="<?= $type->value ?>" <?= $required ? 'required' : '' ?> class="input-group__input" name="<?= $name ?>" placeholder="<?= $placeholder ?>" value="<?= $value ?>" <?= $min ? "min='$min'" : '' ?> <?= $max ? "max='$max'" : '' ?> <?= $minlength ? "minlength='$minlength'" : '' ?> <?= $maxlength ? "maxlength='$maxlength'" : '' ?> <?= $pattern ? "pattern='$pattern'" : '' ?> title='<?= $validacion ?>' />
+  <input list="<?= $list ?>" <?= $readonly ? 'readonly' : '' ?> type="<?= $type->value ?>" <?= $required ? 'required' : '' ?> class="input-group__input" name="<?= $name ?>" placeholder="<?= $placeholder ?>" value="<?= $value ?>" <?= $min ? "min='$min'" : '' ?> <?= $max ? "max='$max'" : '' ?> <?= $minlength ? "minlength='$minlength'" : '' ?> <?= $maxlength ? "maxlength='$maxlength'" : '' ?> <?= $pattern ? "pattern='$pattern'" : '' ?> title='<?= $validacion ?>' />
   <span class="input-group__focus"></span>
   <span class="input-group__label"><?= $placeholder ?></span>
 </label>

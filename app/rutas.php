@@ -6,11 +6,39 @@ use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Representante;
 use SARCO\Modelos\Sala;
 use SARCO\Modelos\Usuario;
+
+App::group('/api', function (Router $router): void {
+  $router->get('/salas/asignaciones/@idMomento:[0-9]+', function (int $idMomento): void {
+    $idPeriodo = (int) bd()->query("
+      SELECT id_periodo FROM momentos WHERE id = $idMomento
+    ")->fetchColumn();
+
+    $asignaciones = bd()->query("
+      SELECT a.id, d.id as idDocente, d.nombres as nombresDocente,
+      d.apellidos as apellidosDocente, s.nombre as sala
+      FROM asignaciones_de_docentes a
+      JOIN usuarios d
+      JOIN salas s
+      ON a.id_docente = d.id AND a.id_sala = s.id
+      WHERE id_periodo = $idPeriodo
+    ")->fetchAll();
+
+    App::json(array_map(static fn (array $asignacion): array => [
+      'id' => $asignacion['id'],
+      'docente' => [
+        'id' => $asignacion['idDocente'],
+        'nombre' => "{$asignacion['nombresDocente']} {$asignacion['apellidosDocente']}"
+      ],
+      'sala' => $asignacion['sala']
+    ], $asignaciones));
+  });
+});
 
 App::route('GET /salir', function (): void {
   unset($_SESSION['usuario.id']);
@@ -118,6 +146,10 @@ App::group('/', function (Router $router): void {
       ->query("SELECT COUNT(id) FROM salas")
       ->fetchColumn();
 
+    $cantidadDeEstudiantes = (int) bd()
+      ->query("SELECT COUNT(id) FROM estudiantes")
+      ->fetchColumn();
+
     $ultimoPeriodo = bd()->query("
       SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
       FROM periodos ORDER BY inicio DESC LIMIT 1
@@ -145,6 +177,7 @@ App::group('/', function (Router $router): void {
         'cantidadDeUsuarios',
         'cantidadDeRepresentantes',
         'cantidadDeMaestros',
+        'cantidadDeEstudiantes',
         'ultimoPeriodo',
         'ultimoMomento',
         'cantidadDeSalas'
@@ -613,6 +646,57 @@ App::group('/', function (Router $router): void {
       App::render('plantillas/privada', ['titulo' => 'Aperturar sala']);
     });
 
+    $router->get('/asignar', function (): void {
+      $periodos = bd()->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos ORDER BY inicio DESC
+      ")->fetchAll(PDO::FETCH_CLASS, Periodo::class);
+
+      $periodoActual = bd()->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos ORDER BY inicio DESC LIMIT 1
+      ")->fetchObject(Periodo::class) ?: null;
+
+      $idAutenticado = App::view()->get('usuario')->id;
+
+      $maestros = bd()->query("
+        SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
+        direccion, telefono, correo, rol, esta_activo as estaActivo,
+        fecha_registro as fechaRegistro
+        FROM usuarios WHERE rol = 'Docente' AND id != $idAutenticado
+      ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
+
+      $salas = bd()->query("
+        SELECT id, nombre, edad_minima as edadMinima, edad_maxima as edadMaxima,
+        esta_activa as estaActiva, fecha_registro as fechaRegistro FROM salas
+      ")->fetchAll(PDO::FETCH_CLASS, Sala::class);
+
+      App::render(
+        'paginas/salas/asignar',
+        compact('periodos', 'periodoActual', 'maestros', 'salas'),
+        'pagina'
+      );
+
+      App::render('plantillas/privada', ['titulo' => 'Asignar maestro a sala']);
+    });
+
+    $router->post('/asignar', function (): void {
+      $asignacion = App::request()->data->getData();
+
+      $sentencia = bd()->prepare("
+        INSERT INTO asignaciones_de_docentes (id_docente, id_sala, id_periodo)
+        VALUES (:idDocente, :idSala, :idPeriodo)
+      ");
+
+      $sentencia->bindValue(':idDocente', $asignacion['id_maestro'], PDO::PARAM_INT);
+      $sentencia->bindValue(':idSala', $asignacion['id_sala'], PDO::PARAM_INT);
+      $sentencia->bindValue(':idPeriodo', $asignacion['id_periodo'], PDO::PARAM_INT);
+      $sentencia->execute();
+
+      $_SESSION['mensajes.exito'] = 'Maestro asignado exitósamente';
+      App::redirect('/');
+    });
+
     $router->group('/@id:[0-9]{1,}', function (Router $router): void {
       $router->get('/', function (int $id): void {
         $sala = bd()->query("
@@ -693,6 +777,146 @@ App::group('/', function (Router $router): void {
       );
 
       App::render('plantillas/privada', ['titulo' => 'Momentos']);
+    });
+  });
+
+  $router->group('estudiantes', function (Router $router): void {
+    $router->get('/', function (): void {
+      $estudiantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula_escolar as cedula,
+        fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
+        genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
+        id_mama as idMama, id_papa as idPapa FROM estudiantes
+      ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+
+      App::render('paginas/estudiantes/listado', compact('estudiantes'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Estudiantes']);
+    });
+
+    $router->get('/inscribir', function (): void {
+      $estudiantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula_escolar as cedula,
+        fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
+        genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
+        id_mama as idMama, id_papa as idPapa FROM estudiantes
+      ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+
+      $momentos = bd()->query("
+        SELECT m.id, numero_momento as numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio, m.fecha_registro as fechaRegistro,
+        anio_inicio as periodo FROM momentos m JOIN periodos p
+        ON m.id_periodo = p.id ORDER BY m.id
+      ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
+
+      $mesActual = (int) date('m');
+
+      $ultimoMomento = bd()->query("
+        SELECT id, numero_momento as numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio, fecha_registro as fechaRegistro,
+        id_periodo as idPeriodo FROM momentos
+        WHERE mesInicio >= $mesActual
+        ORDER BY idPeriodo, mesInicio
+        LIMIT 1
+      ")->fetchObject(Momento::class);
+
+      App::render(
+        'paginas/estudiantes/inscribir',
+        compact('estudiantes', 'momentos', 'ultimoMomento'),
+        'pagina'
+      );
+
+      App::render('plantillas/privada', ['titulo' => 'Inscribir estudiante']);
+    });
+
+    $router->post('/inscribir', function (): void {
+      $inscripcion = App::request()->data->getData();
+
+      bd()->beginTransaction();
+
+      try {
+        $sentencia = bd()->prepare("
+          INSERT INTO representantes (nombres, apellidos, cedula,
+          fecha_nacimiento, estado_civil, nacionalidad, telefono, correo)
+          VALUES (:nombres, :apellidos, :cedula, :fechaNacimiento, :estadoCivil,
+          :nacionalidad, :telefono, :correo)
+        ");
+
+        if (key_exists('padre', $inscripcion)) {
+          $estadoCivil = EstadoCivil::from($inscripcion['padre']['estado_civil'])
+            ->obtenerPorGenero(Genero::Masculino);
+
+          $nacionalidad = Nacionalidad::from($inscripcion['padre']['nacionalidad'])
+            ->obtenerPorGenero(Genero::Masculino);
+
+          $sentencia->bindValue(':nombres', $inscripcion['padre']['nombres']);
+          $sentencia->bindValue(':apellidos', $inscripcion['padre']['apellidos']);
+          $sentencia->bindValue(':cedula', $inscripcion['padre']['cedula'], PDO::PARAM_INT);
+          $sentencia->bindValue(':fechaNacimiento', $inscripcion['padre']['fecha_nacimiento']);
+          $sentencia->bindValue(':estadoCivil', $estadoCivil);
+          $sentencia->bindValue(':nacionalidad', $nacionalidad);
+          $sentencia->bindValue(':telefono', $inscripcion['padre']['telefono']);
+          $sentencia->bindValue(':correo', $inscripcion['padre']['correo']);
+
+          $sentencia->execute();
+          $idDelPapa = bd()->lastInsertId();
+        }
+
+        $estadoCivil = EstadoCivil::from($inscripcion['madre']['estado_civil'])
+          ->obtenerPorGenero(Genero::Femenino);
+
+        $nacionalidad = Nacionalidad::from($inscripcion['madre']['nacionalidad'])
+          ->obtenerPorGenero(Genero::Femenino);
+
+        $sentencia->bindValue(':nombres', $inscripcion['madre']['nombres']);
+        $sentencia->bindValue(':apellidos', $inscripcion['madre']['apellidos']);
+        $sentencia->bindValue(':cedula', $inscripcion['madre']['cedula'], PDO::PARAM_INT);
+        $sentencia->bindValue(':fechaNacimiento', $inscripcion['madre']['fecha_nacimiento']);
+        $sentencia->bindValue(':estadoCivil', $estadoCivil);
+        $sentencia->bindValue(':nacionalidad', $nacionalidad);
+        $sentencia->bindValue(':telefono', $inscripcion['madre']['telefono']);
+        $sentencia->bindValue(':correo', $inscripcion['madre']['correo']);
+
+        $sentencia->execute();
+        $idDeLaMama = bd()->lastInsertId();
+
+        $sentencia = bd()->prepare("
+          INSERT INTO estudiantes (nombres, apellidos, cedula_escolar,
+          fecha_nacimiento, lugar_nacimiento, genero, tipo_sangre, id_mama,
+          id_papa) VALUES (:nombres, :apellidos, :cedula, :fechaNacimiento,
+          :lugarNacimiento, :genero, :grupoSanguineo, $idDeLaMama, $idDelPapa)
+        ");
+
+        $sentencia->bindValue(':nombres', $inscripcion['estudiante']['nombres']);
+        $sentencia->bindValue(':apellidos', $inscripcion['estudiante']['apellidos']);
+        $sentencia->bindValue(':cedula', $inscripcion['estudiante']['cedula_escolar']);
+        $sentencia->bindValue(':fechaNacimiento', $inscripcion['estudiante']['fecha_nacimiento']);
+        $sentencia->bindValue(':lugarNacimiento', $inscripcion['estudiante']['lugar_nacimiento']);
+        $sentencia->bindValue(':genero', $inscripcion['estudiante']['genero']);
+        $sentencia->bindValue(':grupoSanguineo', $inscripcion['estudiante']['grupo_sanguineo']);
+        $sentencia->execute();
+        $idDelEstudiante = bd()->lastInsertId();
+
+        $sentencia = bd()->prepare("
+          INSERT INTO inscripciones (id_momento, id_estudiante,
+          id_asignacion_docente, id_asignacion_asistente) VALUES (:idMomento,
+          :idEstudiante, :idAsignacionDocente, :idAsignacionAsistente)
+        ");
+
+        $sentencia->bindValue(':idMomento', $inscripcion['id_momento'], PDO::PARAM_INT);
+        $sentencia->bindValue(':idEstudiante', $idDelEstudiante, PDO::PARAM_INT);
+        $sentencia->bindValue(':idAsignacionDocente', $inscripcion['id_asignacion_docente'], PDO::PARAM_INT);
+        $sentencia->bindValue(':idAsignacionAsistente', $inscripcion['id_asignacion_asistente'], PDO::PARAM_INT);
+        $sentencia->execute();
+
+        bd()->commit();
+        $_SESSION['mensajes.exito'] = 'Estudiante inscrito exitósamente';
+        App::redirect('/inscripciones');
+      } catch (PDOException $error) {
+        bd()->rollBack();
+
+        throw $error;
+        App::redirect('/estudiantes/inscribir');
+      }
     });
   });
 }, [function (): void {

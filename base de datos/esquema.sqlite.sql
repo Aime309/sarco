@@ -88,11 +88,13 @@ CREATE TABLE asignaciones_de_docentes (
 CREATE TABLE inscripciones (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00'),
+  id_momento INTEGER NOT NULL,
   id_estudiante INTEGER NOT NULL,
   id_asignacion_docente INTEGER NOT NULL,
   id_asignacion_asistente INTEGER NOT NULL,
   id_asignacion_segundo_asistente INTEGER,
 
+  FOREIGN KEY (id_momento) REFERENCES momentos (id),
   FOREIGN KEY (id_estudiante) REFERENCES estudiantes (id),
   FOREIGN KEY (id_asignacion_docente) REFERENCES asignaciones_de_docentes (id),
   FOREIGN KEY (id_asignacion_asistente) REFERENCES asignaciones_de_docentes (id),

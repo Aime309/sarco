@@ -19,13 +19,13 @@ if ($_ENV['IS_DEBUG']) {
       JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
     ));
 
-    App::render('paginas/404', [], 'pagina');
+    App::render('paginas/errores/404', [], 'pagina');
     App::render('plantillas/errores', ['titulo' => 'Página no encontrada']);
     App::response()->status(404)->send();
   });
 } else {
   App::map('error', function (): void {
-    App::render('paginas/500', [], 'pagina');
+    App::render('paginas/errores/500', [], 'pagina');
     App::render('plantillas/errores', ['titulo' => 'Error interno']);
     App::response()->status(500)->send();
   });
