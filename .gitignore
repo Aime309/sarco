@@ -1,7 +1,9 @@
 /vendor/
 /node_modules/
+/.idea/
 
 .env
 *.sublime-workspace
 *.db
 *.backup
+*.cache
