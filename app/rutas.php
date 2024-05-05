@@ -7,6 +7,7 @@ use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Estudiante;
+use SARCO\Modelos\Inscripcion;
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Representante;
@@ -841,7 +842,7 @@ App::group('/', function (Router $router): void {
           :nacionalidad, :telefono, :correo)
         ");
 
-        if (key_exists('padre', $inscripcion)) {
+        if (!empty($inscripcion['padre']['nombres'])) {
           $estadoCivil = EstadoCivil::from($inscripcion['padre']['estado_civil'])
             ->obtenerPorGenero(Genero::Masculino);
 
@@ -878,6 +879,7 @@ App::group('/', function (Router $router): void {
 
         $sentencia->execute();
         $idDeLaMama = bd()->lastInsertId();
+        $idDelPapa ??= 'NULL';
 
         $sentencia = bd()->prepare("
           INSERT INTO estudiantes (nombres, apellidos, cedula_escolar,
@@ -908,6 +910,27 @@ App::group('/', function (Router $router): void {
         $sentencia->bindValue(':idAsignacionAsistente', $inscripcion['id_asignacion_asistente'], PDO::PARAM_INT);
         $sentencia->execute();
 
+        $idDelDocente = (int) bd()->query("
+          SELECT u.id as idDelDocente FROM asignaciones_de_docentes a
+          JOIN usuarios u ON a.id_docente = u.id
+          WHERE a.id = {$inscripcion['id_asignacion_docente']}
+        ")->fetchColumn();
+
+        $idDelAsistente = (int) bd()->query("
+          SELECT u.id as idDelDocente FROM asignaciones_de_docentes a
+          JOIN usuarios u ON a.id_docente = u.id
+          WHERE a.id = {$inscripcion['id_asignacion_asistente']}
+        ")->fetchColumn();
+
+        $sentencia = bd()->query("
+          INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
+          descripcion_formacion, descripcion_ambiente, recomendaciones,
+          id_estudiante, id_momento, id_docente, id_asistente) VALUES (
+          0, 'No establecido', 'No establecida', 'No establecida',
+          'No establecidas', $idDelEstudiante, {$inscripcion['id_momento']},
+          $idDelDocente, $idDelAsistente)
+        ");
+
         bd()->commit();
         $_SESSION['mensajes.exito'] = 'Estudiante inscrito exitósamente';
         App::redirect('/inscripciones');
@@ -917,6 +940,28 @@ App::group('/', function (Router $router): void {
         throw $error;
         App::redirect('/estudiantes/inscribir');
       }
+    });
+  });
+
+  $router->group('inscripciones', function (Router $router): void {
+    $router->get('/', function (): void {
+      $inscripciones = bd()->query("
+        SELECT i.id, i.fecha_registro as fechaRegistro,
+        m.numero_momento as momento, e.nombres as nombresEstudiante,
+        e.apellidos as apellidosEstudiante, d.nombres as nombresDocente,
+        d.apellidos as apellidosDocente
+        FROM inscripciones i JOIN momentos m JOIN estudiantes e
+        JOIN usuarios d ON i.id_momento = m.id AND i.id_estudiante = e.id
+        AND i.id_asignacion_docente = d.id
+      ")->fetchAll(PDO::FETCH_CLASS, Inscripcion::class);
+
+      App::render(
+        'paginas/inscripciones/listado',
+        compact('inscripciones'),
+        'pagina'
+      );
+
+      App::render('plantillas/privada', ['titulo' => 'Inscripciones']);
     });
   });
 }, [function (): void {
