@@ -157,13 +157,6 @@ scripts('./recursos/js/validarFormulario.js');
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'La cédula escolar debe seguir el formato v-1xxXXXXXXXX',
-        'name' => 'estudiante[cedula_escolar]',
-        'placeholder' => 'Cédula',
-        'pattern' => 'v-1[0-9]{2}[0-9]{7,8}'
-      ]);
-
-      $vistas->render('componentes/Input', [
         'validacion' => 'La fecha de nacimiento es requerida',
         'name' => 'estudiante[fecha_nacimiento]',
         'placeholder' => 'Fecha de nacimiento',

@@ -25,6 +25,7 @@ $value = isset($value) ? (string) $value : null;
 $pattern = isset($pattern) ? (string) $pattern : null;
 $required = isset($required) ? (bool) $required : true;
 $readonly = isset($readonly) ? (bool) $readonly : false;
+$disabled = isset($disabled) ? (bool) $disabled : false;
 $class = isset($class) ? (string) $class : null;
 $list = isset($list) ? (string) $list : null;
 
@@ -34,8 +35,26 @@ $type = (isset($type) and is_string($type))
 
 ?>
 
-<label class="input-group input-group--with-validation <?= $class ?>" data-validate="<?= $validacion ?>">
-  <input list="<?= $list ?>" <?= $readonly ? 'readonly' : '' ?> type="<?= $type->value ?>" <?= $required ? 'required' : '' ?> class="input-group__input" name="<?= $name ?>" placeholder="<?= $placeholder ?>" value="<?= $value ?>" <?= $min ? "min='$min'" : '' ?> <?= $max ? "max='$max'" : '' ?> <?= $minlength ? "minlength='$minlength'" : '' ?> <?= $maxlength ? "maxlength='$maxlength'" : '' ?> <?= $pattern ? "pattern='$pattern'" : '' ?> title='<?= $validacion ?>' />
+<label
+  class="input-group input-group--with-validation <?= $disabled ? 'input-group--disabled' : '' ?> <?= $required ? 'input-group--required' : 'input-group--optional' ?> <?= $class ?>"
+  data-validate="<?= $validacion ?>">
+  <input
+    list="<?= $list ?>"
+    <?= $readonly ? 'readonly' : '' ?>
+    <?= $disabled ? 'disabled' : '' ?>
+    type="<?= $type->value ?>"
+    <?= $required ? 'required' : '' ?>
+    class="input-group__input"
+    name="<?= $name ?>"
+    placeholder="<?= $placeholder ?>"
+    value="<?= $value ?>"
+    <?= $min !== null ? "min='$min'" : '' ?>
+    <?= $max ? "max='$max'" : '' ?>
+    <?= $minlength ? "minlength='$minlength'" : '' ?>
+    <?= $maxlength ? "maxlength='$maxlength'" : '' ?>
+    <?= $pattern ? "pattern='$pattern'" : '' ?>
+    title='<?= $validacion ?>'
+  />
   <span class="input-group__focus"></span>
   <span class="input-group__label"><?= $placeholder ?></span>
 </label>

@@ -77,6 +77,56 @@
   margin-bottom: 10px;
 }
 
+.input-group--disabled {
+  background: #ddd;
+}
+
+.input-group--required {
+  position: relative;
+
+  --red: #ec5252;
+}
+
+.input-group--required::before {
+  content: '✳';
+  position: absolute;
+  top: -.25em;
+  left: -.25em;
+  font-size: 1.75em;
+  color: var(--red);
+  font-weight: 900;
+  background: #f5f5f5;
+  z-index: 999;
+}
+
+.input-group--required::after {
+  content: 'Requerido';
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  color: var(--red);
+  font-weight: lighter;
+  font-size: 13px;
+}
+
+.input-group--optional::after {
+  content: 'Opcional';
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  color: #6675df;
+  font-weight: lighter;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.input-group--disabled.input-group--required::before,
+.input-group--disabled.input-group--required::after,
+.input-group--disabled.input-group--optional::before,
+.input-group--disabled.input-group--optional::after {
+  content: unset;
+}
+
 .input-group__label {
   cursor: text;
   font-size: 18px;
@@ -88,6 +138,11 @@
   left: 0;
   top: 30px;
   transition: 200ms top, 200ms font-size;
+}
+
+.input-group--disabled .input-group__label {
+  cursor: not-allowed;
+  color: rgb(85, 85, 85);
 }
 
 .input-group__input {

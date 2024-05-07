@@ -25,7 +25,9 @@ $enlaces[] = ['icono' => '<i class="fas fa-users fa-fw"></i>', 'titulo' => 'Usua
 $enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo' => 'Estudiantes', 'subenlaces' => [
   ['href' => 'estudiantes/inscribir', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Inscribir estudiante'],
   ['href' => 'estudiantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de estudiantes'],
-  ['href' => 'estudiantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar estudiante'],
+  ['href' => 'inscripciones', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de inscripciones'],
+  // ['href' => 'estudiantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar estudiante'],
+  ['href' => 'estudiantes/boletines', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Lista de boletines'],
 ]];
 
 $enlaces[] = ['icono' => '<i class="fas fa-school-flag fa-fw"></i>', 'titulo' => 'Salas', 'subenlaces' => [

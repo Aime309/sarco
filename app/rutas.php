@@ -6,6 +6,7 @@ use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Boletin;
 use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Inscripcion;
 use SARCO\Modelos\Momento;
@@ -880,6 +881,9 @@ App::group('/', function (Router $router): void {
         $sentencia->execute();
         $idDeLaMama = bd()->lastInsertId();
         $idDelPapa ??= 'NULL';
+        [$añoDeNacimiento] = explode('-', $inscripcion['estudiante']['fecha_nacimiento']);
+        $ultimosDigitosAñoNacimiento = substr($añoDeNacimiento, 2);
+        $cedulaEscolar = "v-1{$ultimosDigitosAñoNacimiento}{$inscripcion['madre']['cedula']}";
 
         $sentencia = bd()->prepare("
           INSERT INTO estudiantes (nombres, apellidos, cedula_escolar,
@@ -890,7 +894,7 @@ App::group('/', function (Router $router): void {
 
         $sentencia->bindValue(':nombres', $inscripcion['estudiante']['nombres']);
         $sentencia->bindValue(':apellidos', $inscripcion['estudiante']['apellidos']);
-        $sentencia->bindValue(':cedula', $inscripcion['estudiante']['cedula_escolar']);
+        $sentencia->bindValue(':cedula', $cedulaEscolar);
         $sentencia->bindValue(':fechaNacimiento', $inscripcion['estudiante']['fecha_nacimiento']);
         $sentencia->bindValue(':lugarNacimiento', $inscripcion['estudiante']['lugar_nacimiento']);
         $sentencia->bindValue(':genero', $inscripcion['estudiante']['genero']);
@@ -910,17 +914,60 @@ App::group('/', function (Router $router): void {
         $sentencia->bindValue(':idAsignacionAsistente', $inscripcion['id_asignacion_asistente'], PDO::PARAM_INT);
         $sentencia->execute();
 
-        $idDelDocente = (int) bd()->query("
-          SELECT u.id as idDelDocente FROM asignaciones_de_docentes a
-          JOIN usuarios u ON a.id_docente = u.id
-          WHERE a.id = {$inscripcion['id_asignacion_docente']}
-        ")->fetchColumn();
+        $consulta = "SELECT a.id_docente FROM asignaciones_de_docentes a
+        JOIN usuarios d
+        ON a.id_docente = d.id
+        WHERE a.id = {$inscripcion['id_asignacion_docente']}";
+
+        dd($consulta, $inscripcion);
+
+        $idDelDocente = (int) bd()->query($consulta)->fetchColumn();
 
         $idDelAsistente = (int) bd()->query("
           SELECT u.id as idDelDocente FROM asignaciones_de_docentes a
           JOIN usuarios u ON a.id_docente = u.id
           WHERE a.id = {$inscripcion['id_asignacion_asistente']}
         ")->fetchColumn();
+
+        $sentencia = bd()->prepare("SELECT id_periodo FROM momentos WHERE id = ?");
+        $sentencia->execute([$inscripcion['id_momento']]);
+        $idPeriodo = $sentencia->fetchColumn();
+
+        $idsMomentos = bd()
+          ->query("SELECT id FROM momentos WHERE id_periodo = $idPeriodo")
+          ->fetchAll();
+
+        $idsMomentos = array_column($idsMomentos, 'id');
+
+        $sentenciaBoletines = bd()->prepare("
+          INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
+          descripcion_formacion, descripcion_ambiente, recomendaciones,
+          id_estudiante, id_momento, id_docente, id_asistente) VALUES (
+          0, 'No establecido', 'No establecida', 'No establecida',
+          'No establecidas', :idEstudiante, :idMomento, :idDocente, :idAsistente)
+        ");
+
+        $sentenciaBusquedaBoletin = bd()->prepare("
+          SELECT COUNT(id) FROM boletines WHERE id_estudiante = ?
+          AND id_momento = ?
+        ");
+
+        foreach ($idsMomentos as $idMomento) {
+          $sentenciaBusquedaBoletin->execute([$idDelEstudiante, $idMomento]);
+          $noAñadirBoletin = $sentenciaBusquedaBoletin->fetchColumn();
+
+          if ($noAñadirBoletin) {
+            continue;
+          }
+
+          $sentenciaBoletines->bindValue(':idEstudiante', $idDelEstudiante, PDO::PARAM_INT);
+          $sentenciaBoletines->bindValue(':idMomento', $idMomento, PDO::PARAM_INT);
+          $sentenciaBoletines->bindValue(':idDocente', $idDelDocente, PDO::PARAM_INT);
+          $sentenciaBoletines->bindValue(':idAsistente', $idDelAsistente, PDO::PARAM_INT);
+
+          dd($sentenciaBoletines->debugDumpParams());
+          // $sentenciaBoletines->execute();
+        }
 
         $sentencia = bd()->query("
           INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
@@ -940,6 +987,67 @@ App::group('/', function (Router $router): void {
         throw $error;
         App::redirect('/estudiantes/inscribir');
       }
+    });
+
+    $router->get('/boletines', function (): void {
+      $idDelDocente = (int) App::view()->get('usuario')->id;
+
+      $boletines = bd()->query("
+        SELECT b.id, numero_inasistencias as inasistencias,
+        nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
+        descripcion_ambiente as descripcionAmbiente, recomendaciones,
+        b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
+        e.apellidos as apellidosEstudiante, e.cedula_escolar as cedulaEstudiante,
+        m.numero_momento as momento FROM boletines b JOIN estudiantes e
+        JOIN momentos m ON b.id_estudiante = e.id AND b.id_momento = m.id
+        WHERE b.id_docente = $idDelDocente
+      ")->fetchAll(PDO::FETCH_CLASS, Boletin::class);
+
+      App::render('paginas/boletines/listado', compact('boletines'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Boletines']);
+    });
+
+    $router->group('/boletines/@id:[0-9]+', function (Router $router): void {
+      $router->get('/', function (int $id): void {
+        $boletin = bd()->query("
+          SELECT b.id, numero_inasistencias as inasistencias,
+          nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
+          descripcion_ambiente as descripcionAmbiente, recomendaciones,
+          b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
+          e.apellidos as apellidosEstudiante, e.cedula_escolar as cedulaEstudiante,
+          m.numero_momento as momento FROM boletines b JOIN estudiantes e
+          JOIN momentos m ON b.id_estudiante = e.id AND b.id_momento = m.id
+          WHERE b.id = $id
+        ")->fetchObject(Boletin::class);
+
+        App::render('paginas/boletines/editar', compact('boletin'), 'pagina');
+        App::render('plantillas/privada', ['titulo' => 'Editar boletín']);
+      });
+
+      $router->post('/', function (int $id): void {
+        $boletin = App::request()->data->getData();
+
+        $sentencia = bd()->prepare("
+          UPDATE boletines SET numero_inasistencias = :inasistencias,
+          nombre_proyecto = :proyecto, descripcion_formacion = :formacion,
+          descripcion_ambiente = :ambiente, recomendaciones = :recomendaciones
+          WHERE id = $id
+        ");
+
+        $sentencia->bindValue(':inasistencias', $boletin['inasistencias'], PDO::PARAM_INT);
+        $sentencia->bindValue(':proyecto', $boletin['proyecto']);
+        $sentencia->bindValue(':formacion', $boletin['formacion']);
+        $sentencia->bindValue(':ambiente', $boletin['ambiente']);
+        $sentencia->bindValue(':recomendaciones', $boletin['recomendaciones']);
+
+        try {
+          $sentencia->execute();
+          $_SESSION['mensajes.exito'] = 'Boletín actualizado exitósamente';
+          App::redirect('/estudiantes/boletines');
+        } catch (PDOException $error) {
+          throw $error;
+        }
+      });
     });
   });
 
