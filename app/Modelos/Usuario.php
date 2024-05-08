@@ -31,6 +31,18 @@ final class Usuario extends Persona {
     return password_verify($clave, $this->clave);
   }
 
+  function esDocente(): bool {
+    return $this->rol() === Rol::Docente;
+  }
+
+  function esDirector(): bool {
+    return $this->rol() === Rol::Director;
+  }
+
+  function esSecretario(): bool {
+    return $this->rol() === Rol::Secretario;
+  }
+
   static function encriptar(string $clave): string {
     return password_hash($clave, PASSWORD_DEFAULT);
   }

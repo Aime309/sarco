@@ -1,7 +1,9 @@
 <?php
 
 use SARCO\Modelos\Representante;
+use SARCO\Modelos\Usuario;
 
+assert($usuario instanceof Usuario);
 $representantes = (fn (Representante ...$representantes) => $representantes)(...$representantes);
 
 ?>
@@ -15,12 +17,14 @@ $representantes = (fn (Representante ...$representantes) => $representantes)(...
 
 <div class="container-fluid">
   <ul class="full-box list-unstyled page-nav-tabs">
-    <li>
-      <a href="./representantes/nuevo">
-        <i class="fas fa-plus fa-fw"></i>
-        &nbsp; Nuevo representante
-      </a>
-    </li>
+    <?php if (!$usuario->esDirector()) : ?>
+      <li>
+        <a href="./representantes/nuevo">
+          <i class="fas fa-plus fa-fw"></i>
+          &nbsp; Nuevo representante
+        </a>
+      </li>
+    <?php endif ?>
     <li>
       <a class="active" href="./representantes">
         <i class="fas fa-clipboard-list fa-fw"></i>

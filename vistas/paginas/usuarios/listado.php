@@ -65,14 +65,16 @@ $usuarioAutenticado = $usuario;
             <td><?= $usuarioIterado->direccion ?></td>
             <td><?= $usuarioIterado->rol ?></td>
             <td>
-              <?php if ($usuarioIterado->estaActivo) : ?>
-                <a href="./usuarios/<?= $usuarioIterado->cedula ?>/desactivar" class="btn btn-danger">
-                  Desactivar
-                </a>
-              <?php else : ?>
-                <a href="./usuarios/<?= $usuarioIterado->cedula ?>/activar" class="btn btn-success">
-                  Activar
-                </a>
+              <?php if ($usuarioAutenticado->esDirector()) : ?>
+                <?php if ($usuarioIterado->estaActivo) : ?>
+                  <a href="./usuarios/<?= $usuarioIterado->cedula ?>/desactivar" class="btn btn-danger">
+                    Desactivar
+                  </a>
+                <?php else : ?>
+                  <a href="./usuarios/<?= $usuarioIterado->cedula ?>/activar" class="btn btn-success">
+                    Activar
+                  </a>
+                <?php endif ?>
               <?php endif ?>
             </td>
           </tr>

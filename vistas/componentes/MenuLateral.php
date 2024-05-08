@@ -16,11 +16,13 @@ $enlaces = [
   ['href' => './', 'icono' => '<i class="fab fa-dashcube fa-fw"></i>', 'titulo' => 'Inicio']
 ];
 
-$enlaces[] = ['icono' => '<i class="fas fa-users fa-fw"></i>', 'titulo' => 'Usuarios', 'subenlaces' => [
-  ['href' => 'usuarios/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Nuevo usuario'],
-  ['href' => 'usuarios', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de usuario'],
-  // ['href' => 'usuarios/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar usuario'],
-]];
+if (!$usuario->esDocente()) {
+  $enlaces[] = ['icono' => '<i class="fas fa-users fa-fw"></i>', 'titulo' => 'Usuarios', 'subenlaces' => [
+    ['href' => 'usuarios/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Nuevo usuario'],
+    ['href' => 'usuarios', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de usuario'],
+    // ['href' => 'usuarios/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar usuario'],
+  ]];
+}
 
 $enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo' => 'Estudiantes', 'subenlaces' => [
   ['href' => 'estudiantes/inscribir', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Inscribir estudiante'],
@@ -42,11 +44,17 @@ $enlaces[] = ['icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'titu
   // ['href' => 'maestros/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Maestro'],
 ]];
 
-$enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
-  ['href' => 'representantes/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Representante'],
-  ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
-  // ['href' => 'representantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Representante'],
-]];
+if ($usuario->esDirector()) {
+  $enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
+    ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
+  ]];
+} else {
+  $enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
+    ['href' => 'representantes/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Representante'],
+    ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
+    // ['href' => 'representantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Representante'],
+  ]];
+}
 
 $enlaces[] = ['icono' => '<i class="fas fa-calendar fa-fw"></i>', 'titulo' => 'Periodos', 'subenlaces' => [
   ['href' => 'periodos/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Aperturar Período'],
@@ -60,10 +68,12 @@ $enlaces[] = ['icono' => '<i class="fas fa-calendar-days fa-fw"></i>', 'titulo' 
   // ['href' => 'momentos/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Momento'],
 ]];
 
-$enlaces[] = ['icono' => '<i class="fas fa-gears fa-fw"></i>', 'titulo' => 'Configuraciones', 'subenlaces' => [
-  ['href' => 'respaldar', 'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>', 'titulo' => 'Respaldar sistema'],
-  ['href' => 'restaurar', 'icono' => '<i class="fas fa-rotate-left fa-fw"></i>', 'titulo' => 'Restaurar sistema'],
-]];
+if ($usuario->esDirector()) {
+  $enlaces[] = ['icono' => '<i class="fas fa-gears fa-fw"></i>', 'titulo' => 'Configuraciones', 'subenlaces' => [
+    ['href' => 'respaldar', 'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>', 'titulo' => 'Respaldar sistema'],
+    ['href' => 'restaurar', 'icono' => '<i class="fas fa-rotate-left fa-fw"></i>', 'titulo' => 'Restaurar sistema'],
+  ]];
+}
 
 ?>
 
