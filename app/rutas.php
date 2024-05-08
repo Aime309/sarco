@@ -15,6 +15,23 @@ use SARCO\Modelos\Representante;
 use SARCO\Modelos\Sala;
 use SARCO\Modelos\Usuario;
 
+function autorizar(Rol ...$roles): callable {
+  return static function () use ($roles): void {
+    $usuario = App::view()->get('usuario');
+    assert($usuario instanceof Usuario);
+
+    foreach ($roles as $rol) {
+      if ($usuario->rol() === $rol) {
+        return;
+      }
+    }
+
+    $_SESSION['mensajes.error'] = 'Acceso denegado';
+
+    exit(App::redirect(App::request()->referrer, 403));
+  };
+}
+
 App::group('/api', function (Router $router): void {
   $router->get('/salas/asignaciones/@idMomento:[0-9]+', function (int $idMomento): void {
     $idPeriodo = (int) bd()->query("
@@ -201,7 +218,7 @@ App::group('/', function (Router $router): void {
 
     $_SESSION['mensajes.exito'] = 'Base de datos respaldada exitósamente';
     App::redirect('/');
-  });
+  })->addMiddleware(autorizar(Rol::Director));
 
   $router->get('restaurar', function (): void {
     if (strtolower($_ENV['DB_CONNECTION']) === 'mysql') {
@@ -221,7 +238,7 @@ App::group('/', function (Router $router): void {
 
     $_SESSION['mensajes.exito'] = 'Base de datos restaurada exitósamente';
     App::redirect('/');
-  });
+  })->addMiddleware(autorizar(Rol::Director));
 
   $router->group('usuarios', function (Router $router): void {
     $router->get('/', function (): void {
@@ -304,8 +321,8 @@ App::group('/', function (Router $router): void {
         $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
         App::redirect('/usuarios');
       });
-    });
-  });
+    }, [autorizar(Rol::Director)]);
+  }, [autorizar(Rol::Secretario, Rol::Director)]);
 
   $router->group('representantes', function (Router $router): void {
     $router->get('/', function (): void {
@@ -376,12 +393,12 @@ App::group('/', function (Router $router): void {
 
         App::redirect('/representantes/nuevo');
       }
-    });
+    })->addMiddleware(autorizar(Rol::Docente, Rol::Secretario));
 
     $router->get('/nuevo', function (): void {
       App::render('paginas/representantes/nuevo', [], 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Nuevo representante']);
-    });
+    })->addMiddleware(autorizar(Rol::Docente, Rol::Secretario));
 
     $router->group('/@cedula:[0-9]{7,8}', function (Router $router): void {
       $router->get('/editar', function (int $cedula): void {
@@ -439,7 +456,7 @@ App::group('/', function (Router $router): void {
           App::redirect("/representantes/$cedula/editar");
         }
       });
-    });
+    }, [autorizar(Rol::Secretario)]);
   });
 
   $router->group('maestros', function (Router $router): void {
@@ -525,7 +542,7 @@ App::group('/', function (Router $router): void {
     //   App::render('paginas/periodos/editar', compact('periodo'), 'pagina');
     //   App::render('plantillas/privada', ['titulo' => 'Editar momentos']);
     // });
-  });
+  }, [autorizar(Rol::Director)]);
 
   $router->group('perfil', function (Router $router): void {
     $router->get('/', function (): void {
@@ -750,7 +767,7 @@ App::group('/', function (Router $router): void {
         App::redirect('/salas');
       });
     });
-  });
+  }, [autorizar(Rol::Director, Rol::Secretario)]);
 
   $router->group('momentos', function (Router $router): void {
     $router->get('/', function (): void {
@@ -828,7 +845,7 @@ App::group('/', function (Router $router): void {
       );
 
       App::render('plantillas/privada', ['titulo' => 'Inscribir estudiante']);
-    });
+    })->addMiddleware(autorizar(Rol::Secretario));
 
     $router->post('/inscribir', function (): void {
       $inscripcion = App::request()->data->getData();
@@ -987,7 +1004,7 @@ App::group('/', function (Router $router): void {
         throw $error;
         App::redirect('/estudiantes/inscribir');
       }
-    });
+    })->addMiddleware(autorizar(Rol::Secretario));
 
     $router->get('/boletines', function (): void {
       $idDelDocente = (int) App::view()->get('usuario')->id;
@@ -1005,7 +1022,7 @@ App::group('/', function (Router $router): void {
 
       App::render('paginas/boletines/listado', compact('boletines'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Boletines']);
-    });
+    })->addMiddleware(Rol::Secretario, Rol::Docente);
 
     $router->group('/boletines/@id:[0-9]+', function (Router $router): void {
       $router->get('/', function (int $id): void {
@@ -1048,7 +1065,7 @@ App::group('/', function (Router $router): void {
           throw $error;
         }
       });
-    });
+    }, [autorizar(Rol::Docente)]);
   });
 
   $router->group('inscripciones', function (Router $router): void {
@@ -1071,7 +1088,7 @@ App::group('/', function (Router $router): void {
 
       App::render('plantillas/privada', ['titulo' => 'Inscripciones']);
     });
-  });
+  }, [autorizar(Rol::Secretario)]);
 }, [function (): void {
   if (!key_exists('usuario.id', $_SESSION)) {
     App::render('paginas/ingreso', [], 'pagina');
