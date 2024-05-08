@@ -766,9 +766,9 @@ App::group('/', function (Router $router): void {
       $ultimoMomento = bd()->query("
         SELECT id, numero_momento as numero, mes_inicio as mesInicio,
         dia_inicio as diaInicio, fecha_registro as fechaRegistro,
-        id_periodo as idPeriodo FROM momentos
-        WHERE mesInicio >= $mesActual
-        ORDER BY idPeriodo, mesInicio
+        id_periodo as idPeriodo FROM momentos m
+        WHERE m.mes_inicio >= $mesActual
+        ORDER BY m.id_periodo, m.mes_inicio
         LIMIT 1
       ")->fetchObject(Momento::class);
 

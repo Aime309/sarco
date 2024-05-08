@@ -117,7 +117,6 @@ scripts('./recursos/js/validarFormulario.js');
       ]);
 
       $vistas->render('componentes/Select', [
-        'class' => 'col mr-2',
         'validacion' => 'La asignación de maestro es requerida',
         'name' => 'id_asignacion_docente',
         'placeholder' => 'Maestro',
@@ -127,7 +126,6 @@ scripts('./recursos/js/validarFormulario.js');
       ]);
 
       $vistas->render('componentes/Select', [
-        'class' => 'col ml-2',
         'validacion' => 'La asignación de asistente es requerida',
         'name' => 'id_asignacion_asistente',
         'placeholder' => 'Asistente',

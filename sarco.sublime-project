@@ -28,34 +28,29 @@
           "intelephense.format.braces": "k&r",
         },
       },
-      "LSP-eslint":
-      {
-				"enabled": false,
-			},
-      "LSP-rome":
-      {
-				"enabled": false,
-			},
-      "LSP-stylelint":
-      {
-				"enabled": false,
-			},
-      "LSP-tailwindcss":
-      {
-				"enabled": false,
-			},
-      "ltex-ls":
-      {
-				"enabled": false,
-			},
+      "LSP-eslint": {
+        "enabled": false,
+      },
+      "LSP-rome": {
+        "enabled": false,
+      },
+      "LSP-stylelint": {
+        "enabled": false,
+      },
+      "LSP-tailwindcss": {
+        "enabled": false,
+      },
+      "ltex-ls": {
+        "enabled": false,
+      },
     },
   },
   "connections": {
-    "sarco2": {
+    "sarco-mysql": {
       "type": "mysql",
       "host": "localhost",
       "port": 3306,
-      "database": "sarco2",
+      "database": "sarco",
       "username": "root",
       "password": "",
       "encoding": "utf-8",
