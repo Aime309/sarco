@@ -914,69 +914,69 @@ App::group('/', function (Router $router): void {
         $sentencia->bindValue(':idAsignacionAsistente', $inscripcion['id_asignacion_asistente'], PDO::PARAM_INT);
         $sentencia->execute();
 
-        $consulta = "SELECT a.id_docente FROM asignaciones_de_docentes a
-        JOIN usuarios d
-        ON a.id_docente = d.id
-        WHERE a.id = {$inscripcion['id_asignacion_docente']}";
+        // $consulta = "SELECT a.id_docente FROM asignaciones_de_docentes a
+        // JOIN usuarios d
+        // ON a.id_docente = d.id
+        // WHERE a.id = {$inscripcion['id_asignacion_docente']}";
 
-        dd($consulta, $inscripcion);
+        // dd($consulta, $inscripcion);
 
-        $idDelDocente = (int) bd()->query($consulta)->fetchColumn();
+        // $idDelDocente = (int) bd()->query($consulta)->fetchColumn();
 
-        $idDelAsistente = (int) bd()->query("
-          SELECT u.id as idDelDocente FROM asignaciones_de_docentes a
-          JOIN usuarios u ON a.id_docente = u.id
-          WHERE a.id = {$inscripcion['id_asignacion_asistente']}
-        ")->fetchColumn();
+        // $idDelAsistente = (int) bd()->query("
+        //   SELECT u.id as idDelDocente FROM asignaciones_de_docentes a
+        //   JOIN usuarios u ON a.id_docente = u.id
+        //   WHERE a.id = {$inscripcion['id_asignacion_asistente']}
+        // ")->fetchColumn();
 
-        $sentencia = bd()->prepare("SELECT id_periodo FROM momentos WHERE id = ?");
-        $sentencia->execute([$inscripcion['id_momento']]);
-        $idPeriodo = $sentencia->fetchColumn();
+        // $sentencia = bd()->prepare("SELECT id_periodo FROM momentos WHERE id = ?");
+        // $sentencia->execute([$inscripcion['id_momento']]);
+        // $idPeriodo = $sentencia->fetchColumn();
 
-        $idsMomentos = bd()
-          ->query("SELECT id FROM momentos WHERE id_periodo = $idPeriodo")
-          ->fetchAll();
+        // $idsMomentos = bd()
+        //   ->query("SELECT id FROM momentos WHERE id_periodo = $idPeriodo")
+        //   ->fetchAll();
 
-        $idsMomentos = array_column($idsMomentos, 'id');
+        // $idsMomentos = array_column($idsMomentos, 'id');
 
-        $sentenciaBoletines = bd()->prepare("
-          INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
-          descripcion_formacion, descripcion_ambiente, recomendaciones,
-          id_estudiante, id_momento, id_docente, id_asistente) VALUES (
-          0, 'No establecido', 'No establecida', 'No establecida',
-          'No establecidas', :idEstudiante, :idMomento, :idDocente, :idAsistente)
-        ");
+        // $sentenciaBoletines = bd()->prepare("
+        //   INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
+        //   descripcion_formacion, descripcion_ambiente, recomendaciones,
+        //   id_estudiante, id_momento, id_docente, id_asistente) VALUES (
+        //   0, 'No establecido', 'No establecida', 'No establecida',
+        //   'No establecidas', :idEstudiante, :idMomento, :idDocente, :idAsistente)
+        // ");
 
-        $sentenciaBusquedaBoletin = bd()->prepare("
-          SELECT COUNT(id) FROM boletines WHERE id_estudiante = ?
-          AND id_momento = ?
-        ");
+        // $sentenciaBusquedaBoletin = bd()->prepare("
+        //   SELECT COUNT(id) FROM boletines WHERE id_estudiante = ?
+        //   AND id_momento = ?
+        // ");
 
-        foreach ($idsMomentos as $idMomento) {
-          $sentenciaBusquedaBoletin->execute([$idDelEstudiante, $idMomento]);
-          $noAñadirBoletin = $sentenciaBusquedaBoletin->fetchColumn();
+        // foreach ($idsMomentos as $idMomento) {
+        //   $sentenciaBusquedaBoletin->execute([$idDelEstudiante, $idMomento]);
+        //   $noAñadirBoletin = $sentenciaBusquedaBoletin->fetchColumn();
 
-          if ($noAñadirBoletin) {
-            continue;
-          }
+        //   if ($noAñadirBoletin) {
+        //     continue;
+        //   }
 
-          $sentenciaBoletines->bindValue(':idEstudiante', $idDelEstudiante, PDO::PARAM_INT);
-          $sentenciaBoletines->bindValue(':idMomento', $idMomento, PDO::PARAM_INT);
-          $sentenciaBoletines->bindValue(':idDocente', $idDelDocente, PDO::PARAM_INT);
-          $sentenciaBoletines->bindValue(':idAsistente', $idDelAsistente, PDO::PARAM_INT);
+        //   $sentenciaBoletines->bindValue(':idEstudiante', $idDelEstudiante, PDO::PARAM_INT);
+        //   $sentenciaBoletines->bindValue(':idMomento', $idMomento, PDO::PARAM_INT);
+        //   $sentenciaBoletines->bindValue(':idDocente', $idDelDocente, PDO::PARAM_INT);
+        //   $sentenciaBoletines->bindValue(':idAsistente', $idDelAsistente, PDO::PARAM_INT);
 
-          dd($sentenciaBoletines->debugDumpParams());
-          // $sentenciaBoletines->execute();
-        }
+        //   dd($sentenciaBoletines->debugDumpParams());
+        //   // $sentenciaBoletines->execute();
+        // }
 
-        $sentencia = bd()->query("
-          INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
-          descripcion_formacion, descripcion_ambiente, recomendaciones,
-          id_estudiante, id_momento, id_docente, id_asistente) VALUES (
-          0, 'No establecido', 'No establecida', 'No establecida',
-          'No establecidas', $idDelEstudiante, {$inscripcion['id_momento']},
-          $idDelDocente, $idDelAsistente)
-        ");
+        // $sentencia = bd()->query("
+        //   INSERT INTO boletines (numero_inasistencias, nombre_proyecto,
+        //   descripcion_formacion, descripcion_ambiente, recomendaciones,
+        //   id_estudiante, id_momento, id_docente, id_asistente) VALUES (
+        //   0, 'No establecido', 'No establecida', 'No establecida',
+        //   'No establecidas', $idDelEstudiante, {$inscripcion['id_momento']},
+        //   $idDelDocente, $idDelAsistente)
+        // ");
 
         bd()->commit();
         $_SESSION['mensajes.exito'] = 'Estudiante inscrito exitósamente';
