@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SARCO\Shared\Domain;
 
-use InvalidArgumentException;
+use DomainException;
 
-final class InvalidBirthDate extends InvalidArgumentException {
+final class InvalidBirthDate extends DomainException {
   protected $message = 'Fecha de nacimiento inválida (Debe ser mayor al
   1/1/1906)';
 }

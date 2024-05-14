@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SARCO\Shared\Domain;
 
-use InvalidArgumentException;
+use DomainException;
 
-final class InvalidAddress extends InvalidArgumentException {
+final class InvalidAddress extends DomainException {
   protected $message = 'Dirección inválida (Debe tener mínimo 3 caracteres,
   números)';
 }

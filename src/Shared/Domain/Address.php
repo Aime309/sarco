@@ -8,8 +8,8 @@ use Stringable;
 
 final readonly class Address implements Stringable {
   private const MINIMUM = 3;
-  private const PATTERN = '/^[a-zA-Z0-9]{3,}$/';
-  private string $value;
+  private const PATTERN = '/^[a-zA-Z0-9\s]{3,}$/';
+  public string $value;
 
   function __construct(string $value) {
     self::validate($value);
