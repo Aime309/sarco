@@ -2,6 +2,7 @@
 
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
+use SARCO\Modelos\Usuario;
 
 assert(is_int($cantidadDeUsuarios));
 assert(is_int($cantidadDeRepresentantes));
@@ -10,19 +11,26 @@ assert(is_int($cantidadDeSalas));
 assert(is_int($cantidadDeEstudiantes));
 assert($ultimoPeriodo instanceof Periodo || $ultimoPeriodo === null);
 assert($ultimoMomento instanceof Momento || $ultimoMomento === null);
+assert($usuario instanceof Usuario);
 
-$contadores = [
-  [
+$contadores = [];
+
+if (!$usuario->esDocente()) {
+  $contadores[] = [
+    'href' => './salas/asignar',
+    'title' => 'Asignar sala',
+    'icon' => '<i class="fas fa-pen-to-square fa-fw"></i>'
+  ];
+
+  $contadores[] = [
     'href' => './usuarios',
     'title' => 'Usuarios',
     'icon' => '<i class="fas fa-users fa-fw"></i>',
     'footer' => "$cantidadDeUsuarios registrado" . ($cantidadDeUsuarios > 1 ? 's' : '')
-  ],
-  [
-    'href' => './salas/asignar',
-    'title' => 'Asignar sala',
-    'icon' => '<i class="fas fa-pen-to-square fa-fw"></i>'
-  ],
+  ];
+}
+
+$contadores += [
   [
     'href' => './estudiantes',
     'title' => 'Estudiantes',
