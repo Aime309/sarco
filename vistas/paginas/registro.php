@@ -21,7 +21,7 @@ scripts('recursos/js/registro.js');
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})'
       ]
     );
 
@@ -33,7 +33,7 @@ scripts('recursos/js/registro.js');
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})'
       ]
     );
 
