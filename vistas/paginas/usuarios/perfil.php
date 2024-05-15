@@ -152,7 +152,7 @@ scripts('./recursos/js/validarFormulario.js');
   ?>
 </form>
 
-<form action="./usuarios/<?= $usuario->cedula ?>/desactivar" class="my-5 form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+<form method="post" action="./perfil/desactivar" class="my-5 form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <div style="text-align: end">
     <?php
 

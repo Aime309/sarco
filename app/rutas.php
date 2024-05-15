@@ -313,13 +313,13 @@ App::group('/', function (Router $router): void {
       $router->get('/activar', function (int $cedula): void {
         bd()->query("UPDATE usuarios SET esta_activo = TRUE WHERE cedula = $cedula");
         $_SESSION['mensajes.exito'] = 'Usuario activado existósamente';
-        App::redirect('/usuarios');
+        App::redirect(App::request()->referrer);
       });
 
       $router->get('/desactivar', function (int $cedula): void {
         bd()->query("UPDATE usuarios SET esta_activo = FALSE WHERE cedula = $cedula");
         $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
-        App::redirect('/usuarios');
+        App::redirect(App::request()->referrer);
       });
     }, [autorizar(Rol::Director)]);
   });
@@ -619,6 +619,17 @@ App::group('/', function (Router $router): void {
 
       $_SESSION['mensajes.exito'] = 'Contraseña actualizada exitósamente';
       App::redirect('/perfil');
+    });
+
+    $router->post('/desactivar', function (): void {
+      $usuario = App::view()->get('usuario');
+
+      assert($usuario instanceof Usuario);
+
+      bd()->query("UPDATE usuarios SET esta_activo = FALSE WHERE id = $usuario->id");
+      $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
+
+      App::redirect('/salir');
     });
   });
 
