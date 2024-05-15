@@ -1099,7 +1099,7 @@ App::group('/', function (Router $router): void {
 
       App::render('plantillas/privada', ['titulo' => 'Inscripciones']);
     });
-  }, [autorizar(Rol::Secretario)]);
+  });
 }, [function (): void {
   if (!key_exists('usuario.id', $_SESSION)) {
     App::render('paginas/ingreso', [], 'pagina');

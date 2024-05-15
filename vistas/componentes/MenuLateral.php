@@ -13,35 +13,41 @@ assert($usuario instanceof Usuario);
  * }[]
  */
 $enlaces = [
-  ['href' => './', 'icono' => '<i class="fab fa-dashcube fa-fw"></i>', 'titulo' => 'Inicio']
+  [
+    'href' => './',
+    'icono' => '<i class="fab fa-dashcube fa-fw"></i>',
+    'titulo' => 'Inicio'
+  ]
 ];
 
 if (!$usuario->esDocente()) {
   $enlaces[] = ['icono' => '<i class="fas fa-users fa-fw"></i>', 'titulo' => 'Usuarios', 'subenlaces' => [
     ['href' => 'usuarios/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Nuevo usuario'],
     ['href' => 'usuarios', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de usuario'],
-    // ['href' => 'usuarios/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar usuario'],
   ]];
 }
 
 $enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo' => 'Estudiantes', 'subenlaces' => [
-  ['href' => 'estudiantes/inscribir', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Inscribir estudiante'],
+  $usuario->esDocente() || $usuario->esDirector() ?: [
+    'href' => 'estudiantes/inscribir',
+    'icono' => '<i class="fas fa-plus fa-fw"></i>',
+    'titulo' => 'Inscribir estudiante'
+  ],
   ['href' => 'estudiantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de estudiantes'],
   ['href' => 'inscripciones', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de inscripciones'],
-  // ['href' => 'estudiantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar estudiante'],
   ['href' => 'estudiantes/boletines', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Lista de boletines'],
 ]];
 
-$enlaces[] = ['icono' => '<i class="fas fa-school-flag fa-fw"></i>', 'titulo' => 'Salas', 'subenlaces' => [
-  ['href' => 'salas/nueva', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Sala'],
-  ['href' => 'salas', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Salas'],
-  // ['href' => 'salas/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Sala'],
-]];
+if (!$usuario->esDocente()) {
+  $enlaces[] = ['icono' => '<i class="fas fa-school-flag fa-fw"></i>', 'titulo' => 'Salas', 'subenlaces' => [
+    ['href' => 'salas/nueva', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Sala'],
+    ['href' => 'salas', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Salas'],
+  ]];
+}
 
 $enlaces[] = ['icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'titulo' => 'Maestros', 'subenlaces' => [
   ['href' => 'usuarios/nuevo?rol=maestro', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Maestro'],
   ['href' => 'maestros', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Maestros'],
-  // ['href' => 'maestros/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Maestro'],
 ]];
 
 if ($usuario->esDirector()) {
@@ -52,20 +58,16 @@ if ($usuario->esDirector()) {
   $enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
     ['href' => 'representantes/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Representante'],
     ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
-    // ['href' => 'representantes/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Representante'],
   ]];
 }
 
 $enlaces[] = ['icono' => '<i class="fas fa-calendar fa-fw"></i>', 'titulo' => 'Periodos', 'subenlaces' => [
   ['href' => 'periodos/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Aperturar Período'],
   ['href' => 'periodos', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Períodos'],
-  // ['href' => 'periodos/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Periodo'],
 ]];
 
 $enlaces[] = ['icono' => '<i class="fas fa-calendar-days fa-fw"></i>', 'titulo' => 'Momentos', 'subenlaces' => [
-  // ['href' => 'momentos/registrar', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Momento'],
   ['href' => 'momentos', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Momentos'],
-  // ['href' => 'momentos/buscar', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Buscar Momento'],
 ]];
 
 if ($usuario->esDirector()) {
@@ -107,7 +109,8 @@ if ($usuario->esDirector()) {
                 <i class="fas fa-chevron-down"></i>
               </a>
               <ul>
-                <?php foreach ($enlace['subenlaces'] as $subenlace) : ?>
+                <?php foreach ($enlace['subenlaces'] as $subenlace) :
+                  if (is_bool($subenlace)) continue ?>
                   <li>
                     <a href="<?= $subenlace['href'] ?>">
                       <?= $subenlace['icono'] ?>

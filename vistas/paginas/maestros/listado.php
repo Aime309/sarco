@@ -19,7 +19,7 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
   <ul class="full-box list-unstyled page-nav-tabs">
     <?php if (!$usuario->esDocente()) : ?>
       <li>
-        <a href="./usuarios/nuevo">
+        <a href="./usuarios/nuevo?rol=maestro">
           <i class="fas fa-plus fa-fw"></i>
           &nbsp; Nuevo maestro
         </a>

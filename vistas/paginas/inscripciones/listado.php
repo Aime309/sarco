@@ -1,6 +1,9 @@
 <?php
 
 use SARCO\Modelos\Inscripcion;
+use SARCO\Modelos\Usuario;
+
+assert($usuario instanceof Usuario);
 
 $inscripciones = (fn (Inscripcion ...$inscripciones) => $inscripciones)(...$inscripciones);
 
@@ -15,12 +18,14 @@ $inscripciones = (fn (Inscripcion ...$inscripciones) => $inscripciones)(...$insc
 
 <div class="container-fluid">
   <ul class="full-box list-unstyled page-nav-tabs">
-    <li>
-      <a href="./estudiantes/inscribir">
-        <i class="fas fa-plus fa-fw"></i>
-        &nbsp; Inscribir estudiante
-      </a>
-    </li>
+    <?php if ($usuario->esSecretario()) : ?>
+      <li>
+        <a href="./estudiantes/inscribir">
+          <i class="fas fa-plus fa-fw"></i>
+          &nbsp; Inscribir estudiante
+        </a>
+      </li>
+    <?php endif ?>
     <li>
       <a class="active" href="./inscripciones/">
         <i class="fas fa-clipboard-list fa-fw"></i>

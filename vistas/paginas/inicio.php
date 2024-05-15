@@ -29,6 +29,15 @@ if (!$usuario->esDocente()) {
     'icon' => '<i class="fas fa-users fa-fw"></i>',
     'footer' => "$cantidadDeUsuarios registrado" . ($cantidadDeUsuarios > 1 ? 's' : '')
   ];
+
+  $contadores[] = [
+    'href' => './salas',
+    'title' => 'Salas',
+    'icon' => '<i class="fas fa-school-flag fa-fw"></i>',
+    'footer' => "$cantidadDeSalas registrada" . (
+      $cantidadDeSalas > 1 ? 's' : ''
+    )
+  ];
 }
 
 $contadores += [
@@ -54,14 +63,6 @@ $contadores += [
     'icon' => '<i class="fas fa-person-chalkboard fa-fw"></i>',
     'footer' => "$cantidadDeMaestros registrado" . (
       $cantidadDeMaestros > 1 ? 's' : ''
-    )
-  ],
-  [
-    'href' => './salas',
-    'title' => 'Salas',
-    'icon' => '<i class="fas fa-school-flag fa-fw"></i>',
-    'footer' => "$cantidadDeSalas registrada" . (
-      $cantidadDeSalas > 1 ? 's' : ''
     )
   ],
 ];
