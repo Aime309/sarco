@@ -8,12 +8,12 @@ scripts('recursos/js/registro.js');
 
 ?>
 
-<form autocomplete="off" method="post" class="form form--scrollable form--full form--with-validation">
+<form method="post" class="form form--scrollable form--full form--with-validation">
   <div class="form__body">
     <h1 class="form__title">Cree su cuenta de director/a</h1>
     <?php
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
         'validacion' => 'Los nombres sólo pueden contener letras',
@@ -25,7 +25,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
         'validacion' => 'Los apellidos sólo pueden contener letras',
@@ -37,7 +37,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
         'validacion' => 'La cédula es requerida',
@@ -49,7 +49,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
         'validacion' => 'La contraseña es requerida',
@@ -61,7 +61,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
         'validacion' => 'La fecha de nacimiento es requerida',
@@ -71,7 +71,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Select',
       [
         'validacion' => 'El género es requerido',
@@ -84,7 +84,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Textarea',
       [
         'validacion' => 'La dirección es requerida',
@@ -94,10 +94,10 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
-        'validacion' => 'El teléfono no es válido: +XX XXX-XXXX',
+        'validacion' => 'El teléfono no es válido: +XX XXX-XXXXXXX',
         'type' => 'tel',
         'name' => 'telefono',
         'placeholder' => 'Teléfono',
@@ -107,7 +107,7 @@ scripts('recursos/js/registro.js');
       ]
     );
 
-    echo $vistas->fetch(
+    $vistas->render(
       'componentes/Input',
       [
         'validacion' => 'El correo es requerido',
