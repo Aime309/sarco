@@ -71,7 +71,7 @@ scripts('./recursos/js/validarFormulario.js');
 </header>
 
 <?php if (!key_exists('cedula', $_GET)) : ?>
-  <form class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+  <!-- <form class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
     <?php
 
     $vistas->render('componentes/Input', [
@@ -88,7 +88,7 @@ scripts('./recursos/js/validarFormulario.js');
     ]);
 
     ?>
-  </form>
+  </form> -->
 
   <details class="my-5">
     <summary class="h2 pl-5 mb-4">Inscribir por primera vez</summary>
