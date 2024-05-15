@@ -1,5 +1,6 @@
 <?php
 
+use Jenssegers\Date\Date;
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Usuario;
@@ -65,6 +66,8 @@ $contadores += [
   ],
 ];
 
+$fechaActual = Date::now()->format('l j \d\e F');
+
 ?>
 
 <header class="full-box page-header">
@@ -79,7 +82,11 @@ $contadores += [
           <?= $ultimoPeriodo ?>
         </a>
         <span class="h4"> ~ </span>
-        <small class="h4"><?= $ultimoMomento ?></small>
+        <small class="h4">
+          <?= $ultimoMomento ?>
+          <br />
+          (<?= $fechaActual ?>)
+        </small>
       </div>
     <?php else : ?>
       <a href="./periodos/nuevo" class="col" style="font-size: .65em">
