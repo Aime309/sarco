@@ -302,12 +302,12 @@ App::group('/', function (Router $router): void {
       }
 
       App::redirect('/usuarios');
-    });
+    })->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
 
     $router->get('/nuevo', function (): void {
       App::render('paginas/usuarios/nuevo', [], 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Nuevo usuario']);
-    });
+    })->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
 
     $router->group('/@cedula:[0-9]{7,8}', function (Router $router): void {
       $router->get('/activar', function (int $cedula): void {
@@ -322,7 +322,7 @@ App::group('/', function (Router $router): void {
         App::redirect('/usuarios');
       });
     }, [autorizar(Rol::Director)]);
-  }, [autorizar(Rol::Secretario, Rol::Director)]);
+  });
 
   $router->group('representantes', function (Router $router): void {
     $router->get('/', function (): void {
