@@ -21,7 +21,7 @@ $usuarioAutenticado = $usuario;
     <li>
       <a href="./usuarios/nuevo">
         <i class="fas fa-plus fa-fw"></i>
-        &nbsp; Nuevo usuarios
+        &nbsp; Nuevo usuario
       </a>
     </li>
     <li>

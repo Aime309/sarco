@@ -5,8 +5,10 @@
  * @var string $contenido
  */
 
+$class ??= '';
+
 ?>
 
-<button type="<?= $tipo ?? 'button' ?>" class="button">
+<button type="<?= $tipo ?? 'button' ?>" class="button <?= $class ?>">
   <?= $contenido ?>
 </button>

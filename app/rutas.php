@@ -1108,4 +1108,13 @@ App::group('/', function (Router $router): void {
   $usuario = $sentencia->fetchObject(Usuario::class);
 
   App::view()->set('usuario', $usuario);
+}, function (): void {
+  $usuario = App::view()->get('usuario');
+  assert($usuario instanceof Usuario);
+
+  if (!$usuario->estaActivo) {
+    App::redirect('/salir');
+
+    return;
+  }
 }]);

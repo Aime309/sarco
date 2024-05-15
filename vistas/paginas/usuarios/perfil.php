@@ -152,3 +152,16 @@ scripts('./recursos/js/validarFormulario.js');
   ?>
 </form>
 
+<form action="./usuarios/<?= $usuario->cedula ?>/desactivar" class="my-5 form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+  <div style="text-align: end">
+    <?php
+
+    $vistas->render('componentes/Boton', [
+      'tipo' => 'submit',
+      'contenido' => 'Desactivar cuenta',
+      'class' => 'bg-danger w-50'
+    ]);
+
+    ?>
+  </div>
+</form>
