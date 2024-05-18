@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace SARCO\Users\Domain;
 
 use DateTimeImmutable;
-use DomainException;
+use Exception;
+use InvalidArgumentException;
 use PharIo\Manifest\Email;
 use SARCO\Shared\Domain\Address;
 use SARCO\Shared\Domain\BirthDate;
 use SARCO\Shared\Domain\Gender;
 use SARCO\Shared\Domain\IDCard;
+use SARCO\Shared\Domain\InvalidBirthDate;
+use SARCO\Shared\Domain\InvalidRegisteredDate;
 use SARCO\Shared\Domain\LastNames;
 use SARCO\Shared\Domain\Names;
 use SARCO\Shared\Domain\Phone;
@@ -30,7 +33,7 @@ abstract class User {
   private bool $isActive;
   private RegisteredDate $registeredDate;
 
-  /** @throws DomainException */
+  /** @throws InvalidArgumentException */
   function __construct(
     string $id,
     string $names,
@@ -50,14 +53,25 @@ abstract class User {
     $this->lastNames = new LastNames($lastNames);
     $this->idCard = new IDCard($idCard);
     $this->gender = Gender::from($gender);
-    $this->birthDate = new BirthDate(new DateTimeImmutable($birthDate));
+
+    try {
+      $this->birthDate = new BirthDate(new DateTimeImmutable($birthDate));
+    } catch (Exception) {
+      throw new InvalidBirthDate;
+    }
+
     $this->address = new Address($address);
     $this->email = new Email($email);
     $this->phone = new Phone($phone);
     $this->password = new Password($password);
     $this->isActive = $isActive;
 
-    $registeredDateTime = new DateTimeImmutable($registeredDate);
+    try {
+      $registeredDateTime = new DateTimeImmutable($registeredDate);
+    } catch (Exception) {
+      throw new InvalidRegisteredDate;
+    }
+
     $this->registeredDate = new RegisteredDate($registeredDateTime);
   }
 

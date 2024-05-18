@@ -11,6 +11,7 @@ readonly class Names implements Stringable {
   public ?string $second;
   protected const EXCEPTION = InvalidNames::class;
 
+  /** @throws InvalidNames */
   function __construct(string $value) {
     static::validate($value);
 

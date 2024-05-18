@@ -11,6 +11,7 @@ final readonly class Address implements Stringable {
   private const PATTERN = '/^[a-zA-Z0-9\s]{3,}$/';
   public string $value;
 
+  /** @throws InvalidAddress */
   function __construct(string $value) {
     self::validate($value);
 

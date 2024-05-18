@@ -19,7 +19,9 @@ final class SQLiteUserRepositoryTest extends TestCase {
   private readonly SQLite3 $connection;
   private readonly SQLiteUserRepository $repository;
 
-  function setUp(): void {
+  protected function setUp(): void {
+    parent::setUp();
+
     $this->connection = new SQLite3(':memory:');
 
     $this->connection->query("
@@ -56,7 +58,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     );
@@ -79,7 +81,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     );
@@ -94,7 +96,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '04161231234',
       'yender@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     );
@@ -118,7 +120,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     );
@@ -144,7 +146,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     ];
@@ -176,7 +178,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     ];
@@ -207,7 +209,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       true,
       date('Y-m-d H:i:s')
     ];

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SARCO\Shared\Domain;
 
-use DomainException;
+use InvalidArgumentException;
 
-class InvalidNames extends DomainException {
-  protected $message = 'Nombres inválidos (Deben ser mínimo 1 palabra, 
+class InvalidNames extends InvalidArgumentException {
+  protected $message = 'Nombres inválidos (Deben ser mínimo 1 palabra,
   máximo 2 palabras)';
 }

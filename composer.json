@@ -1,6 +1,7 @@
 {
   "require": {
     "php": ">=8.2",
+    "ext-sqlite3": "*",
     "symfony/dotenv": "^7.0",
     "illuminate/container": "^11.5",
     "flightphp/core": "dev-fix/bug-with-multiple-view-renders",
@@ -10,7 +11,8 @@
     "post-install-cmd": [
       "php -r \"if (!file_exists('.env')) copy('.env.dist', '.env');\""
     ],
-    "dev": "start php -S localhost:80"
+    "dev": "start php -S localhost:80",
+    "test": "phpunit"
   },
   "autoload": {
     "psr-4": {

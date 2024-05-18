@@ -10,6 +10,7 @@ final readonly class Phone implements Stringable {
   private const SEPARATORS = '(\s|-)?';
   public string $value;
 
+  /** @throws InvalidPhone */
   function __construct(string $value) {
     self::validate($value);
 

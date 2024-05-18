@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SARCO\Shared\Domain;
 
-use DomainException;
+use InvalidArgumentException;
 
-final class InvalidRegisteredDate extends DomainException {
+final class InvalidRegisteredDate extends InvalidArgumentException {
   protected $message = 'La fecha de registro debe ser mayor al 1/1/2006';
 }

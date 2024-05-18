@@ -9,6 +9,7 @@ use DateTimeInterface;
 final class RegisteredDate {
   private const MINIMUM = '2006-01-01';
 
+  /** @throws InvalidRegisteredDate */
   function __construct(public DateTimeInterface $value) {
     $this->validate();
   }

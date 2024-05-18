@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SARCO\Users\Application;
 
-use DomainException;
+use InvalidArgumentException;
 use SARCO\Users\Domain\Director;
 use SARCO\Users\Domain\Secretary;
 use SARCO\Users\Domain\Teacher;
@@ -16,7 +16,7 @@ final readonly class UserRegister {
   }
 
   /**
-   * @throws DomainException
+   * @throws InvalidArgumentException
    * @throws UserCouldNotSave
    */
   function __invoke(

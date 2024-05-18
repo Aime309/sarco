@@ -32,17 +32,19 @@ final readonly class SQLiteUserRepository implements UserRepository {
   }
 
   private static function throwError(string $error, User $user): never {
-    file_put_contents('php://stderr', $error);
-
     throw (match (true) {
-      str_contains($error, 'usuarios.nombres')
-        => new DuplicatedFullName("Usuario {$user->fullName()} ya existe"),
-      str_contains($error, 'usuarios.cedula')
-        => new DuplicatedIDCard("Usuario {$user->idCard()} ya existe"),
-      str_contains($error, 'usuarios.telefono')
-        => new DuplicatedPhone($user->phone()),
-      str_contains($error, 'usuarios.correo')
-        => new DuplicatedEmail($user->email())
+      str_contains($error, 'usuarios.nombres') => new DuplicatedFullName(
+        "Usuario {$user->fullName()} ya existe"
+      ),
+      str_contains($error, 'usuarios.cedula') => new DuplicatedIDCard(
+        "Usuario {$user->idCard()} ya existe"
+      ),
+      str_contains($error, 'usuarios.telefono') => new DuplicatedPhone(
+        $user->phone()
+      ),
+      str_contains($error, 'usuarios.correo') => new DuplicatedEmail(
+        $user->email()
+      )
     });
   }
 }

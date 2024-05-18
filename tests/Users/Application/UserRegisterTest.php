@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SARCO\Tests\Users\Application;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SARCO\Users\Application\UserRegister;
@@ -14,8 +15,14 @@ final class UserRegisterTest extends TestCase {
   private readonly UserRepository&MockObject $repository;
   private readonly UserRegister $userRegister;
 
-  function setUp(): void {
-    $this->repository = self::createMock(UserRepository::class);
+  protected function setUp(): void {
+    parent::setUp();
+
+    try {
+      $this->repository = self::createMock(UserRepository::class);
+    } catch (Exception) {
+    }
+
     $this->userRegister = new UserRegister($this->repository);
   }
 
@@ -32,7 +39,7 @@ final class UserRegisterTest extends TestCase {
       'El Pinar',
       '+584165335826',
       'franyeradriansanchez@gmail.com',
-      '12345678',
+      'Fran.1234',
       'Director'
     );
   }
