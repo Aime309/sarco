@@ -52,11 +52,12 @@ scripts('recursos/js/registro.js');
     $vistas->render(
       'componentes/Input',
       [
-        'validacion' => 'La contraseña es requerida',
+        'validacion' => 'La contraseña debe tener al menos 1 mayúscula,
+        1 número y un símbolo',
         'name' => 'clave',
         'placeholder' => 'Contraseña',
         'type' => 'password',
-        'pattern' => '(.+){8,}',
+        'pattern' => '(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,}',
         'minlength' => 8
       ]
     );

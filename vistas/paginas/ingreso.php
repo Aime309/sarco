@@ -32,14 +32,14 @@ assert($vistas instanceof View);
         'name' => 'clave',
         'placeholder' => 'Contraseña',
         'type' => 'password',
-        'pattern' => '(?!.*[<>]).+{8,}',
+        'pattern' => '(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,}',
         'minlength' => 8
       ]
     );
 
     ?>
     <div class="form__remember">
-      <label class="checkbox">
+      <label class="checkbox" style="visibility: hidden">
         <input class="checkbox__input" name="recordar" type="checkbox" />
         <span class="checkbox__label">Recuérdame</span>
       </label>
