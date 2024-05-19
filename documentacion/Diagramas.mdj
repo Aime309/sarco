@@ -7394,7 +7394,7 @@
 											"top": 299,
 											"width": 208.74267578125,
 											"height": 13,
-											"text": "-tipoSangre: TipoSangre",
+											"text": "-tipoSangre: TipoSangre {readOnly}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7428,7 +7428,7 @@
 											"top": 329,
 											"width": 208.74267578125,
 											"height": 13,
-											"text": "-sala: Sala",
+											"text": "-sala: Sala {readOnly}",
 											"horizontalAlignment": 0
 										}
 									],
@@ -13735,7 +13735,8 @@
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAGPjW8kYBZ6PBo="
-							}
+							},
+							"isReadOnly": true
 						},
 						{
 							"_type": "UMLAttribute",
@@ -13760,7 +13761,8 @@
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAGPjYjzAHb+Z6g="
-							}
+							},
+							"isReadOnly": true
 						}
 					],
 					"isFinalSpecialization": true

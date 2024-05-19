@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SARCO\Users\Domain;
 
-use InvalidArgumentException;
 use SARCO\Shared\Domain\Address;
 use SARCO\Shared\Domain\ContactablePerson;
 
@@ -14,7 +13,6 @@ abstract class User extends ContactablePerson {
   private Password $password;
   private bool $isActive;
 
-  /** @throws InvalidArgumentException */
   final function __construct(
     string $id,
     string $names,

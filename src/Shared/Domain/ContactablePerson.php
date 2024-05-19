@@ -10,7 +10,6 @@ abstract class ContactablePerson extends Person {
   private Phone $phone;
   private Email $email;
 
-  /** @throws InvalidArgumentException */
   function __construct(
     string $names,
     string $lastNames,

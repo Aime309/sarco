@@ -7,4 +7,8 @@ namespace SARCO\Shared\Domain;
 enum Gender: string {
   case Male = 'Masculino';
   case Female = 'Femenino';
+
+  function isMale(): bool {
+    return $this === self::Male;
+  }
 }
