@@ -190,6 +190,10 @@ App::group('/', function (Router $router): void {
       ")->fetchObject(Momento::class);
     }
 
+    if ($ultimoMomento === false) {
+      $ultimoMomento = null;
+    }
+
     App::render(
       'paginas/inicio',
       compact(

@@ -80,7 +80,7 @@
 }
 
 .input-group--required::before {
-  content: '✳';
+/*  content: '✳';*/
   position: absolute;
   top: -.25em;
   left: -.25em;
@@ -96,7 +96,8 @@
   position: absolute;
   top: .5em;
   right: .5em;
-  color: var(--red);
+/*  color: var(--red);*/
+  color: #a6a6a6;
   font-weight: lighter;
   font-size: 13px;
 }
