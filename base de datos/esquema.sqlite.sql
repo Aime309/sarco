@@ -160,8 +160,8 @@ CREATE TABLE asignaciones_de_salas (
 );
 
 INSERT INTO salas (nombre, edad_minima, edad_maxima)
-VALUES ('Maternal', 0, 2), ('De 3 Única', 3, 3), ('Mixta', 3, 4),
-('De 4 Única', 4, 4), ('De 5 Única', 5, 5);
+VALUES ('Maternal', 0, 2), ('De 3 Única', 3, 3), ('Mixta 3-4', 3, 4),
+('De 4 Única', 4, 4), ('Mixta 4-5', 4, 5), ('De 5 Única', 5, 5);
 
 /*
 CHULETA: Extraer los docentes de una inscripción
