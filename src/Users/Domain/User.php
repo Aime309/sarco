@@ -4,37 +4,18 @@ declare(strict_types=1);
 
 namespace SARCO\Users\Domain;
 
-use DateTimeImmutable;
-use Exception;
 use InvalidArgumentException;
-use PharIo\Manifest\Email;
 use SARCO\Shared\Domain\Address;
-use SARCO\Shared\Domain\BirthDate;
-use SARCO\Shared\Domain\Gender;
-use SARCO\Shared\Domain\IDCard;
-use SARCO\Shared\Domain\InvalidBirthDate;
-use SARCO\Shared\Domain\InvalidRegisteredDate;
-use SARCO\Shared\Domain\LastNames;
-use SARCO\Shared\Domain\Names;
-use SARCO\Shared\Domain\Phone;
-use SARCO\Shared\Domain\RegisteredDate;
+use SARCO\Shared\Domain\ContactablePerson;
 
-abstract class User {
+abstract class User extends ContactablePerson {
   private readonly UserID $id;
-  private Names $names;
-  private LastNames $lastNames;
-  private IDCard $idCard;
-  protected Gender $gender;
-  private BirthDate $birthDate;
   private Address $address;
-  private Phone $phone;
-  private Email $email;
   private Password $password;
   private bool $isActive;
-  private RegisteredDate $registeredDate;
 
   /** @throws InvalidArgumentException */
-  function __construct(
+  final function __construct(
     string $id,
     string $names,
     string $lastNames,
@@ -48,31 +29,21 @@ abstract class User {
     bool $isActive,
     string $registeredDate
   ) {
+    parent::__construct(
+      $names,
+      $lastNames,
+      $idCard,
+      $gender,
+      $birthDate,
+      $phone,
+      $email,
+      $registeredDate
+    );
+
     $this->id = new UserID($id);
-    $this->names = new Names($names);
-    $this->lastNames = new LastNames($lastNames);
-    $this->idCard = new IDCard($idCard);
-    $this->gender = Gender::from($gender);
-
-    try {
-      $this->birthDate = new BirthDate(new DateTimeImmutable($birthDate));
-    } catch (Exception) {
-      throw new InvalidBirthDate;
-    }
-
     $this->address = new Address($address);
-    $this->email = new Email($email);
-    $this->phone = new Phone($phone);
     $this->password = new Password($password);
     $this->isActive = $isActive;
-
-    try {
-      $registeredDateTime = new DateTimeImmutable($registeredDate);
-    } catch (Exception) {
-      throw new InvalidRegisteredDate;
-    }
-
-    $this->registeredDate = new RegisteredDate($registeredDateTime);
   }
 
   abstract function role(): string;
@@ -81,36 +52,8 @@ abstract class User {
     return (string) $this->id;
   }
 
-  function names(): string {
-    return (string) $this->names;
-  }
-
-  function lastNames(): string {
-    return (string) $this->lastNames;
-  }
-
-  function fullName(): string {
-    return "$this->names $this->lastNames";
-  }
-
-  function idCard(): int {
-    return $this->idCard->value;
-  }
-
-  function birthDate(string $format): string {
-    return $this->birthDate->value->format($format);
-  }
-
   function address(): string {
     return $this->address->value;
-  }
-
-  function phone(): string {
-    return $this->phone->value;
-  }
-
-  function email(): string {
-    return $this->email->asString();
   }
 
   function password(): string {
@@ -119,9 +62,5 @@ abstract class User {
 
   function isActive(): bool {
     return $this->isActive;
-  }
-
-  function registeredDate(string $format): string {
-    return $this->registeredDate->value->format($format);
   }
 }
