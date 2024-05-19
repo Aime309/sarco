@@ -10,6 +10,7 @@ use SARCO\Shared\Domain\DuplicatedEmail;
 use SARCO\Shared\Domain\DuplicatedFullName;
 use SARCO\Shared\Domain\DuplicatedIDCard;
 use SARCO\Shared\Domain\DuplicatedPhone;
+use SARCO\Tests\Users\Domain\UserBuilder;
 use SARCO\Users\Domain\Director;
 use SARCO\Users\Domain\Teacher;
 use SARCO\Users\Infrastructure\SQLiteUserRepository;
@@ -26,13 +27,13 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
     $this->connection->query("
       CREATE TABLE usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id VARCHAR(255) PRIMARY KEY,
         nombres VARCHAR(40) NOT NULL CHECK (LENGTH(nombres) BETWEEN 3 AND 40),
         apellidos VARCHAR(40) NOT NULL CHECK (LENGTH(apellidos) BETWEEN 3 AND 40),
         cedula INTEGER NOT NULL UNIQUE CHECK (cedula BETWEEN 1000000 AND 99999999),
         fecha_nacimiento DATE NOT NULL CHECK (fecha_nacimiento >= '1906-01-01'),
         direccion TEXT NOT NULL CHECK (LENGTH(direccion) >= 3),
-        telefono CHAR(15) NOT NULL UNIQUE CHECK (LENGTH(telefono) = 15 AND telefono LIKE '+__ ___-_______' /* AND telefono REGEXP '^\+\d{2} \d{3}-\d{7}$' */),
+        telefono CHAR(15) NOT NULL UNIQUE CHECK (LENGTH(telefono) = 15 AND telefono LIKE '+__ ___-_______'),
         correo VARCHAR(255) NOT NULL UNIQUE CHECK (LENGTH(correo) >= 5 AND correo LIKE '%@%.%'),
         clave TEXT NOT NULL CHECK (LENGTH(clave) >= 8),
         rol VARCHAR(12) NOT NULL CHECK (rol IN ('Director', 'Directora', 'Docente', 'Secretario', 'Secretaria')),
@@ -48,20 +49,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
   #[Test]
   function can_save_one_director(): void {
-    $user = new Director(
-      '',
-      'Franyer',
-      'Sánchez',
-      28072391,
-      'Masculino',
-      '2001-10-06',
-      'El Pinar',
-      '+584165335826',
-      'franyeradriansanchez@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    );
+    $user = UserBuilder::withRole(Director::class)->build();
 
     $this->repository->save($user);
 
@@ -71,35 +59,8 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
   #[Test]
   function can_save_two_teachers(): void {
-    $teacher1 = new Teacher(
-      '',
-      'Franyer',
-      'Sánchez',
-      28072391,
-      'Masculino',
-      '2001-10-06',
-      'El Pinar',
-      '+584165335826',
-      'franyeradriansanchez@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    );
-
-    $teacher2 = new Teacher(
-      '',
-      'Yender',
-      'Sánchez',
-      30735099,
-      'Masculino',
-      '2004-04-30',
-      'El Pinar',
-      '04161231234',
-      'yender@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    );
+    $teacher1 = UserBuilder::withRole(Teacher::class)->build();
+    $teacher2 = UserBuilder::withRole(Teacher::class)->build();
 
     $this->repository->save($teacher1);
     $this->repository->save($teacher2);
@@ -110,20 +71,7 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
   #[Test]
   function cannot_save_two_directors_with_same_full_name(): void {
-    $user = new Director(
-      '',
-      'Franyer',
-      'Sánchez',
-      28072391,
-      'Masculino',
-      '2001-10-06',
-      'El Pinar',
-      '+584165335826',
-      'franyeradriansanchez@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    );
+    $user = UserBuilder::withRole(Director::class)->build();
 
     $this->repository->save($user);
 
@@ -136,26 +84,13 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
   #[Test]
   function cannot_save_two_directors_with_same_id_card(): void {
-    $params = [
-      '',
-      'Franyer',
-      'Sánchez',
-      28072391,
-      'Masculino',
-      '2001-10-06',
-      'El Pinar',
-      '+584165335826',
-      'franyeradriansanchez@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    ];
+    $user = UserBuilder::withRole(Director::class)
+      ->withIdCard(28072391)
+      ->build();
 
-    $user = new Director(...$params);
-    $params[2] = 'Guillén';
-    $params[7] = '+584247542450';
-    $params[8] = 'franyersanchez06@hotmail.com';
-    $user2 = new Director(...$params);
+    $user2 = UserBuilder::withRole(Director::class)
+      ->withIdCard(28072391)
+      ->build();
 
     $this->repository->save($user);
 
@@ -168,25 +103,13 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
   #[Test]
   function cannot_save_two_directors_with_same_phone(): void {
-    $params = [
-      '',
-      'Franyer',
-      'Sánchez',
-      28072391,
-      'Masculino',
-      '2001-10-06',
-      'El Pinar',
-      '+584165335826',
-      'franyeradriansanchez@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    ];
+    $user = UserBuilder::withRole(Director::class)
+      ->withPhone('+58 123-1234567')
+      ->build();
 
-    $user = new Director(...$params);
-    $params[2] = 'Guillén';
-    $params[8] = 'franyersanchez06@hotmail.com';
-    $user2 = new Director(...$params);
+    $user2 = UserBuilder::withRole(Director::class)
+      ->withPhone('+58 123-1234567')
+      ->build();
 
     $this->repository->save($user);
 
@@ -199,24 +122,13 @@ final class SQLiteUserRepositoryTest extends TestCase {
 
   #[Test]
   function cannot_save_two_directors_with_same_email(): void {
-    $params = [
-      '',
-      'Franyer',
-      'Sánchez',
-      28072391,
-      'Masculino',
-      '2001-10-06',
-      'El Pinar',
-      '+584165335826',
-      'franyeradriansanchez@gmail.com',
-      'Fran.1234',
-      true,
-      date('Y-m-d H:i:s')
-    ];
+    $user = UserBuilder::withRole(Director::class)
+      ->withEmail('franyeradriansanchez@gmail.com')
+      ->build();
 
-    $user = new Director(...$params);
-    $params[2] = 'Guillén';
-    $user2 = new Director(...$params);
+    $user2 = UserBuilder::withRole(Director::class)
+      ->withEmail('franyeradriansanchez@gmail.com')
+      ->build();
 
     $this->repository->save($user);
 

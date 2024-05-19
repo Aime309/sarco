@@ -17,14 +17,27 @@ final readonly class SQLiteUserRepository implements UserRepository {
   }
 
   function save(User $user): void {
-    $wasRegistered = @$this->connection->query("
-      INSERT INTO usuarios (nombres, apellidos, cedula, fecha_nacimiento,
+    $stmt = $this->connection->prepare("
+      INSERT INTO usuarios (id, nombres, apellidos, cedula, fecha_nacimiento,
       direccion, telefono, correo, clave, rol, esta_activo, fecha_registro)
-      VALUES ('{$user->names()}', '{$user->lastNames()}', {$user->idCard()},
-      '{$user->birthDate('Y-m-d')}', '{$user->address()}', '{$user->phone()}',
-      '{$user->email()}', '{$user->password()}', '{$user->role()}',
-      {$user->isActive()}, '{$user->registeredDate('Y-m-d H:i:s')}')
+      VALUES (:id, :names, :lastNames, :idCard, :birthDate, :address, :phone,
+      :email, :password, :role, :isActive, :registeredDate)
     ");
+
+    $stmt->bindValue(':id', $user->id());
+    $stmt->bindValue(':names', $user->names());
+    $stmt->bindValue(':lastNames', $user->lastNames());
+    $stmt->bindValue(':idCard', $user->idCard());
+    $stmt->bindValue(':birthDate', $user->birthDate('Y-m-d'));
+    $stmt->bindValue(':address', $user->address());
+    $stmt->bindValue(':phone', $user->phone());
+    $stmt->bindValue(':email', $user->email());
+    $stmt->bindValue(':password', $user->password());
+    $stmt->bindValue(':role', $user->role());
+    $stmt->bindValue(':isActive', $user->isActive());
+    $stmt->bindValue(':registeredDate', $user->registeredDate('Y-m-d H:i:s'));
+
+    $wasRegistered = @$stmt->execute();
 
     if (!$wasRegistered) {
       self::throwError($this->connection->lastErrorMsg(), $user);
@@ -44,7 +57,8 @@ final readonly class SQLiteUserRepository implements UserRepository {
       ),
       str_contains($error, 'usuarios.correo') => new DuplicatedEmail(
         $user->email()
-      )
+      ),
+      default => exit(print_r(compact('error', 'user')))
     });
   }
 }

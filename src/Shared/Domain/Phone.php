@@ -26,7 +26,7 @@ final readonly class Phone implements Stringable {
     $isVenezuelan = self::isVenezuelan($value);
 
     if (!$isInternational && !$isVenezuelan) {
-      throw new InvalidPhone;
+      throw new InvalidPhone($value);
     }
   }
 

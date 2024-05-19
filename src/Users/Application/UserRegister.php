@@ -20,6 +20,7 @@ final readonly class UserRegister {
    * @throws UserCouldNotSave
    */
   function __invoke(
+    string $id,
     string $names,
     string $lastNames,
     int $idCard,
@@ -31,7 +32,6 @@ final readonly class UserRegister {
     string $password,
     string $role
   ): void {
-    $id = '';
     $password = password_hash($password, PASSWORD_DEFAULT);
     $registeredDate = date('Y-m-d H:i:s');
     $isActive = true;

@@ -11,22 +11,24 @@ abstract class ContactablePerson extends Person {
   private Email $email;
 
   function __construct(
+    string $id,
+    string $registeredDate,
     string $names,
     string $lastNames,
     int $idCard,
     string $gender,
     string $birthDate,
     string $phone,
-    string $email,
-    string $registeredDate
+    string $email
   ) {
     parent::__construct(
+      $id,
+      $registeredDate,
       $names,
       $lastNames,
       $idCard,
       $gender,
       $birthDate,
-      $registeredDate
     );
 
     $this->email = new Email($email);

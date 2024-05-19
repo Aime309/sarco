@@ -29,7 +29,7 @@ final class NamesTest extends TestCase {
   function cannot_instantiate_a_short_name(): void {
     self::expectException(InvalidNames::class);
 
-    new Names('Fr');
+    new Names('F');
   }
 
   #[Test]
@@ -43,7 +43,7 @@ final class NamesTest extends TestCase {
   function cannot_instantiate_with_a_short_surname(): void {
     self::expectException(InvalidNames::class);
 
-    new Names('Franyer Ad');
+    new Names('Franyer A');
   }
 
   #[Test]

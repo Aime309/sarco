@@ -29,12 +29,12 @@ readonly class Names implements Stringable {
   }
 
   private static function validate(string $value): void {
-    $characters = 'a-zA-ZáéíóúñÁÉÍÓÚÑ';
-    $pattern = "/^[$characters]{3,20}(\s[$characters]{3,20})?$/";
+    $characters = 'a-zA-ZáéíóúñÁÉÍÓÚÑ\'';
+    $pattern = "/^[$characters]{2,20}(\s[$characters]{2,20})?$/";
     $length = mb_strlen($value);
 
-    if ($length < 3 || $length > 40 || !preg_match($pattern, $value)) {
-      throw new (static::EXCEPTION);
+    if ($length < 2 || $length > 40 || !preg_match($pattern, $value)) {
+      throw new (static::EXCEPTION)($value);
     }
   }
 

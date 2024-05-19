@@ -15,7 +15,8 @@ final class Representative extends ContactablePerson {
   private array $children = [];
 
   function __construct(
-    private readonly int $id,
+    string $id,
+    string $registeredDate,
     string $names,
     string $lastNames,
     int $idCard,
@@ -23,21 +24,21 @@ final class Representative extends ContactablePerson {
     string $birthDate,
     string $phone,
     string $email,
-    string $registeredDate,
     string $civilStatus,
     string $nationality,
     Student $child,
     Student ...$children
   ) {
     parent::__construct(
+      $id,
+      $registeredDate,
       $names,
       $lastNames,
       $idCard,
       $gender,
       $birthDate,
       $phone,
-      $email,
-      $registeredDate
+      $email
     );
 
     $this->civilStatus = CivilStatus::from($civilStatus);

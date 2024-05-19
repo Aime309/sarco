@@ -7,6 +7,8 @@ namespace SARCO\Shared\Domain;
 use InvalidArgumentException;
 
 final class InvalidAddress extends InvalidArgumentException {
-  protected $message = 'Dirección inválida (Debe tener mínimo 3 caracteres,
-  números)';
+  function __construct(string $address) {
+    $this->message = "Dirección inválida $address (Debe tener mínimo 3 caracteres,
+    números)";
+  }
 }

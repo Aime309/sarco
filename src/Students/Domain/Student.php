@@ -14,26 +14,27 @@ final class Student extends Person {
   private readonly BloodType $bloodType;
 
   function __construct(
-    private readonly int $id,
+    string $id,
+    string $registeredDate,
     string $names,
     string $lastNames,
     int $idCard,
     string $gender,
     string $birthDate,
     string $birthPlace,
-    string $registeredDate,
     string $bloodType,
     private readonly Room $room,
     private readonly Representative $mom,
     private readonly ?Representative $dad
   ) {
     parent::__construct(
+      $id,
+      $registeredDate,
       $names,
       $lastNames,
       $idCard,
       $gender,
-      $birthDate,
-      $registeredDate
+      $birthDate
     );
 
     $this->birthPlace = new Address($birthPlace);

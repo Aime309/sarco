@@ -29,7 +29,7 @@ final class LastNamesTest extends TestCase {
   function cannot_instantiate_a_short_last_name(): void {
     self::expectException(InvalidLastNames::class);
 
-    new LastNames('Sá');
+    new LastNames('S');
   }
 
   #[Test]
@@ -43,7 +43,7 @@ final class LastNamesTest extends TestCase {
   function cannot_instantiate_with_a_short_second_last_name(): void {
     self::expectException(InvalidLastNames::class);
 
-    new LastNames('Sánchez Gu');
+    new LastNames('Sánchez G');
   }
 
   #[Test]

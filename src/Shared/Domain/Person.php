@@ -7,23 +7,24 @@ namespace SARCO\Shared\Domain;
 use DateTimeImmutable;
 use Exception;
 
-abstract class Person {
+abstract class Person extends Model {
   private Names $names;
   private LastNames $lastNames;
   private IDCard $idCard;
   protected Gender $gender;
   private BirthDate $birthDate;
-  private RegisteredDate $registeredDate;
 
-  /** @throws InvalidArgumentException */
   function __construct(
+    string $id,
+    string $registeredDate,
     string $names,
     string $lastNames,
     int $idCard,
     string $gender,
     string $birthDate,
-    string $registeredDate
   ) {
+    parent::__construct($id, $registeredDate);
+
     $this->names = new Names($names);
     $this->lastNames = new LastNames($lastNames);
     $this->idCard = new IDCard($idCard);
@@ -34,14 +35,6 @@ abstract class Person {
     } catch (Exception) {
       throw new InvalidBirthDate;
     }
-
-    try {
-      $registeredDateTime = new DateTimeImmutable($registeredDate);
-    } catch (Exception) {
-      throw new InvalidRegisteredDate;
-    }
-
-    $this->registeredDate = new RegisteredDate($registeredDateTime);
   }
 
   final function names(): string {
@@ -64,7 +57,7 @@ abstract class Person {
     return $this->birthDate->value->format($format);
   }
 
-  function registeredDate(string $format): string {
-    return $this->registeredDate->value->format($format);
+  final function gender(): string {
+    return $this->gender->value;
   }
 }

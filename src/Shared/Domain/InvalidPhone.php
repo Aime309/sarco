@@ -7,6 +7,8 @@ namespace SARCO\Shared\Domain;
 use InvalidArgumentException;
 
 final class InvalidPhone extends InvalidArgumentException {
-  protected $message = 'Teléfono inválido (Debe tener el formato +xxYYYzzzzzzz
-  o xxxxYYYzzzz)';
+  function __construct(string $phone) {
+    $this->message = "Teléfono inválido $phone (Debe tener el formato +xxYYYzzzzzzz
+  o xxxxYYYzzzz)";
+  }
 }

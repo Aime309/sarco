@@ -8,7 +8,7 @@ use Stringable;
 
 final readonly class Address implements Stringable {
   private const MINIMUM = 3;
-  private const PATTERN = '/^[a-zA-Z0-9\s]{3,}$/';
+  private const PATTERN = '/^[a-zA-Z0-9\s,-.\']{3,}$/';
   public string $value;
 
   /** @throws InvalidAddress */
@@ -26,7 +26,7 @@ final readonly class Address implements Stringable {
     $length = mb_strlen($value);
 
     if ($length < self::MINIMUM || !preg_match(self::PATTERN, $value)) {
-      throw new InvalidAddress;
+      throw new InvalidAddress($value);
     }
   }
 
