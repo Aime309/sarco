@@ -5,7 +5,8 @@
     "symfony/dotenv": "^7.0",
     "illuminate/container": "^11.5",
     "flightphp/core": "dev-fix/bug-with-multiple-view-renders",
-    "jenssegers/date": "^4.0"
+    "jenssegers/date": "^4.0",
+    "symfony/uid": "^7.0"
   },
   "scripts": {
     "post-install-cmd": [
@@ -31,6 +32,7 @@
   "require-dev": {
     "filp/whoops": "^2.15",
     "symfony/var-dumper": "^7.0",
-    "phpunit/phpunit": "^11.1"
+    "phpunit/phpunit": "^11.1",
+    "fakerphp/faker": "^1.23"
   }
 }
