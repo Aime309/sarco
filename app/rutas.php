@@ -35,38 +35,29 @@ function autorizar(Rol ...$roles): callable {
 }
 
 App::group('/api', function (Router $router): void {
-  $router->get('/salas/asignaciones/@idMomento', function (string $idMomento): void {
-    $idPeriodo = (string) bd()->query("
-      SELECT id_periodo FROM momentos WHERE id = '$idMomento'
-    ")->fetchColumn();
+  $router->get(
+    '/asignaciones/@idPeriodo/@fechaNacimiento:\d{4}-\d{2}-\d{2}',
+    function (string $idPeriodo, string $fechaNacimiento): void {
+      $sentencia = bd()->prepare('
+        SELECT s.id as idSala, nombre as nombreSala,
+        edad_minima as edadMinima, edad_maxima as edadMaxima
+        FROM salas s
+        JOIN asignaciones_de_salas a
+        ON a.id_sala = s.id
+        WHERE id_periodo = ?
+      ');
 
-    $asignaciones = bd()->query("
-      SELECT a.id, d.id as idDocente, d.nombres as nombresDocente,
-      d.apellidos as apellidosDocente, s.nombre as sala,
-      au.codigo as aula, au.tipo as tipoAula
-      FROM asignaciones_de_salas a
-      JOIN usuarios d
-      JOIN salas s
-      JOIN aulas au
-      ON (
-        a.id_docente1 = d.id
-        OR a.id_docente2 = d.id
-        OR a.id_docente3 = d.id
-      ) AND a.id_sala = s.id
-      AND a.id_aula = au.id
-      WHERE id_periodo = '$idPeriodo'
-    ")->fetchAll();
+      $sentencia->execute([$idPeriodo]);
+      $salas = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+      $edad = Estudiante::calcularEdad($fechaNacimiento);
 
-    App::json(array_map(static fn (array $asignacion): array => [
-      'id' => $asignacion['id'],
-      'docente' => [
-        'id' => $asignacion['idDocente'],
-        'nombre' => "{$asignacion['nombresDocente']} {$asignacion['apellidosDocente']}"
-      ],
-      'sala' => $asignacion['sala'],
-      'aula' => $asignacion['aula']
-    ], $asignaciones));
-  });
+      $salas = array_filter($salas, function (array $sala) use ($edad): bool {
+        return $edad >= $sala['edadMinima'] && $edad <= $sala['edadMaxima'];
+      });
+
+      App::json($salas);
+    }
+  );
 });
 
 App::route('GET /salir', function (): void {
@@ -989,48 +980,19 @@ App::group('/', function (Router $router): void {
     });
 
     $router->get('/inscribir', function (): void {
-      $estudiantes = bd()->query("
-        SELECT id, nombres, apellidos, cedula,
-        fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
-        genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
-        id_mama as idMama, id_papa as idPapa FROM estudiantes
-      ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+      $periodos = bd()->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos ORDER BY inicio DESC
+      ")->fetchAll(PDO::FETCH_CLASS, Periodo::class);
 
-      $momentos = bd()->query("
-        SELECT m.id, numero, mes_inicio as mesInicio,
-        dia_inicio as diaInicio,
-        mes_cierre as mesCierre,
-        dia_cierre as diaCierre,
-        m.fecha_registro as fechaRegistro,
-        id_periodo as idPeriodo FROM momentos m JOIN periodos p
-        ON m.id_periodo = p.id ORDER BY m.id
-      ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
-
-      foreach ($momentos as $momento) {
-        assert($momento instanceof Momento);
-
-        $periodo = bd()->query("
-          SELECT id, fecha_registro as fechaRegistro, anio_inicio as inicio
-          FROM periodos WHERE id = '$momento->idPeriodo'
-        ")->fetchObject(Periodo::class);
-
-        $momento->asignarPeriodo($periodo);
-      }
-
-      $mesActual = (int) date('m');
-
-      $ultimoMomento = bd()->query("
-        SELECT id, numero, mes_inicio as mesInicio,
-        dia_inicio as diaInicio, fecha_registro as fechaRegistro,
-        id_periodo as idPeriodo FROM momentos
-        WHERE mesInicio >= $mesActual
-        ORDER BY idPeriodo, mesInicio
-        LIMIT 1
-      ")->fetchObject(Momento::class);
+      $periodoActual = bd()->query("
+        SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+        FROM periodos ORDER BY inicio DESC LIMIT 1
+      ")->fetchObject(Periodo::class) ?: null;
 
       App::render(
         'paginas/estudiantes/inscribir',
-        compact('estudiantes', 'momentos', 'ultimoMomento'),
+        compact('periodos', 'periodoActual'),
         'pagina'
       );
 

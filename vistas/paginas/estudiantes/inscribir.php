@@ -5,60 +5,10 @@ use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\GrupoSanguineo;
 use SARCO\Enumeraciones\Nacionalidad;
-use SARCO\Modelos\Estudiante;
-use SARCO\Modelos\Momento;
+use SARCO\Modelos\Periodo;
 
 assert($vistas instanceof View);
-assert($ultimoMomento instanceof Momento);
-$estudiantes = (static fn (Estudiante ...$estudiantes) => $estudiantes)(...$estudiantes);
-$momentosParaIterar = [];
-
-foreach ($momentos as $momento) {
-  assert($momento instanceof Momento);
-
-  $momentosParaIterar[$momento->periodo()->inicio][] = $momento;
-}
-
-$momentosOpciones = '';
-$asignaciones = [];
-
-foreach ($momentosParaIterar as $periodo => $momentos) {
-  $momentos = join('', array_map(
-    static function (Momento $momento) use ($ultimoMomento, &$asignaciones): string {
-      $selected = $ultimoMomento->id === $momento->id ? 'selected' : null;
-
-      if ($selected) {
-        $url = str_replace('/index.php', '', substr($_SERVER['SCRIPT_NAME'], 1));
-        $host = $_SERVER['SERVER_NAME'];
-        $puerto = $_SERVER['SERVER_PORT'];
-        $protocolo = $_SERVER['REQUEST_SCHEME'];
-
-        $url = "$protocolo://$host:$puerto/$url/api/salas/asignaciones/$momento->id";
-        $respuesta = file_get_contents($url);
-        $asignaciones = json_decode($respuesta, true);
-      }
-
-      $actual = $selected ? '~ actual' : null;
-
-      return <<<html
-      <option value="$momento->id" $selected>$momento $actual</option>
-      html;
-    },
-    $momentos
-  ));
-
-  $momentosOpciones .= <<<html
-  <optgroup label="$periodo">$momentos</optgroup>
-  html;
-}
-
-$asignaciones = join('', array_map(static fn (array $asignacion): string => <<<html
-<option value="{$asignacion['docente']['id']}">
-  {$asignacion['docente']['nombre']} ~ {$asignacion['sala']}
-</option>
-html, $asignaciones));
-
-scripts('./recursos/js/validarFormulario.js');
+assert($periodoActual instanceof Periodo);
 
 ?>
 
@@ -90,51 +40,23 @@ scripts('./recursos/js/validarFormulario.js');
     ?>
   </form> -->
 
-  <details class="my-5">
+  <details class="my-5" open>
     <summary class="h2 pl-5 mb-4">Inscribir por primera vez</summary>
-    <form method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+    <form method="post" class="form form--bordered form--with-validation form--with-padding mx-5 form--centered">
       <?php
 
       $vistas->render('componentes/Select', [
-        'validacion' => 'El momento es requerido',
-        'name' => 'id_momento',
-        'placeholder' => 'Momento',
-        'children' => $momentosOpciones,
-        'onchange' => <<<'javascript'
-        fetch(`api/salas/asignaciones/${this.value}`)
-          .then(response => response.json())
-          .then(asignaciones => {
-            asignaciones = asignaciones.map(asignacion => `
-              <option value='${asignacion.docente.id}'>
-                ${asignacion.docente.nombre} ~ ${asignacion.sala}
-              </option>
-            `).join('')
-
-            document.getElementById('docentes').innerHTML = asignaciones
-            document.getElementById('asistentes').innerHTML = asignaciones
-          })
-        javascript
+        'validacion' => 'El período es requerido',
+        'name' => 'id_periodo',
+        'placeholder' => 'Período',
+        'opciones' => array_map(static fn (Periodo $periodo): array => [
+          'value' => $periodo->id,
+          'children' => $periodo,
+          'selected' => $periodo == $periodoActual
+        ], $periodos)
       ]);
 
-      $vistas->render('componentes/Select', [
-        'validacion' => 'La asignación de maestro es requerida',
-        'name' => 'id_asignacion_docente',
-        'placeholder' => 'Maestro',
-        'children' => <<<html
-        <optgroup label='Maestros' id='docentes'>{$asignaciones}</optgroup>
-        html
-      ]);
-
-      $vistas->render('componentes/Select', [
-        'validacion' => 'La asignación de asistente es requerida',
-        'name' => 'id_asignacion_asistente',
-        'placeholder' => 'Asistente',
-        'children' => <<<html
-        <optgroup label='Asistentes' id='asistentes'>{$asignaciones}</optgroup>
-        html
-      ]);
-
-      echo '<fieldset class="mt-5"><legend>Datos del estudiante</legend>';
+      echo '<fieldset class="mt-5 row justify-content-center"><legend>Datos del estudiante</legend>';
 
       $vistas->render('componentes/Input', [
         'validacion' => 'Los nombres sólo pueden contener letras',
@@ -142,7 +64,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -151,21 +74,25 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
         'validacion' => 'La fecha de nacimiento es requerida',
         'name' => 'estudiante[fecha_nacimiento]',
         'placeholder' => 'Fecha de nacimiento',
-        'type' => 'date'
+        'type' => 'date',
+        'class' => 'col-md-5 mr-md-2',
+        'onblur' => 'obtenerSalas(this)'
       ]);
 
       $vistas->render('componentes/Textarea', [
         'validacion' => 'El lugar de nacimiento es requerido',
         'name' => 'estudiante[lugar_nacimiento]',
         'placeholder' => 'Lugar de nacimiento',
-        'minlength' => 3
+        'minlength' => 3,
+        'class' => 'col-md-5 ml-md-2',
       ]);
 
       $vistas->render('componentes/Select', [
@@ -175,7 +102,8 @@ scripts('./recursos/js/validarFormulario.js');
         'opciones' => array_map(static fn (Genero $genero): array => [
           'value' => $genero->name,
           'children' => $genero->name
-        ], Genero::cases())
+        ], Genero::cases()),
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Select', [
@@ -185,10 +113,61 @@ scripts('./recursos/js/validarFormulario.js');
         'opciones' => array_map(static fn (GrupoSanguineo $grupo): array => [
           'value' => $grupo->value,
           'children' => $grupo->value
-        ], GrupoSanguineo::cases())
+        ], GrupoSanguineo::cases()),
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
-      echo '</fieldset><fieldset class="mt-5"><legend>Datos de la madre</legend>';
+      echo '</fieldset><fieldset class="mt-5"><legend>Sala asignada</legend>';
+
+      echo '<div class="row">';
+
+      $vistas->render('componentes/Select', [
+        'validacion' => 'La sala es requerida',
+        'name' => 'id_sala',
+        'placeholder' => 'Salas disponibles',
+        'class' => 'col-md m-2',
+        'onchange' => 'actualizarAulaDocentes(this)'
+      ]);
+
+      $vistas->render('componentes/Input', [
+        'validacion' => 'Aula asignada',
+        'readonly' => true,
+        'disabled' => true,
+        'name' => 'id_aula',
+        'placeholder' => 'Aula asignada',
+        'class' => 'col-md m-2'
+      ]);
+
+      echo '</div><div class="row">';
+
+      $vistas->render('componentes/Input', [
+        'validacion' => 'Maestro asignado',
+        'readonly' => true,
+        'disabled' => true,
+        'name' => 'id_maestro[1]',
+        'placeholder' => 'Maestro asignado',
+        'class' => 'col-md m-2'
+      ]);
+
+      $vistas->render('componentes/Input', [
+        'validacion' => 'Maestro asignado',
+        'readonly' => true,
+        'disabled' => true,
+        'name' => 'id_maestro[2]',
+        'placeholder' => 'Maestro asignado',
+        'class' => 'col-md m-2'
+      ]);
+
+      $vistas->render('componentes/Input', [
+        'validacion' => 'Maestro asignado',
+        'readonly' => true,
+        'disabled' => true,
+        'name' => 'id_maestro[3]',
+        'placeholder' => 'Maestro asignado',
+        'class' => 'col-md m-2'
+      ]);
+
+      echo '</div></fieldset><fieldset class="mt-5 row justify-content-center"><legend>Datos de la madre</legend>';
 
       $vistas->render('componentes/Input', [
         'validacion' => 'Los nombres sólo pueden contener letras',
@@ -196,7 +175,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -205,7 +185,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -214,14 +195,16 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Cédula',
         'type' => 'number',
         'min' => 1000000,
-        'max' => 99999999
+        'max' => 99999999,
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
         'validacion' => 'La fecha de nacimiento es requerida',
         'name' => 'madre[fecha_nacimiento]',
         'placeholder' => 'Fecha de nacimiento',
-        'type' => 'date'
+        'type' => 'date',
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Select', [
@@ -231,7 +214,8 @@ scripts('./recursos/js/validarFormulario.js');
         'opciones' => array_map(static fn (EstadoCivil $estado): array => [
           'value' => $estado->name,
           'children' => $estado->name
-        ], EstadoCivil::cases())
+        ], EstadoCivil::cases()),
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Select', [
@@ -241,7 +225,8 @@ scripts('./recursos/js/validarFormulario.js');
         'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
           'children' => $nacionalidad->name
-        ], Nacionalidad::cases())
+        ], Nacionalidad::cases()),
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -251,7 +236,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Teléfono',
         'minlength' => 15,
         'maxlength' => 15,
-        'pattern' => '\+\d{2} \d{3}-\d{7}'
+        'pattern' => '\+\d{2} \d{3}-\d{7}',
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -259,10 +245,12 @@ scripts('./recursos/js/validarFormulario.js');
         'type' => 'email',
         'name' => 'madre[correo]',
         'placeholder' => 'Correo',
-        'minlength' => 5
+        'minlength' => 5,
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       echo '</fieldset><details class="mt-5"><summary class="h4 mb-4">Datos del padre (opcional)</summary>';
+      echo '<div class="row justify-content-center">';
 
       $vistas->render('componentes/Input', [
         'validacion' => 'Los nombres sólo pueden contener letras',
@@ -271,7 +259,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -281,7 +270,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -291,7 +281,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Cédula',
         'type' => 'number',
         'min' => 1000000,
-        'max' => 99999999
+        'max' => 99999999,
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -299,7 +290,8 @@ scripts('./recursos/js/validarFormulario.js');
         'name' => 'padre[fecha_nacimiento]',
         'required' => false,
         'placeholder' => 'Fecha de nacimiento',
-        'type' => 'date'
+        'type' => 'date',
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Select', [
@@ -310,7 +302,8 @@ scripts('./recursos/js/validarFormulario.js');
         'opciones' => array_map(static fn (EstadoCivil $estado): array => [
           'value' => $estado->name,
           'children' => $estado->name
-        ], EstadoCivil::cases())
+        ], EstadoCivil::cases()),
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Select', [
@@ -321,7 +314,8 @@ scripts('./recursos/js/validarFormulario.js');
         'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
           'children' => $nacionalidad->name
-        ], Nacionalidad::cases())
+        ], Nacionalidad::cases()),
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -332,7 +326,8 @@ scripts('./recursos/js/validarFormulario.js');
         'placeholder' => 'Teléfono',
         'minlength' => 15,
         'maxlength' => 15,
-        'pattern' => '\+\d{2} \d{3}-\d{7}'
+        'pattern' => '\+\d{2} \d{3}-\d{7}',
+        'class' => 'col-md-5 mr-md-2'
       ]);
 
       $vistas->render('componentes/Input', [
@@ -341,10 +336,11 @@ scripts('./recursos/js/validarFormulario.js');
         'name' => 'padre[correo]',
         'required' => false,
         'placeholder' => 'Correo',
-        'minlength' => 5
+        'minlength' => 5,
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
-      echo '</details>';
+      echo '</div></details>';
 
       $vistas->render('componentes/Boton', [
         'tipo' => 'submit',
@@ -354,10 +350,32 @@ scripts('./recursos/js/validarFormulario.js');
       ?>
     </form>
   </details>
-
-  <datalist id="estudiantes">
-    <?php foreach ($estudiantes as $estudiante) : ?>
-      <option value="<?= $estudiante->cedula ?>"></option>
-    <?php endforeach ?>
-  </datalist>
 <?php endif ?>
+
+<script>
+  const $idPeriodo = document.querySelector('[name="id_periodo"]')
+  const $idSala = $idPeriodo.form.querySelector('[name="id_sala"]')
+
+  async function obtenerSalas($fechaNacimiento) {
+    if (!$fechaNacimiento.value) {
+      return
+    }
+
+    const url = `./api/asignaciones/${$idPeriodo.value}/${$fechaNacimiento.value}`
+    const respuesta = await fetch(url)
+    const asignaciones = await respuesta.json()
+    $idSala.innerHTML = ''
+
+    Object.entries(asignaciones).forEach(([, asignacion]) => {
+      $idSala.innerHTML += `
+        <option value="${asignacion.idSala}">
+          Sala ${asignacion.nombreSala}
+        </option>
+      `
+    })
+  }
+
+  async function actualizarAulaDocentes($idSala) {
+    console.log($idSala.value)
+  }
+</script>

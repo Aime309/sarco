@@ -9,11 +9,12 @@ $maxlength = isset($maxlength) ? (int) $maxlength : null;
 $value = isset($value) ? (string) $value : null;
 $required = isset($required) ? (bool) $required : true;
 $pattern = isset($pattern) ? (string) $pattern : null;
+$class = isset($class) ? (string) $class : null;
 
 ?>
 
 <label
-  class="input-group input-group--with-validationp <?= $required ? 'input-group--required' : 'input-group--optional' ?>"
+  class="input-group input-group--with-validationp <?= $required ? 'input-group--required' : 'input-group--optional' ?> <?= $class ?>"
   data-validate="<?= $validacion ?>">
   <textarea
     <?= $required ? 'required' : '' ?>

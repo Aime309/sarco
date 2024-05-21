@@ -20,7 +20,11 @@ final class Estudiante extends Modelo {
   }
 
   function edad(): int {
-    $fechaNacimiento = new DateTime($this->fechaNacimiento);
+    return self::calcularEdad($this->fechaNacimiento);
+  }
+
+  static function calcularEdad(string $fechaNacimiento): int {
+    $fechaNacimiento = new DateTime($fechaNacimiento);
     $fechaActual = time();
     $diferencia = $fechaActual - $fechaNacimiento->getTimestamp();
 
