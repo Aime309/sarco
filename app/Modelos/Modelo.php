@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use stdClass;
 
 abstract class Modelo extends stdClass {
-  public int $id;
+  public string $id;
   public string $fechaRegistro;
 
   function fechaRegistro(string $formato = 'd/m/Y'): string {

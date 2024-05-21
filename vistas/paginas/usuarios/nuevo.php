@@ -28,7 +28,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Nombres',
     'minlength' => 3,
     'maxlength' => 40,
-    'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})'
+    'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})',
+    'value' => @$_SESSION['datos']['nombres']
   ]);
 
   $vistas->render('componentes/Input', [
@@ -37,7 +38,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Apellidos',
     'minlength' => 3,
     'maxlength' => 40,
-    'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})'
+    'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})',
+    'value' => @$_SESSION['datos']['apellidos']
   ]);
 
   $vistas->render('componentes/Input', [
@@ -46,7 +48,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Cédula',
     'type' => 'number',
     'min' => 1000000,
-    'max' => 99999999
+    'max' => 99999999,
+    'value' => @$_SESSION['datos']['cedula']
   ]);
 
   $vistas->render('componentes/Input', [
@@ -55,13 +58,15 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Contraseña',
     'type' => 'password',
     'pattern' => '(.+){8,}',
-    'minlength' => 8
+    'minlength' => 8,
+    'value' => @$_SESSION['datos']['clave']
   ]);
 
   $vistas->render('componentes/Select', [
     'validacion' => 'El rol es requerido',
     'name' => 'rol',
     'placeholder' => 'Rol',
+    'value' => @$_SESSION['datos']['rol'],
     'opciones' => array_map(static fn (Rol $rol): array => [
       'value' => $rol->name,
       'children' => $rol->name,
@@ -73,13 +78,15 @@ scripts('./recursos/js/validarFormulario.js');
     'validacion' => 'La fecha de nacimiento es requerida',
     'name' => 'fecha_nacimiento',
     'placeholder' => 'Fecha de nacimiento',
-    'type' => 'date'
+    'type' => 'date',
+    'value' => @$_SESSION['datos']['fecha_nacimiento'],
   ]);
 
   $vistas->render('componentes/Select', [
     'validacion' => 'El género es requerido',
     'name' => 'genero',
     'placeholder' => 'Género',
+    'value' => @$_SESSION['datos']['genero'],
     'opciones' => array_map(static fn (Genero $genero): array => [
       'value' => $genero->name,
       'children' => $genero->name
@@ -90,7 +97,8 @@ scripts('./recursos/js/validarFormulario.js');
     'validacion' => 'La dirección es requerida',
     'name' => 'direccion',
     'placeholder' => 'Dirección',
-    'minlength' => 3
+    'minlength' => 3,
+    'value' => @$_SESSION['datos']['direccion'],
   ]);
 
   $vistas->render('componentes/Input', [
@@ -100,7 +108,8 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Teléfono',
     'minlength' => 15,
     'maxlength' => 15,
-    'pattern' => '\+\d{2} \d{3}-\d{7}'
+    'pattern' => '\+\d{2} \d{3}-\d{7}',
+    'value' => @$_SESSION['datos']['telefono'],
   ]);
 
   $vistas->render('componentes/Input', [
@@ -108,7 +117,8 @@ scripts('./recursos/js/validarFormulario.js');
     'type' => 'email',
     'name' => 'correo',
     'placeholder' => 'Correo',
-    'minlength' => 5
+    'minlength' => 5,
+    'value' => @$_SESSION['datos']['correo'],
   ]);
 
   $vistas->render('componentes/Boton', [

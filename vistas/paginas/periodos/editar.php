@@ -13,12 +13,13 @@ $ultimoAño = $periodo->inicio;
 <header class="full-box page-header">
   <h1 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
-    Aperturar período
+    Editar período
   </h1>
   <p class="text-justify"></p>
 </header>
 
-<form method="post" action="./periodos" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+<form method="post" action="./periodos/<?= $periodo->inicio ?>" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+  <input type="hidden" name="id_periodo" value="<?= $periodo->id ?>" />
   <?php
 
   $vistas->render('componentes/Input', [
@@ -28,7 +29,8 @@ $ultimoAño = $periodo->inicio;
     'type' => 'number',
     'min' => 2006,
     'max' => date('Y') + 1,
-    'value' => $ultimoAño
+    'value' => $_SESSION['datos']['anio_inicio'] ?? $ultimoAño,
+    'onchange' => 'actualizarMomentos(this)'
   ]);
 
   echo <<<html
@@ -38,18 +40,20 @@ $ultimoAño = $periodo->inicio;
     {$vistas->fetch('componentes/Input', [
       'class' => 'col mr-2',
       'validacion' => 'La fecha de inicio es requerida',
-      'name' => 'periodos[1][inicio]',
+      'name' => 'momentos[1][inicio]',
       'placeholder' => 'Inicio',
       'type' => 'date',
-      'value' => "$ultimoAño-01-01"
+      'value' => $_SESSION['datos']['momentos'][1]['inicio']
+        ?? $periodo->momento(1)->inicio('Y-m-d')
     ])}
     {$vistas->fetch('componentes/Input', [
       'class' => 'col ml-2',
       'validacion' => 'La fecha de fin es requerida',
-      'name' => 'periodos[1][fin]',
+      'name' => 'momentos[1][fin]',
       'placeholder' => 'Fin',
       'type' => 'date',
-      'value' => "$ultimoAño-04-30"
+      'value' => $_SESSION['datos']['momentos'][1]['fin']
+        ?? $periodo->momento(1)->cierre('Y-m-d')
     ])}
   </div>
   <hr />
@@ -58,18 +62,20 @@ $ultimoAño = $periodo->inicio;
     {$vistas->fetch('componentes/Input', [
       'class' => 'col mr-2',
       'validacion' => 'La fecha de inicio es requerida',
-      'name' => 'periodos[2][inicio]',
+      'name' => 'momentos[2][inicio]',
       'placeholder' => 'Inicio',
       'type' => 'date',
-      'value' => "$ultimoAño-05-01"
+      'value' => $_SESSION['datos']['momentos'][2]['inicio']
+        ?? $periodo->momento(2)->inicio('Y-m-d')
     ])}
     {$vistas->fetch('componentes/Input', [
       'class' => 'col ml-2',
       'validacion' => 'La fecha de fin es requerida',
-      'name' => 'periodos[2][fin]',
+      'name' => 'momentos[2][fin]',
       'placeholder' => 'Fin',
       'type' => 'date',
-      'value' => "$ultimoAño-07-31"
+      'value' => $_SESSION['datos']['momentos'][2]['fin']
+        ?? $periodo->momento(2)->cierre('Y-m-d')
     ])}
   </div>
   <hr />
@@ -78,26 +84,40 @@ $ultimoAño = $periodo->inicio;
     {$vistas->fetch('componentes/Input', [
       'class' => 'col mr-2',
       'validacion' => 'La fecha de inicio es requerida',
-      'name' => 'periodos[3][inicio]',
+      'name' => 'momentos[3][inicio]',
       'placeholder' => 'Inicio',
       'type' => 'date',
-      'value' => "$ultimoAño-08-01"
+      'value' => $_SESSION['datos']['momentos'][3]['inicio']
+        ?? $periodo->momento(3)->inicio('Y-m-d')
     ])}
     {$vistas->fetch('componentes/Input', [
       'class' => 'col ml-2',
       'validacion' => 'La fecha de fin es requerida',
-      'name' => 'periodos[3][fin]',
+      'name' => 'momentos[3][fin]',
       'placeholder' => 'Fin',
       'type' => 'date',
-      'value' => "$ultimoAño-12-31"
+      'value' => $_SESSION['datos']['momentos'][3]['fin']
+        ?? $periodo->momento(3)->cierre('Y-m-d')
     ])}
   </div>
   html;
 
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
-    'contenido' => 'Registrar'
+    'contenido' => 'Actualizar'
   ]);
 
   ?>
 </form>
+
+<script>
+  function actualizarMomentos($añoInicio) {
+    $momentos = $añoInicio.form.querySelectorAll('[name^="momentos"]')
+
+    $momentos.forEach($momento => {
+      [, mes, dia] = $momento.value.split('-')
+
+      $momento.value = `${$añoInicio.value}-${mes}-${dia}`
+    })
+  }
+</script>

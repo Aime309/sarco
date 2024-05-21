@@ -35,11 +35,9 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
-          <th>ID</th>
           <th>Nombre</th>
           <th>Edad mínima</th>
           <th>Edad máxima</th>
-          <th>Fecha de registro</th>
           <th></th>
           <th></th>
         </tr>
@@ -47,11 +45,11 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
       <tbody>
         <?php foreach ($salas as $sala) : ?>
           <tr class="text-center">
-            <td><?= $sala->id ?></td>
-            <td><?= $sala ?></td>
-            <td><?= $sala->edadMinima ?></td>
-            <td><?= $sala->edadMaxima ?></td>
-            <td><?= $sala->fechaRegistro() ?></td>
+            <td>Sala <?= $sala ?></td>
+            <td>
+              <?= $sala->edadMinima ? "$sala->edadMinima años" : '< 1 año' ?>
+            </td>
+            <td><?= $sala->edadMaxima ?> años</td>
             <td>
               <a href="./salas/<?= $sala->id ?>" class="btn btn-success">
                 Editar

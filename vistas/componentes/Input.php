@@ -28,6 +28,7 @@ $readonly = isset($readonly) ? (bool) $readonly : false;
 $disabled = isset($disabled) ? (bool) $disabled : false;
 $class = isset($class) ? (string) $class : null;
 $list = isset($list) ? (string) $list : null;
+$onchange = isset($onchange) ? (string) $onchange : null;
 
 $type = (isset($type) and is_string($type))
   ? InputType::from($type)
@@ -48,6 +49,7 @@ $type = (isset($type) and is_string($type))
     name="<?= $name ?>"
     placeholder="<?= $placeholder ?>"
     value="<?= $value ?>"
+    onchange="<?= $onchange ?>"
     <?= $min !== null ? "min='$min'" : '' ?>
     <?= $max ? "max='$max'" : '' ?>
     <?= $minlength ? "minlength='$minlength'" : '' ?>

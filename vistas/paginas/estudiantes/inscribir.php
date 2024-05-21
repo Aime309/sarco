@@ -16,7 +16,7 @@ $momentosParaIterar = [];
 foreach ($momentos as $momento) {
   assert($momento instanceof Momento);
 
-  $momentosParaIterar[$momento->periodo][] = $momento;
+  $momentosParaIterar[$momento->periodo()->inicio][] = $momento;
 }
 
 $momentosOpciones = '';

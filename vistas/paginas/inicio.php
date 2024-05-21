@@ -89,10 +89,18 @@ $fechaActual = Date::now()->format('l j \d\e F');
           (<?= $fechaActual ?>)
         </small>
       </div>
-    <?php else : ?>
+    <?php elseif ($usuario->esDirector()) : ?>
       <a href="./periodos/nuevo" class="col" style="font-size: .65em">
         Aperturar período
+        <br />
+        (<?= $fechaActual ?>)
       </a>
+    <?php else : ?>
+      <strong class="col" style="font-size: .65em">
+        Período no aperturado
+        <br />
+        (<?= $fechaActual ?>)
+      </strong>
     <?php endif ?>
   </h1>
   <p class="text-justify"></p>

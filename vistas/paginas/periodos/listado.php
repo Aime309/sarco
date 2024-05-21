@@ -36,9 +36,11 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
       <thead>
         <tr class="text-center roboto-medium">
           <th></th>
-          <th>ID</th>
-          <th>Año de inicio</th>
-          <th>Fecha de registro</th>
+          <th>Período</th>
+          <th>1er Momento</th>
+          <th>2do Momento</th>
+          <th>3er Momento</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -49,9 +51,15 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
                 <span class="badge bg-dark text-white">Actual</span>
               <?php endif ?>
             </td>
-            <td><?= $periodo->id ?></td>
-            <td><?= $periodo->inicio ?></td>
-            <td><?= $periodo->fechaRegistro() ?></td>
+            <td><?= $periodo ?></td>
+            <td><?= $periodo->momento(1)->fechaCompleta() ?></td>
+            <td><?= $periodo->momento(2)->fechaCompleta() ?></td>
+            <td><?= $periodo->momento(3)->fechaCompleta() ?></td>
+            <td>
+              <a href="./periodos/<?= $periodo->inicio ?>/editar" class="btn btn-success">
+                Editar
+              </a>
+            </td>
           </tr>
         <?php endforeach ?>
       </tbody>

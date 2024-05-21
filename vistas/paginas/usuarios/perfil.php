@@ -6,7 +6,7 @@ use SARCO\Modelos\Usuario;
 
 assert($vistas instanceof View);
 assert($usuario instanceof Usuario);
-scripts('./recursos/js/validarFormulario.js');
+// scripts('./recursos/js/validarFormulario.js');
 
 ?>
 
@@ -19,6 +19,8 @@ scripts('./recursos/js/validarFormulario.js');
 </header>
 
 <form method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+  <input type="hidden" name="id" value="<?= $usuario->id ?>" />
+
   <?php
 
   $vistas->render('componentes/Input', [

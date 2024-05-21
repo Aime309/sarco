@@ -57,7 +57,7 @@
     },
     "sarco": {
       "type": "sqlite",
-      "database": "C:\\xampp\\htdocs\\sarco\\base de datos\\sarco.db",
+      "database": "C:\\xampp\\htdocs\\proyectos\\sarco\\base de datos\\sarco.db",
     },
   },
 }

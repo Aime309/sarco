@@ -6,6 +6,7 @@ use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Aula;
 use SARCO\Modelos\Boletin;
 use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Inscripcion;
@@ -14,6 +15,7 @@ use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Representante;
 use SARCO\Modelos\Sala;
 use SARCO\Modelos\Usuario;
+use Symfony\Component\Uid\UuidV4;
 
 function autorizar(Rol ...$roles): callable {
   return static function () use ($roles): void {
@@ -33,19 +35,26 @@ function autorizar(Rol ...$roles): callable {
 }
 
 App::group('/api', function (Router $router): void {
-  $router->get('/salas/asignaciones/@idMomento:[0-9]+', function (int $idMomento): void {
-    $idPeriodo = (int) bd()->query("
-      SELECT id_periodo FROM momentos WHERE id = $idMomento
+  $router->get('/salas/asignaciones/@idMomento', function (string $idMomento): void {
+    $idPeriodo = (string) bd()->query("
+      SELECT id_periodo FROM momentos WHERE id = '$idMomento'
     ")->fetchColumn();
 
     $asignaciones = bd()->query("
       SELECT a.id, d.id as idDocente, d.nombres as nombresDocente,
-      d.apellidos as apellidosDocente, s.nombre as sala
-      FROM asignaciones_de_docentes a
+      d.apellidos as apellidosDocente, s.nombre as sala,
+      au.codigo as aula, au.tipo as tipoAula
+      FROM asignaciones_de_salas a
       JOIN usuarios d
       JOIN salas s
-      ON a.id_docente = d.id AND a.id_sala = s.id
-      WHERE id_periodo = $idPeriodo
+      JOIN aulas au
+      ON (
+        a.id_docente1 = d.id
+        OR a.id_docente2 = d.id
+        OR a.id_docente3 = d.id
+      ) AND a.id_sala = s.id
+      AND a.id_aula = au.id
+      WHERE id_periodo = '$idPeriodo'
     ")->fetchAll();
 
     App::json(array_map(static fn (array $asignacion): array => [
@@ -54,7 +63,8 @@ App::group('/api', function (Router $router): void {
         'id' => $asignacion['idDocente'],
         'nombre' => "{$asignacion['nombresDocente']} {$asignacion['apellidosDocente']}"
       ],
-      'sala' => $asignacion['sala']
+      'sala' => $asignacion['sala'],
+      'aula' => $asignacion['aula']
     ], $asignaciones));
   });
 });
@@ -73,32 +83,34 @@ App::group('/registrate', function (Router $router): void {
 
   $router->post('/', function (): void {
     $usuario = App::request()->data->getData();
-    $rol = Rol::Director->obtenerPorGenero(Genero::from($usuario['genero']));
     $clave = password_hash($usuario['clave'], PASSWORD_DEFAULT);
+    $id = new UuidV4;
 
     $sentencia = bd()->prepare("
       INSERT INTO usuarios (
-        nombres, apellidos, cedula, fecha_nacimiento, direccion, telefono,
-        correo, clave, rol
+        id, nombres, apellidos, cedula, fecha_nacimiento, genero, telefono,
+        correo, direccion, clave, rol
       ) VALUES (
-        :nombres, :apellidos, :cedula, :fechaNacimiento, :direccion,
-        :telefono, :correo, :clave, :rol
+        :id, :nombres, :apellidos, :cedula, :fechaNacimiento, :genero,
+        :telefono, :correo, :direccion, :clave, :rol
       )
     ");
 
+    $sentencia->bindValue(':id', $id);
     $sentencia->bindValue(':nombres', $usuario['nombres']);
     $sentencia->bindValue(':apellidos', $usuario['apellidos']);
     $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
     $sentencia->bindValue(':fechaNacimiento', $usuario['fecha_nacimiento']);
-    $sentencia->bindValue(':direccion', $usuario['direccion']);
+    $sentencia->bindValue(':genero', $usuario['genero']);
     $sentencia->bindValue(':telefono', $usuario['telefono']);
     $sentencia->bindValue(':correo', $usuario['correo']);
+    $sentencia->bindValue(':direccion', $usuario['direccion']);
     $sentencia->bindValue(':clave', $clave);
-    $sentencia->bindValue(':rol', $rol);
+    $sentencia->bindValue(':rol', Rol::Director->value);
 
     $sentencia->execute();
-    $_SESSION['mensajes.exito'] = "$rol registrado existósamente";
-    $_SESSION['usuario.id'] = bd()->lastInsertId();
+    $_SESSION['mensajes.exito'] = 'Director registrado existósamente';
+    $_SESSION['usuario.id'] = $id;
     App::redirect('/');
   });
 }, [function (): void {
@@ -180,10 +192,11 @@ App::group('/', function (Router $router): void {
       $mesActual = (int) date('m');
 
       $ultimoMomento = bd()->query("
-        SELECT id, numero_momento as numero, mes_inicio as mesInicio,
+        SELECT id, numero, mes_inicio as mesInicio,
         dia_inicio as diaInicio, fecha_registro as fechaRegistro,
-        id_periodo as idPeriodo FROM momentos
-        WHERE idPeriodo = {$ultimoPeriodo->id}
+        id_periodo as idPeriodo
+        FROM momentos
+        WHERE idPeriodo = '{$ultimoPeriodo->id}'
         AND mesInicio >= $mesActual
         ORDER BY mesInicio ASC
         LIMIT 1
@@ -254,7 +267,7 @@ App::group('/', function (Router $router): void {
           fecha_nacimiento as fechaNacimiento, direccion, telefono, correo,
           rol, esta_activo as estaActivo, fecha_registro as fechaRegistro
           FROM usuarios
-          WHERE id != $idAutenticado
+          WHERE id != '$idAutenticado'
         ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
 
       App::render('paginas/usuarios/listado', compact('usuarios'), 'pagina');
@@ -264,33 +277,39 @@ App::group('/', function (Router $router): void {
     $router->post('/', function (): void {
       $usuario = App::request()->data->getData();
       $genero = Genero::from($usuario['genero']);
-      $rol = Rol::from($usuario['rol'])->obtenerPorGenero($genero);
+      $rol = Rol::from($usuario['rol']);
       $clave = password_hash($usuario['clave'], PASSWORD_DEFAULT);
 
       $sentencia = bd()->prepare("
         INSERT INTO usuarios (
-          nombres, apellidos, cedula, fecha_nacimiento, direccion, telefono,
-          correo, clave, rol
+          id, nombres, apellidos, cedula, fecha_nacimiento, genero, telefono,
+          correo, direccion, clave, rol
         ) VALUES (
-          :nombres, :apellidos, :cedula, :fechaNacimiento, :direccion,
-          :telefono, :correo, :clave, :rol
+          :id, :nombres, :apellidos, :cedula, :fechaNacimiento, :genero,
+          :telefono, :correo, :direccion, :clave, :rol
         )
       ");
 
+      $sentencia->bindValue(':id', new UuidV4);
       $sentencia->bindValue(':nombres', $usuario['nombres']);
       $sentencia->bindValue(':apellidos', $usuario['apellidos']);
       $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
       $sentencia->bindValue(':fechaNacimiento', $usuario['fecha_nacimiento']);
-      $sentencia->bindValue(':direccion', $usuario['direccion']);
+      $sentencia->bindValue(':genero', $genero->value);
       $sentencia->bindValue(':telefono', $usuario['telefono']);
       $sentencia->bindValue(':correo', $usuario['correo']);
+      $sentencia->bindValue(':direccion', $usuario['direccion']);
       $sentencia->bindValue(':clave', $clave);
-      $sentencia->bindValue(':rol', $rol);
+      $sentencia->bindValue(':rol', $rol->value);
 
       try {
         $sentencia->execute();
+
         $mensaje = $genero === Genero::Femenino ? 'registrada' : 'registrado';
-        $_SESSION['mensajes.exito'] = "$rol $mensaje exitósamente";
+        $_SESSION['mensajes.exito'] = "{$rol->obtenerPorGenero($genero)} $mensaje exitósamente";
+        unset($_SESSION['datos']);
+
+        App::redirect('/usuarios');
       } catch (PDOException $error) {
         if (str_contains($error, 'usuarios.nombres')) {
           $_SESSION['mensajes.error'] = "Usuario {$usuario['nombres']} {$usuario['apellidos']} ya existe";
@@ -303,9 +322,10 @@ App::group('/', function (Router $router): void {
         } else {
           throw $error;
         }
-      }
 
-      App::redirect('/usuarios');
+        $_SESSION['datos'] = $usuario;
+        App::redirect(App::request()->referrer);
+      }
     })->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
 
     $router->get('/nuevo', function (): void {
@@ -471,7 +491,7 @@ App::group('/', function (Router $router): void {
         SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
         direccion, telefono, correo, rol, esta_activo as estaActivo,
         fecha_registro as fechaRegistro
-        FROM usuarios WHERE rol = 'Docente' AND id != $idAutenticado
+        FROM usuarios WHERE rol = 'Docente' AND id != '$idAutenticado'
       ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
 
       App::render('paginas/maestros/listado', compact('maestros'), 'pagina');
@@ -486,37 +506,130 @@ App::group('/', function (Router $router): void {
         FROM periodos ORDER BY inicio DESC
       ")->fetchAll(PDO::FETCH_CLASS, Periodo::class);
 
+      foreach ($periodos as $periodo) {
+        $momentos = bd()->query("
+          SELECT m.id, numero, mes_inicio as mesInicio,
+          dia_inicio as diaInicio,
+          mes_cierre as mesCierre,
+          dia_cierre as diaCierre,
+          m.fecha_registro as fechaRegistro
+          FROM momentos m
+          JOIN periodos p
+          ON id_periodo = p.id
+          WHERE id_periodo = '{$periodo->id}'
+          ORDER BY numero
+        ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
+
+        $periodo->asignarMomentos(...$momentos);
+      }
+
       App::render('paginas/periodos/listado', compact('periodos'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Períodos']);
     });
 
     $router->post('/', function (): void {
-      $añoInicio = (int) App::request()->data['anio_inicio'];
+      $periodo = App::request()->data->getData();
+      $añoInicio = (int) $periodo['anio_inicio'];
+      $momentos = $periodo['momentos'];
+
       bd()->beginTransaction();
 
       try {
-        bd()->query("INSERT INTO periodos (anio_inicio) VALUES ($añoInicio)");
-        $idDelPeriodo = bd()->lastInsertId();
+        $momentos = array_map(function (array $momento): array {
+          [$fechaInicio, $mesInicio, $diaInicio] = explode('-', $momento['inicio']);
+          [$fechaCierre, $mesCierre, $diaCierre] = explode('-', $momento['fin']);
+
+          return [
+            'inicio' => [
+              'año' => $fechaInicio,
+              'mes' => $mesInicio,
+              'dia' => $diaInicio
+            ],
+            'cierre' => [
+              'año' => $fechaCierre,
+              'mes' => $mesCierre,
+              'dia' => $diaCierre
+            ],
+            'inicioCompleto' => $momento['inicio'],
+            'cierreCompleto' => $momento['fin'],
+            'id' => new UuidV4
+          ];
+        }, $momentos);
+
+        if (
+          $momentos[1]['inicio']['año'] != $añoInicio
+          || $momentos[1]['cierre']['año'] != $añoInicio
+          || $momentos[2]['inicio']['año'] != $añoInicio
+          || $momentos[2]['cierre']['año'] != $añoInicio
+          || $momentos[3]['inicio']['año'] != $añoInicio
+          || $momentos[3]['cierre']['año'] != $añoInicio
+        ) {
+          throw new Error("Los momentos deben del año $añoInicio");
+        } elseif (
+          $momentos[1]['inicioCompleto'] >= $momentos[1]['cierreCompleto']
+        ) {
+          throw new Error('El inicio del 1er Momento debe ser antes del fin');
+        } elseif (
+          $momentos[1]['cierreCompleto'] >= $momentos[2]['inicioCompleto']
+        ) {
+          throw new Error('El fin del 1er Momento debe ser antes del inicio del 2do Momento');
+        } elseif (
+          $momentos[2]['inicioCompleto'] >= $momentos[2]['cierreCompleto']
+        ) {
+          throw new Error('El inicio del 2do Momento debe ser antes del fin');
+        } elseif (
+          $momentos[2]['cierreCompleto'] >= $momentos[3]['inicioCompleto']
+        ) {
+          throw new Error('El fin del 2do Momento debe ser antes del inicio del 3er Momento');
+        } elseif (
+          $momentos[3]['inicioCompleto'] >= $momentos[3]['cierreCompleto']
+        ) {
+          throw new Error('El inicio del 3er Momento debe ser antes del fin');
+        }
+
+        $idPeriodo = new UuidV4;
+
         bd()->query("
-          INSERT INTO momentos (numero_momento, mes_inicio, dia_inicio, id_periodo)
-          VALUES (1, 1, 1, $idDelPeriodo), (2, 5, 1, $idDelPeriodo),
-          (3, 9, 1, $idDelPeriodo)
+          INSERT INTO periodos (id, anio_inicio)
+          VALUES ('$idPeriodo', $añoInicio)
         ");
+
+        $sentencia = bd()->prepare("
+          INSERT INTO momentos (id, numero, mes_inicio, dia_inicio, mes_cierre,
+          dia_cierre, id_periodo) VALUES (:id, :numero, :mesInicio, :diaInicio,
+          :mesCierre, :diaCierre, '$idPeriodo')
+        ");
+
+        foreach ($momentos as $numero => $momento) {
+          $sentencia->bindValue(':id', $momento['id']);
+          $sentencia->bindValue(':numero', $numero, PDO::PARAM_INT);
+          $sentencia->bindValue(':mesInicio', $momento['inicio']['mes'], PDO::PARAM_INT);
+          $sentencia->bindValue(':diaInicio', $momento['inicio']['dia'], PDO::PARAM_INT);
+          $sentencia->bindValue(':mesCierre', $momento['cierre']['mes'], PDO::PARAM_INT);
+          $sentencia->bindValue(':diaCierre', $momento['cierre']['dia'], PDO::PARAM_INT);
+
+          $sentencia->execute();
+        }
 
         bd()->commit();
         $_SESSION['mensajes.exito'] = "Período $añoInicio aperturado exitósamente";
+        unset($_SESSION['datos']);
         App::redirect('/periodos');
-      } catch (PDOException $error) {
-        bd()->rollBack();
 
+        return;
+      } catch (PDOException $error) {
         if (str_contains($error, 'periodos.anio_inicio')) {
           $_SESSION['mensajes.error'] = "Periodo $añoInicio ya fue aperturado";
         } else {
           throw $error;
         }
-
-        App::redirect('/periodos/nuevo');
+      } catch (Error $error) {
+        $_SESSION['mensajes.error'] = $error->getMessage();
       }
+
+      bd()->rollBack();
+      $_SESSION['datos'] = $periodo;
+      App::redirect(App::request()->referrer);
     });
 
     $router->get('/nuevo', function (): void {
@@ -530,22 +643,137 @@ App::group('/', function (Router $router): void {
       App::render('plantillas/privada', ['titulo' => 'Nuevo período']);
     });
 
-    // $router->get('/@periodo:[0-9]{4}', function (int $periodo): void {
-    //   $periodo = bd()
-    //     ->query("
-    //       SELECT p.id, p.anio_inicio as inicio, p.fecha_registro as fechaRegistro
-    //       FROM periodos p
-    //       JOIN momentos m
-    //       ON p.id = m.id_periodo
-    //       WHERE inicio = $periodo
-    //     ")->fetchAll();
+    $router->get('/@periodo:[0-9]{4}/editar', function (int $periodo): void {
+      $periodo = bd()
+        ->query("
+          SELECT p.id, p.anio_inicio as inicio, p.fecha_registro as fechaRegistro
+          FROM periodos p
+          WHERE inicio = $periodo
+        ")->fetchObject(Periodo::class);
 
-    //   dd($periodo);
-    //   exit;
+      $momentos = bd()->query("
+        SELECT m.id, numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio,
+        mes_cierre as mesCierre,
+        dia_cierre as diaCierre,
+        m.fecha_registro as fechaRegistro
+        FROM momentos m
+        JOIN periodos p
+        ON id_periodo = p.id
+        WHERE id_periodo = '{$periodo->id}'
+        ORDER BY numero
+      ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
 
-    //   App::render('paginas/periodos/editar', compact('periodo'), 'pagina');
-    //   App::render('plantillas/privada', ['titulo' => 'Editar momentos']);
-    // });
+      $periodo->asignarMomentos(...$momentos);
+
+      App::render('paginas/periodos/editar', compact('periodo'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => 'Editar período']);
+    });
+
+    $router->post('/@periodo:[0-9]{4}/', function (int $viejoAñoInicio): void {
+      $periodo = App::request()->data->getData();
+      $idPeriodo = $periodo['id_periodo'];
+      $añoInicio = (int) $periodo['anio_inicio'];
+      $momentos = $periodo['momentos'];
+
+      bd()->beginTransaction();
+
+      try {
+        $momentos = array_map(function (array $momento): array {
+          [$fechaInicio, $mesInicio, $diaInicio] = explode('-', $momento['inicio']);
+          [$fechaCierre, $mesCierre, $diaCierre] = explode('-', $momento['fin']);
+
+          return [
+            'inicio' => [
+              'año' => $fechaInicio,
+              'mes' => $mesInicio,
+              'dia' => $diaInicio
+            ],
+            'cierre' => [
+              'año' => $fechaCierre,
+              'mes' => $mesCierre,
+              'dia' => $diaCierre
+            ],
+            'inicioCompleto' => $momento['inicio'],
+            'cierreCompleto' => $momento['fin'],
+          ];
+        }, $momentos);
+
+        if (
+          $momentos[1]['inicio']['año'] != $añoInicio
+          || $momentos[1]['cierre']['año'] != $añoInicio
+          || $momentos[2]['inicio']['año'] != $añoInicio
+          || $momentos[2]['cierre']['año'] != $añoInicio
+          || $momentos[3]['inicio']['año'] != $añoInicio
+          || $momentos[3]['cierre']['año'] != $añoInicio
+        ) {
+          throw new Error("Los momentos deben del año $añoInicio");
+        } elseif (
+          $momentos[1]['inicioCompleto'] >= $momentos[1]['cierreCompleto']
+        ) {
+          throw new Error('El inicio del 1er Momento debe ser antes del fin');
+        } elseif (
+          $momentos[1]['cierreCompleto'] >= $momentos[2]['inicioCompleto']
+        ) {
+          throw new Error('El fin del 1er Momento debe ser antes del inicio del 2do Momento');
+        } elseif (
+          $momentos[2]['inicioCompleto'] >= $momentos[2]['cierreCompleto']
+        ) {
+          throw new Error('El inicio del 2do Momento debe ser antes del fin');
+        } elseif (
+          $momentos[2]['cierreCompleto'] >= $momentos[3]['inicioCompleto']
+        ) {
+          throw new Error('El fin del 2do Momento debe ser antes del inicio del 3er Momento');
+        } elseif (
+          $momentos[3]['inicioCompleto'] >= $momentos[3]['cierreCompleto']
+        ) {
+          throw new Error('El inicio del 3er Momento debe ser antes del fin');
+        }
+
+        $sentencia = bd()->prepare("
+          UPDATE periodos SET anio_inicio = :inicio
+          WHERE id = :id
+        ");
+
+        $sentencia->execute([':inicio' => $añoInicio, ':id' => $idPeriodo]);
+
+        $sentencia = bd()->prepare("
+          UPDATE momentos SET mes_inicio = :mesInicio, dia_inicio = :diaInicio,
+          mes_cierre = :mesCierre, dia_cierre = :diaCierre
+          WHERE numero = :numero AND id_periodo = :idPeriodo
+        ");
+
+        foreach ($momentos as $numero => $momento) {
+          $sentencia->execute([
+            ':mesInicio' => $momento['inicio']['mes'],
+            ':diaInicio' => $momento['inicio']['dia'],
+            ':mesCierre' => $momento['cierre']['mes'],
+            ':diaCierre' => $momento['cierre']['dia'],
+            ':numero' => $numero,
+            ':idPeriodo' => $idPeriodo
+          ]);
+        }
+
+        bd()->commit();
+        $_SESSION['mensajes.exito'] = "Período $viejoAñoInicio actualizado exitósamente";
+        unset($_SESSION['datos']);
+        App::redirect('/periodos');
+
+        return;
+      } catch (PDOException $error) {
+        if (str_contains($error, 'periodos.anio_inicio')) {
+          $_SESSION['mensajes.error'] = "Periodo $añoInicio ya fue aperturado";
+        } else {
+          throw $error;
+        }
+      } catch (Error $error) {
+        $_SESSION['mensajes.error'] = $error->getMessage();
+      }
+
+      bd()->rollBack();
+      $_SESSION['datos'] = $periodo;
+      App::redirect(App::request()->referrer);
+    });
   }, [autorizar(Rol::Director)]);
 
   $router->group('perfil', function (Router $router): void {
@@ -561,8 +789,10 @@ App::group('/', function (Router $router): void {
         UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos,
         cedula = :cedula, fecha_nacimiento = :fechaNacimiento,
         direccion = :direccion, telefono = :telefono, correo = :correo
+        WHERE id = :id
       ");
 
+      $sentencia->bindValue(':id', $usuario['id']);
       $sentencia->bindValue(':nombres', $usuario['nombres']);
       $sentencia->bindValue(':apellidos', $usuario['apellidos']);
       $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
@@ -593,14 +823,13 @@ App::group('/', function (Router $router): void {
     });
 
     $router->post('/actualizar-clave', function (): void {
-      // TODO: no está actualizando clave
       $claves = App::request()->data->getData();
       $usuario = App::view()->get('usuario');
       $nuevaClave = Usuario::encriptar($claves['nueva_clave']);
 
       assert($usuario instanceof Usuario);
 
-      if ($usuario->validarClave($claves['antigua_clave'])) {
+      if (!$usuario->validarClave($claves['antigua_clave'])) {
         $_SESSION['mensajes.error'] = 'Antigua contraseña incorrecta';
       } elseif ($claves['antigua_clave'] === $claves['nueva_clave']) {
         $_SESSION['mensajes.error'] = 'La nueva contraseña no puede ser igual a la anterior';
@@ -630,9 +859,13 @@ App::group('/', function (Router $router): void {
 
       assert($usuario instanceof Usuario);
 
-      bd()->query("UPDATE usuarios SET esta_activo = FALSE WHERE id = $usuario->id");
-      $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
+      bd()->query("
+        UPDATE usuarios
+        SET esta_activo = FALSE
+        WHERE id = '$usuario->id'
+      ");
 
+      $_SESSION['mensajes.exito'] = 'Cuenta desactivada existósamente';
       App::redirect('/salir');
     });
   });
@@ -652,17 +885,22 @@ App::group('/', function (Router $router): void {
       $sala = App::request()->data->getData();
 
       $sentencia = bd()->prepare('
-        INSERT INTO salas (nombre, edad_minima, edad_maxima)
-        VALUES (:nombre, :edadMinima, :edadMaxima)
+        INSERT INTO salas (id, nombre, edad_minima, edad_maxima)
+        VALUES (:id, :nombre, :edadMinima, :edadMaxima)
       ');
 
-      $sentencia->bindValue(':nombre', $sala['nombre']);
+      $sentencia->bindValue(
+        ':nombre',
+        mb_convert_case($sala['nombre'], MB_CASE_TITLE)
+      );
+
+      $sentencia->bindValue(':id', new UuidV4);
       $sentencia->bindValue(':edadMinima', $sala['edad_minima'], PDO::PARAM_INT);
       $sentencia->bindValue(':edadMaxima', $sala['edad_maxima'], PDO::PARAM_INT);
 
       try {
         $sentencia->execute();
-        $_SESSION['mensajes.exito'] = 'Sala aperturada exitósamente';
+        $_SESSION['mensajes.exito'] = "Sala {$sala['nombre']} aperturada exitósamente";
         App::redirect('/salas');
       } catch (PDOException $error) {
         if (str_contains($error, 'salas.nombre')) {
@@ -697,7 +935,7 @@ App::group('/', function (Router $router): void {
         SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
         direccion, telefono, correo, rol, esta_activo as estaActivo,
         fecha_registro as fechaRegistro
-        FROM usuarios WHERE rol = 'Docente' AND id != $idAutenticado
+        FROM usuarios WHERE rol = 'Docente' AND id != '$idAutenticado'
       ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
 
       $salas = bd()->query("
@@ -705,50 +943,60 @@ App::group('/', function (Router $router): void {
         esta_activa as estaActiva, fecha_registro as fechaRegistro FROM salas
       ")->fetchAll(PDO::FETCH_CLASS, Sala::class);
 
+      $aulas = bd()->query("
+        SELECT id, codigo, fecha_registro as fechaRegistro, tipo FROM aulas
+      ")->fetchAll(PDO::FETCH_CLASS, Aula::class);
+
       App::render(
         'paginas/salas/asignar',
-        compact('periodos', 'periodoActual', 'maestros', 'salas'),
+        compact('periodos', 'periodoActual', 'maestros', 'salas', 'aulas'),
         'pagina'
       );
 
-      App::render('plantillas/privada', ['titulo' => 'Asignar maestro a sala']);
+      App::render('plantillas/privada', ['titulo' => 'Asignar maestros a sala']);
     });
 
     $router->post('/asignar', function (): void {
       $asignacion = App::request()->data->getData();
 
       $sentencia = bd()->prepare("
-        INSERT INTO asignaciones_de_docentes (id_docente, id_sala, id_periodo)
-        VALUES (:idDocente, :idSala, :idPeriodo)
+        INSERT INTO asignaciones_de_salas (id, id_sala, id_aula, id_periodo,
+        id_docente1, id_docente2, id_docente3) VALUES (:id, :idSala, :idAula,
+        :idPeriodo, :idDocente1, :idDocente2, :idDocente3)
       ");
 
-      $sentencia->bindValue(':idDocente', $asignacion['id_maestro'], PDO::PARAM_INT);
-      $sentencia->bindValue(':idSala', $asignacion['id_sala'], PDO::PARAM_INT);
-      $sentencia->bindValue(':idPeriodo', $asignacion['id_periodo'], PDO::PARAM_INT);
-      $sentencia->execute();
+      $sentencia->execute([
+        ':id' => new UuidV4,
+        ':idSala' => $asignacion['id_sala'],
+        ':idAula' => $asignacion['id_aula'],
+        ':idPeriodo' => $asignacion['id_periodo'],
+        ':idDocente1' => $asignacion['id_maestro'][1],
+        ':idDocente2' => $asignacion['id_maestro'][2],
+        ':idDocente3' => $asignacion['id_maestro'][3] ?? null,
+      ]);
 
-      $_SESSION['mensajes.exito'] = 'Maestro asignado exitósamente';
+      $_SESSION['mensajes.exito'] = 'Maestros asignados exitósamente';
       App::redirect('/');
     });
 
-    $router->group('/@id:[0-9]{1,}', function (Router $router): void {
-      $router->get('/', function (int $id): void {
+    $router->group('/@id', function (Router $router): void {
+      $router->get('/', function (string $id): void {
         $sala = bd()->query("
           SELECT id, nombre, edad_minima as edadMinima, edad_maxima as edadMaxima,
           esta_activa as estaActiva, fecha_registro as fechaRegistro FROM salas
-          WHERE id = $id
+          WHERE id = '$id'
         ")->fetchObject(Sala::class);
 
         App::render('paginas/salas/editar', compact('sala'), 'pagina');
         App::render('plantillas/privada', ['titulo' => 'Editar sala']);
       });
 
-      $router->post('/', function (int $id): void {
+      $router->post('/', function (string $id): void {
         $sala = App::request()->data->getData();
 
         $sentencia = bd()->prepare("
           UPDATE salas SET nombre = :nombre, edad_minima = :edadMinima,
-          edad_maxima = :edadMaxima WHERE id = $id
+          edad_maxima = :edadMaxima WHERE id = '$id'
         ");
 
         $sentencia->bindValue(':nombre', $sala['nombre']);
@@ -770,54 +1018,24 @@ App::group('/', function (Router $router): void {
         }
       });
 
-      $router->get('/habilitar', function (int $id): void {
-        bd()->query("UPDATE salas SET esta_activa = TRUE WHERE id = $id");
+      $router->get('/habilitar', function (string $id): void {
+        bd()->query("UPDATE salas SET esta_activa = TRUE WHERE id = '$id'");
         $_SESSION['mensajes.exito'] = 'Sala habilitada exitósamente';
         App::redirect('/salas');
       });
 
-      $router->get('/inhabilitar', function (int $id): void {
-        bd()->query("UPDATE salas SET esta_activa = FALSE WHERE id = $id");
+      $router->get('/inhabilitar', function (string $id): void {
+        bd()->query("UPDATE salas SET esta_activa = FALSE WHERE id = '$id'");
         $_SESSION['mensajes.exito'] = 'Sala inhabilitada exitósamente';
         App::redirect('/salas');
       });
     });
   }, [autorizar(Rol::Director, Rol::Secretario)]);
 
-  $router->group('momentos', function (Router $router): void {
-    $router->get('/', function (): void {
-      $momentos = bd()->query("
-        SELECT m.id, numero_momento as numero, mes_inicio as mesInicio,
-        dia_inicio as diaInicio, m.fecha_registro as fechaRegistro,
-        anio_inicio as periodo FROM momentos m JOIN periodos p
-        ON m.id_periodo = p.id ORDER BY m.id
-      ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
-
-      $mesActual = (int) date('m');
-
-      $ultimoMomento = bd()->query("
-        SELECT id, numero_momento as numero, mes_inicio as mesInicio,
-        dia_inicio as diaInicio, fecha_registro as fechaRegistro,
-        id_periodo as idPeriodo FROM momentos m
-        WHERE m.mes_inicio >= $mesActual
-        ORDER BY m.id_periodo, m.mes_inicio
-        LIMIT 1
-      ")->fetchObject(Momento::class);
-
-      App::render(
-        'paginas/momentos/listado',
-        compact('momentos', 'ultimoMomento'),
-        'pagina'
-      );
-
-      App::render('plantillas/privada', ['titulo' => 'Momentos']);
-    });
-  });
-
   $router->group('estudiantes', function (Router $router): void {
     $router->get('/', function (): void {
       $estudiantes = bd()->query("
-        SELECT id, nombres, apellidos, cedula_escolar as cedula,
+        SELECT id, nombres, apellidos, cedula,
         fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
         genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
         id_mama as idMama, id_papa as idPapa FROM estudiantes
@@ -829,23 +1047,37 @@ App::group('/', function (Router $router): void {
 
     $router->get('/inscribir', function (): void {
       $estudiantes = bd()->query("
-        SELECT id, nombres, apellidos, cedula_escolar as cedula,
+        SELECT id, nombres, apellidos, cedula,
         fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
         genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
         id_mama as idMama, id_papa as idPapa FROM estudiantes
       ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
 
       $momentos = bd()->query("
-        SELECT m.id, numero_momento as numero, mes_inicio as mesInicio,
-        dia_inicio as diaInicio, m.fecha_registro as fechaRegistro,
-        anio_inicio as periodo FROM momentos m JOIN periodos p
+        SELECT m.id, numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio,
+        mes_cierre as mesCierre,
+        dia_cierre as diaCierre,
+        m.fecha_registro as fechaRegistro,
+        id_periodo as idPeriodo FROM momentos m JOIN periodos p
         ON m.id_periodo = p.id ORDER BY m.id
       ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
+
+      foreach ($momentos as $momento) {
+        assert($momento instanceof Momento);
+
+        $periodo = bd()->query("
+          SELECT id, fecha_registro as fechaRegistro, anio_inicio as inicio
+          FROM periodos WHERE id = '$momento->idPeriodo'
+        ")->fetchObject(Periodo::class);
+
+        $momento->asignarPeriodo($periodo);
+      }
 
       $mesActual = (int) date('m');
 
       $ultimoMomento = bd()->query("
-        SELECT id, numero_momento as numero, mes_inicio as mesInicio,
+        SELECT id, numero, mes_inicio as mesInicio,
         dia_inicio as diaInicio, fecha_registro as fechaRegistro,
         id_periodo as idPeriodo FROM momentos
         WHERE mesInicio >= $mesActual

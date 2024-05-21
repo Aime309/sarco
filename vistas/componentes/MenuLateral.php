@@ -21,9 +21,20 @@ $enlaces = [
 ];
 
 if (!$usuario->esDocente()) {
-  $enlaces[] = ['icono' => '<i class="fas fa-users fa-fw"></i>', 'titulo' => 'Usuarios', 'subenlaces' => [
-    ['href' => 'usuarios/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Nuevo usuario'],
-    ['href' => 'usuarios', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de usuario'],
+  $enlaces[] = [
+    'icono' => '<i class="fas fa-users fa-fw"></i>',
+    'titulo' => 'Usuarios',
+    'subenlaces' => [
+      [
+        'href' => 'usuarios/nuevo',
+        'icono' => '<i class="fas fa-plus fa-fw"></i>',
+        'titulo' => 'Nuevo usuario'
+      ],
+      [
+        'href' => 'usuarios',
+        'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+        'titulo' => 'Lista de usuarios'
+      ],
   ]];
 }
 
@@ -64,10 +75,6 @@ if ($usuario->esDirector()) {
 $enlaces[] = ['icono' => '<i class="fas fa-calendar fa-fw"></i>', 'titulo' => 'Periodos', 'subenlaces' => [
   ['href' => 'periodos/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Aperturar Período'],
   ['href' => 'periodos', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Períodos'],
-]];
-
-$enlaces[] = ['icono' => '<i class="fas fa-calendar-days fa-fw"></i>', 'titulo' => 'Momentos', 'subenlaces' => [
-  ['href' => 'momentos', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Momentos'],
 ]];
 
 if ($usuario->esDirector()) {
