@@ -35,7 +35,8 @@ if (!$usuario->esDocente()) {
         'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
         'titulo' => 'Lista de usuarios'
       ],
-  ]];
+    ]
+  ];
 }
 
 $enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo' => 'Estudiantes', 'subenlaces' => [
@@ -61,27 +62,46 @@ $enlaces[] = ['icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'titu
   ['href' => 'maestros', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Maestros'],
 ]];
 
-if ($usuario->esDirector()) {
-  $enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
-    ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
-  ]];
-} else {
-  $enlaces[] = ['icono' => '<i class="fas fa-people-roof fa-fw"></i>', 'titulo' => 'Representantes', 'subenlaces' => [
-    ['href' => 'representantes/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Representante'],
-    ['href' => 'representantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Representante'],
-  ]];
-}
-
-$enlaces[] = ['icono' => '<i class="fas fa-calendar fa-fw"></i>', 'titulo' => 'Periodos', 'subenlaces' => [
-  ['href' => 'periodos/nuevo', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Aperturar Período'],
-  ['href' => 'periodos', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Períodos'],
-]];
+$enlaces[] = [
+  'icono' => '<i class="fas fa-people-roof fa-fw"></i>',
+  'titulo' => 'Representantes',
+  'href' => 'representantes'
+];
 
 if ($usuario->esDirector()) {
-  $enlaces[] = ['icono' => '<i class="fas fa-gears fa-fw"></i>', 'titulo' => 'Configuraciones', 'subenlaces' => [
-    ['href' => 'respaldar', 'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>', 'titulo' => 'Respaldar sistema'],
-    ['href' => 'restaurar', 'icono' => '<i class="fas fa-rotate-left fa-fw"></i>', 'titulo' => 'Restaurar sistema'],
-  ]];
+  $enlaces[] = [
+    'icono' => '<i class="fas fa-calendar fa-fw"></i>',
+    'titulo' => 'Periodos',
+    'subenlaces' => [
+      [
+        'href' => 'periodos/nuevo',
+        'icono' => '<i class="fas fa-plus fa-fw"></i>',
+        'titulo' => 'Aperturar Período'
+      ],
+      [
+        'href' => 'periodos',
+        'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+        'titulo' => 'Lista de Períodos'
+      ],
+    ]
+  ];
+
+  $enlaces[] = [
+    'icono' => '<i class="fas fa-gears fa-fw"></i>',
+    'titulo' => 'Configuraciones',
+    'subenlaces' => [
+      [
+        'href' => 'respaldar',
+        'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>',
+        'titulo' => 'Respaldar sistema'
+      ],
+      [
+        'href' => 'restaurar',
+        'icono' => '<i class="fas fa-rotate-left fa-fw"></i>',
+        'titulo' => 'Restaurar sistema'
+      ],
+    ]
+  ];
 }
 
 ?>

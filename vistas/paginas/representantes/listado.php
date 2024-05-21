@@ -16,25 +16,6 @@ $representantes = (fn (Representante ...$representantes) => $representantes)(...
 </div>
 
 <div class="container-fluid">
-  <ul class="full-box list-unstyled page-nav-tabs">
-    <?php if (!$usuario->esDirector()) : ?>
-      <li>
-        <a href="./representantes/nuevo">
-          <i class="fas fa-plus fa-fw"></i>
-          &nbsp; Nuevo representante
-        </a>
-      </li>
-    <?php endif ?>
-    <li>
-      <a class="active" href="./representantes">
-        <i class="fas fa-clipboard-list fa-fw"></i>
-        &nbsp; Lista de representantes
-      </a>
-    </li>
-  </ul>
-</div>
-
-<div class="container-fluid">
   <div class="table-responsive">
     <table class="table table-dark table-sm">
       <thead>
