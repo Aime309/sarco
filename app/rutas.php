@@ -569,12 +569,18 @@ App::group('/', function (Router $router): void {
         }, $momentos);
 
         if (
-          $momentos[1]['inicio']['año'] != $añoInicio
-          || $momentos[1]['cierre']['año'] != $añoInicio
-          || $momentos[2]['inicio']['año'] != $añoInicio
-          || $momentos[2]['cierre']['año'] != $añoInicio
-          || $momentos[3]['inicio']['año'] != $añoInicio
-          || $momentos[3]['cierre']['año'] != $añoInicio
+          $momentos[1]['inicio']['año'] < $añoInicio
+          || $momentos[1]['cierre']['año'] < $añoInicio
+          || $momentos[2]['inicio']['año'] < $añoInicio
+          || $momentos[2]['cierre']['año'] < $añoInicio
+          || $momentos[3]['inicio']['año'] < $añoInicio
+          || $momentos[3]['cierre']['año'] < $añoInicio
+          || $momentos[1]['inicio']['año'] > ($añoInicio + 1)
+          || $momentos[1]['cierre']['año'] > ($añoInicio + 1)
+          || $momentos[2]['inicio']['año'] > ($añoInicio + 1)
+          || $momentos[2]['cierre']['año'] > ($añoInicio + 1)
+          || $momentos[3]['inicio']['año'] > ($añoInicio + 1)
+          || $momentos[3]['cierre']['año'] > ($añoInicio + 1)
         ) {
           throw new Error("Los momentos deben del año $añoInicio");
         } elseif (
@@ -712,12 +718,18 @@ App::group('/', function (Router $router): void {
         }, $momentos);
 
         if (
-          $momentos[1]['inicio']['año'] != $añoInicio
-          || $momentos[1]['cierre']['año'] != $añoInicio
-          || $momentos[2]['inicio']['año'] != $añoInicio
-          || $momentos[2]['cierre']['año'] != $añoInicio
-          || $momentos[3]['inicio']['año'] != $añoInicio
-          || $momentos[3]['cierre']['año'] != $añoInicio
+          $momentos[1]['inicio']['año'] < $añoInicio
+          || $momentos[1]['cierre']['año'] < $añoInicio
+          || $momentos[2]['inicio']['año'] < $añoInicio
+          || $momentos[2]['cierre']['año'] < $añoInicio
+          || $momentos[3]['inicio']['año'] < $añoInicio
+          || $momentos[3]['cierre']['año'] < $añoInicio
+          || $momentos[1]['inicio']['año'] > ($añoInicio + 1)
+          || $momentos[1]['cierre']['año'] > ($añoInicio + 1)
+          || $momentos[2]['inicio']['año'] > ($añoInicio + 1)
+          || $momentos[2]['cierre']['año'] > ($añoInicio + 1)
+          || $momentos[3]['inicio']['año'] > ($añoInicio + 1)
+          || $momentos[3]['cierre']['año'] > ($añoInicio + 1)
         ) {
           throw new Error("Los momentos deben del año $añoInicio");
         } elseif (
@@ -1203,17 +1215,18 @@ App::group('/', function (Router $router): void {
     })->addMiddleware(autorizar(Rol::Secretario));
 
     $router->get('/boletines', function (): void {
-      $idDelDocente = (int) App::view()->get('usuario')->id;
-
       $boletines = bd()->query("
         SELECT b.id, numero_inasistencias as inasistencias,
         nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
         descripcion_ambiente as descripcionAmbiente, recomendaciones,
         b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
-        e.apellidos as apellidosEstudiante, e.cedula_escolar as cedulaEstudiante,
-        m.numero_momento as momento FROM boletines b JOIN estudiantes e
-        JOIN momentos m ON b.id_estudiante = e.id AND b.id_momento = m.id
-        WHERE b.id_docente = $idDelDocente
+        e.apellidos as apellidosEstudiante, e.cedula as cedulaEstudiante,
+        m.numero as momento, b.id_asignacion_sala as idAsignacion
+        FROM boletines b
+        JOIN estudiantes e
+        JOIN momentos m
+        ON b.id_estudiante = e.id
+        AND b.id_momento = m.id
       ")->fetchAll(PDO::FETCH_CLASS, Boletin::class);
 
       App::render('paginas/boletines/listado', compact('boletines'), 'pagina');
