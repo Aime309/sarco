@@ -177,6 +177,14 @@ assert($periodoActual instanceof Periodo);
         'class' => 'col-md m-2'
       ]);
 
+      $vistas->render('componentes/Input', [
+        'validacion' => '',
+        'readonly' => true,
+        'name' => 'id_asignacion_sala',
+        'placeholder' => '',
+        'class' => 'd-none'
+      ]);
+
       echo '</div></fieldset><fieldset class="mt-5 row justify-content-center"><legend>Datos de la madre</legend>';
 
       $vistas->render('componentes/Input', [
@@ -370,6 +378,7 @@ assert($periodoActual instanceof Periodo);
   const $idDocente1 = $idPeriodo.form.querySelector('[name="id_maestro[1]"]')
   const $idDocente2 = $idPeriodo.form.querySelector('[name="id_maestro[2]"]')
   const $idDocente3 = $idPeriodo.form.querySelector('[name="id_maestro[3]"]')
+  const $idAsignacion = $idPeriodo.form.querySelector('[name="id_asignacion_sala"]')
   const $edad = $idPeriodo.form.querySelector('[name="estudiante[edad]"]')
 
   $idPeriodo.onchange = () => {
@@ -405,7 +414,7 @@ assert($periodoActual instanceof Periodo);
     const response = await fetch(url)
     const body = await response.json()
 
-    if (!body.docentes.length || !body.aula) {
+    if (!body.docentes.length || !body.aula || !body.idAsignacion) {
       return
     }
 
@@ -420,6 +429,8 @@ assert($periodoActual instanceof Periodo);
     } else {
       $idDocente3.value = ''
     }
+
+    $idAsignacion.value = body.idAsignacion
 
     if (body.inscripcionesExcedidas) {
       new Noty({

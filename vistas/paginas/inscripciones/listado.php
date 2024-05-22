@@ -40,18 +40,16 @@ $inscripciones = (fn (Inscripcion ...$inscripciones) => $inscripciones)(...$insc
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
-          <th>Momento</th>
+          <th>Período</th>
           <th>Estudiante</th>
-          <th>Maestro</th>
           <th>Fecha de registro</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($inscripciones as $inscripcion) : ?>
           <tr class="text-center">
-            <td><?= $inscripcion->momento() ?></td>
+            <td><?= $inscripcion->periodo() ?></td>
             <td><?= $inscripcion->estudiante() ?></td>
-            <td><?= $inscripcion->docente() ?></td>
             <td><?= $inscripcion->fechaRegistro() ?></td>
           </tr>
         <?php endforeach ?>
