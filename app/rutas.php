@@ -58,6 +58,49 @@ App::group('/api', function (Router $router): void {
       App::json($salas);
     }
   );
+
+  $router->get(
+    '/asignaciones/@idPeriodo/@idSala',
+    function (string $idPeriodo, string $idSala): void {
+      $sentencia = bd()->prepare('
+        SELECT au.codigo, au.tipo, d.nombres, d.apellidos
+        FROM asignaciones_de_salas a
+        JOIN aulas au
+        JOIN usuarios d
+        ON (
+          a.id_docente1 = d.id
+          OR a.id_docente2 = d.id
+          OR a.id_docente3 = d.id
+        ) AND a.id_aula = au.id
+        WHERE a.id_periodo = :idPeriodo
+        AND a.id_sala = :idSala
+      ');
+
+      $sentencia->execute([
+        ':idPeriodo' => $idPeriodo,
+        ':idSala' => $idSala
+      ]);
+
+      $asignaciones = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+      $aula = [];
+      $docentes = [];
+
+      foreach ($asignaciones as $asignacion) {
+        $aula = [
+          'codigo' => $asignacion['codigo'],
+          'tipo' => $asignacion['tipo']
+        ];
+
+        $docentes[] = [
+          'nombres' => $asignacion['nombres'],
+          'apellidos' => $asignacion['apellidos']
+        ];
+      }
+
+      App::json(compact('aula', 'docentes'));
+    }
+  );
 });
 
 App::route('GET /salir', function (): void {
@@ -881,9 +924,16 @@ App::group('/', function (Router $router): void {
         SELECT id, codigo, fecha_registro as fechaRegistro, tipo FROM aulas
       ")->fetchAll(PDO::FETCH_CLASS, Aula::class);
 
+      $asignaciones = bd()->query("
+        SELECT id as idAsignacion, id_sala as idSala,
+        id_aula as idAula, id_periodo as idPeriodo, id_docente1 as idDocente1,
+        id_docente2 as idDocente2, id_docente3 as idDocente3
+        FROM asignaciones_de_salas
+      ")->fetchAll(PDO::FETCH_ASSOC);
+
       App::render(
         'paginas/salas/asignar',
-        compact('periodos', 'periodoActual', 'maestros', 'salas', 'aulas'),
+        compact('periodos', 'periodoActual', 'maestros', 'salas', 'aulas', 'asignaciones'),
         'pagina'
       );
 

@@ -29,7 +29,8 @@ assert($vistas instanceof View);
       'value' => $periodo->id,
       'children' => $periodo->inicio,
       'selected' => $periodo == $periodoActual
-    ], $periodos)
+    ], $periodos),
+    'onchange' => 'resetearSelectores()'
   ]);
 
   $vistas->render('componentes/Select', [
@@ -106,6 +107,14 @@ assert($vistas instanceof View);
 </form>
 
 <script>
+  const asignaciones = JSON.parse(`<?= json_encode($asignaciones) ?>`)
+  const $idPeriodo = document.querySelector('[name="id_periodo"]')
+  const $idDocente1 = document.querySelector('[name="id_maestro[1]"]')
+  const $idDocente2 = document.querySelector('[name="id_maestro[2]"]')
+  const $idDocente3 = document.querySelector('[name="id_maestro[3]"]')
+  const $idSala = document.querySelector('[name="id_sala"]')
+  const $idAula = document.querySelector('[name="id_aula"]')
+
   document.querySelector('[type="reset"]').addEventListener('click', event => {
     document.querySelectorAll('option').forEach($option => {
       if ($option.getAttribute('data-type') !== 'placeholder') {
@@ -127,4 +136,166 @@ assert($vistas instanceof View);
         $option.disabled = true
       })
   }
+
+  function bloquearRegistrosAsignados() {
+    const asignacionesPorPeriodo = asignaciones
+      .filter(asignacion => asignacion.idPeriodo === $idPeriodo.value)
+
+    asignacionesPorPeriodo.forEach(asignacion => {
+      $idSala
+        .querySelector(`[value="${asignacion.idSala}"]`)
+        .disabled = true
+
+      $idSala
+        .querySelector(`[value="${asignacion.idSala}"]`)
+        .textContent += ' ~ Ya fue asignada'
+
+      $idAula
+        .querySelector(`[value="${asignacion.idAula}"]`)
+        .disabled = true
+
+      $idAula
+        .querySelector(`[value="${asignacion.idAula}"]`)
+        .textContent += ' ~ Ya fue asignada'
+
+      $idDocente1
+        .querySelector(`[value="${asignacion.idDocente1}"]`)
+        .disabled = true
+
+      $idDocente1
+        .querySelector(`[value="${asignacion.idDocente1}"]`)
+        .textContent += ' ~ Ya fue asignado'
+
+      $idDocente1
+        .querySelector(`[value="${asignacion.idDocente2}"]`)
+        .disabled = true
+
+      $idDocente1
+        .querySelector(`[value="${asignacion.idDocente2}"]`)
+        .textContent += ' ~ Ya fue asignado'
+
+      if ($idDocente1.querySelector(`[value="${asignacion.idDocente3}"]`)) {
+        $idDocente1
+          .querySelector(`[value="${asignacion.idDocente3}"]`)
+          .disabled = true
+
+        $idDocente1
+          .querySelector(`[value="${asignacion.idDocente3}"]`)
+          .textContent += ' ~ Ya fue asignado'
+      }
+
+      $idDocente2
+        .querySelector(`[value="${asignacion.idDocente1}"]`)
+        .disabled = true
+
+      $idDocente2
+        .querySelector(`[value="${asignacion.idDocente1}"]`)
+        .textContent += ' ~ Ya fue asignado'
+
+      $idDocente2
+        .querySelector(`[value="${asignacion.idDocente2}"]`)
+        .disabled = true
+
+      $idDocente2
+        .querySelector(`[value="${asignacion.idDocente2}"]`)
+        .textContent += ' ~ Ya fue asignado'
+
+      if ($idDocente2.querySelector(`[value="${asignacion.idDocente3}"]`)) {
+        $idDocente2
+          .querySelector(`[value="${asignacion.idDocente3}"]`)
+          .disabled = true
+
+        $idDocente2
+          .querySelector(`[value="${asignacion.idDocente3}"]`)
+          .textContent += ' ~ Ya fue asignado'
+      }
+
+      $idDocente3
+        .querySelector(`[value="${asignacion.idDocente1}"]`)
+        .disabled = true
+
+      $idDocente3
+        .querySelector(`[value="${asignacion.idDocente1}"]`)
+        .textContent += ' ~ Ya fue asignado'
+
+      $idDocente3
+        .querySelector(`[value="${asignacion.idDocente2}"]`)
+        .disabled = true
+
+      $idDocente3
+        .querySelector(`[value="${asignacion.idDocente2}"]`)
+        .textContent += ' ~ Ya fue asignado'
+
+      if ($idDocente3.querySelector(`[value="${asignacion.idDocente3}"]`)) {
+        $idDocente3
+          .querySelector(`[value="${asignacion.idDocente3}"]`)
+          .disabled = true
+
+        $idDocente3
+          .querySelector(`[value="${asignacion.idDocente3}"]`)
+          .textContent += ' ~ Ya fue asignado'
+      }
+    })
+  }
+
+  function resetearSelectores() {
+    $idSala
+      .querySelectorAll('option')
+      .forEach($opcion => {
+        if ($opcion.getAttribute('data-type') === 'placeholder') {
+          return
+        }
+
+        $opcion.disabled = false
+        $opcion.textContent = $opcion.textContent.replace(' ~ Ya fue asignada', '')
+      })
+
+    $idAula
+      .querySelectorAll('option')
+      .forEach($opcion => {
+        if ($opcion.getAttribute('data-type') === 'placeholder') {
+          return
+        }
+
+        $opcion.disabled = false
+        $opcion.textContent = $opcion.textContent.replace(' ~ Ya fue asignada', '')
+      })
+
+    $idDocente1
+      .querySelectorAll('option')
+      .forEach($opcion => {
+        if ($opcion.getAttribute('data-type') === 'placeholder') {
+          return
+        }
+
+        $opcion.disabled = false
+        $opcion.textContent = $opcion.textContent.replace(' ~ Ya fue asignado', '')
+      })
+
+    $idDocente2
+      .querySelectorAll('option')
+      .forEach($opcion => {
+        if ($opcion.getAttribute('data-type') === 'placeholder') {
+          return
+        }
+
+        $opcion.disabled = false
+        $opcion.textContent = $opcion.textContent.replace(' ~ Ya fue asignado', '')
+      })
+
+    $idDocente3
+      .querySelectorAll('option')
+      .forEach($opcion => {
+        if ($opcion.getAttribute('data-type') === 'placeholder') {
+          return
+        }
+
+        $opcion.disabled = false
+        $opcion.textContent = $opcion.textContent.replace(' ~ Ya fue asignado', '')
+      })
+
+    bloquearRegistrosAsignados()
+  }
+
+  bloquearRegistrosAsignados()
 </script>

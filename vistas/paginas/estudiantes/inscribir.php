@@ -84,7 +84,17 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Fecha de nacimiento',
         'type' => 'date',
         'class' => 'col-md-5 mr-md-2',
-        'onblur' => 'obtenerSalas(this)'
+        'onblur' => 'obtenerSalas(this)',
+        'onchange' => 'calcularEdad(this)'
+      ]);
+
+      $vistas->render('componentes/Input', [
+        'validacion' => 'Edad',
+        'readonly' => true,
+        'disabled' => true,
+        'name' => 'estudiante[edad]',
+        'placeholder' => 'Edad',
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Textarea', [
@@ -92,7 +102,7 @@ assert($periodoActual instanceof Periodo);
         'name' => 'estudiante[lugar_nacimiento]',
         'placeholder' => 'Lugar de nacimiento',
         'minlength' => 3,
-        'class' => 'col-md-5 ml-md-2',
+        'class' => 'col-md-5 mr-md-2',
       ]);
 
       $vistas->render('componentes/Select', [
@@ -103,7 +113,7 @@ assert($periodoActual instanceof Periodo);
           'value' => $genero->name,
           'children' => $genero->name
         ], Genero::cases()),
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 ml-md-2'
       ]);
 
       $vistas->render('componentes/Select', [
@@ -114,7 +124,7 @@ assert($periodoActual instanceof Periodo);
           'value' => $grupo->value,
           'children' => $grupo->value
         ], GrupoSanguineo::cases()),
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5'
       ]);
 
       echo '</fieldset><fieldset class="mt-5"><legend>Sala asignada</legend>';
@@ -355,6 +365,15 @@ assert($periodoActual instanceof Periodo);
 <script>
   const $idPeriodo = document.querySelector('[name="id_periodo"]')
   const $idSala = $idPeriodo.form.querySelector('[name="id_sala"]')
+  const $idAula = $idPeriodo.form.querySelector('[name="id_aula"]')
+  const $idDocente1 = $idPeriodo.form.querySelector('[name="id_maestro[1]"]')
+  const $idDocente2 = $idPeriodo.form.querySelector('[name="id_maestro[2]"]')
+  const $idDocente3 = $idPeriodo.form.querySelector('[name="id_maestro[3]"]')
+  const $edad = $idPeriodo.form.querySelector('[name="estudiante[edad]"]')
+
+  $idPeriodo.onchange = () => {
+    obtenerSalas(document.querySelector('[name="estudiante[fecha_nacimiento]"]'))
+  }
 
   async function obtenerSalas($fechaNacimiento) {
     if (!$fechaNacimiento.value) {
@@ -364,7 +383,10 @@ assert($periodoActual instanceof Periodo);
     const url = `./api/asignaciones/${$idPeriodo.value}/${$fechaNacimiento.value}`
     const respuesta = await fetch(url)
     const asignaciones = await respuesta.json()
-    $idSala.innerHTML = ''
+
+    if (asignaciones.length) {
+      $idSala.innerHTML = ''
+    }
 
     Object.entries(asignaciones).forEach(([, asignacion]) => {
       $idSala.innerHTML += `
@@ -372,10 +394,43 @@ assert($periodoActual instanceof Periodo);
           Sala ${asignacion.nombreSala}
         </option>
       `
+
+      actualizarAulaDocentes($idSala)
     })
   }
 
   async function actualizarAulaDocentes($idSala) {
-    console.log($idSala.value)
+    const url = `./api/asignaciones/${$idPeriodo.value}/${$idSala.value}`
+    const response = await fetch(url)
+    const body = await response.json()
+
+    const capacidad = body.aula.tipo === 'Pequeña' ? '28-29' : '31-32'
+    $idAula.value = `${body.aula.codigo} ~ ${body.aula.tipo} (${capacidad})`
+
+    if (!body.docentes.length) {
+      return
+    }
+
+    $idDocente1.value = `${body.docentes[0].nombres} ${body.docentes[0].apellidos}`
+    $idDocente2.value = `${body.docentes[1].nombres} ${body.docentes[1].apellidos}`
+
+    if (body.docentes[2]) {
+      $idDocente3.value = `${body.docentes[2].nombres} ${body.docentes[2].apellidos}`
+    } else {
+      $idDocente3.value = ''
+    }
+  }
+
+  function calcularEdad($fechaNacimiento) {
+    if (!$fechaNacimiento.value) {
+      return
+    }
+
+    const fechaActual = new Date()
+    const fechaNacimiento = new Date($fechaNacimiento.value)
+    let diferencia = fechaActual.getTime() - fechaNacimiento.getTime()
+    let edad = new Date(diferencia).getFullYear() - 1970
+
+    $edad.value = edad
   }
 </script>
