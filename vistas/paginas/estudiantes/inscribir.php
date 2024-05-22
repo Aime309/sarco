@@ -363,6 +363,7 @@ assert($periodoActual instanceof Periodo);
 <?php endif ?>
 
 <script>
+  const theme = 'semanticui'
   const $idPeriodo = document.querySelector('[name="id_periodo"]')
   const $idSala = $idPeriodo.form.querySelector('[name="id_sala"]')
   const $idAula = $idPeriodo.form.querySelector('[name="id_aula"]')
@@ -404,12 +405,12 @@ assert($periodoActual instanceof Periodo);
     const response = await fetch(url)
     const body = await response.json()
 
-    const capacidad = body.aula.tipo === 'Pequeña' ? '28-29' : '31-32'
-    $idAula.value = `${body.aula.codigo} ~ ${body.aula.tipo} (${capacidad})`
-
-    if (!body.docentes.length) {
+    if (!body.docentes.length || !body.aula) {
       return
     }
+
+    const capacidad = body.aula.tipo === 'Pequeña' ? '28-29' : '31-32'
+    $idAula.value = `${body.aula.codigo} ~ ${body.aula.tipo} (${capacidad})`
 
     $idDocente1.value = `${body.docentes[0].nombres} ${body.docentes[0].apellidos}`
     $idDocente2.value = `${body.docentes[1].nombres} ${body.docentes[1].apellidos}`
@@ -418,6 +419,15 @@ assert($periodoActual instanceof Periodo);
       $idDocente3.value = `${body.docentes[2].nombres} ${body.docentes[2].apellidos}`
     } else {
       $idDocente3.value = ''
+    }
+
+    if (body.inscripcionesExcedidas) {
+      new Noty({
+        text: `<span style="margin-right: 1em">❌</span> Inscripciones excedidas`,
+        type: 'error',
+        theme,
+        timeout: 3000
+      }).show()
     }
   }
 
@@ -430,6 +440,10 @@ assert($periodoActual instanceof Periodo);
     const fechaNacimiento = new Date($fechaNacimiento.value)
     let diferencia = fechaActual.getTime() - fechaNacimiento.getTime()
     let edad = new Date(diferencia).getFullYear() - 1970
+
+    if (isNaN(edad)) {
+      return
+    }
 
     $edad.value = edad
   }

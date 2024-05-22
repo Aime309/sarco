@@ -63,7 +63,7 @@ App::group('/api', function (Router $router): void {
     '/asignaciones/@idPeriodo/@idSala',
     function (string $idPeriodo, string $idSala): void {
       $sentencia = bd()->prepare('
-        SELECT au.codigo, au.tipo, d.nombres, d.apellidos
+        SELECT a.id as idAsignacion, au.codigo, au.tipo, d.nombres, d.apellidos
         FROM asignaciones_de_salas a
         JOIN aulas au
         JOIN usuarios d
@@ -98,7 +98,39 @@ App::group('/api', function (Router $router): void {
         ];
       }
 
-      App::json(compact('aula', 'docentes'));
+      $inscripciones = 0;
+      $inscripcionesExcedidas = false;
+
+      if (count($asignaciones) > 0) {
+        $sentencia = bd()->prepare("
+          SELECT COUNT(id) FROM inscripciones
+          WHERE id_periodo = :idPeriodo AND id_asignacion_sala = :idAsignacion
+        ");
+
+        $sentencia->execute([
+          ':idPeriodo' => $idPeriodo,
+          ':idAsignacion' => $asignaciones[0]['idAsignacion']
+        ]);
+
+        $inscripciones = $sentencia->fetchColumn();
+
+        if ($aula['tipo'] === 'Pequeña') {
+          if ($inscripciones > 29) {
+            $inscripcionesExcedidas = true;
+          }
+        } elseif ($aula['tipo'] === 'Grande') {
+          if ($inscripciones > 32) {
+            $inscripcionesExcedidas = true;
+          }
+        }
+      }
+
+      App::json(compact(
+        'aula',
+        'docentes',
+        'inscripciones',
+        'inscripcionesExcedidas'
+      ));
     }
   );
 });
