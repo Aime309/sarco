@@ -46,7 +46,11 @@ $enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo'
     'titulo' => 'Inscribir estudiante'
   ],
   ['href' => 'estudiantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de estudiantes'],
-  ['href' => 'inscripciones', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de inscripciones'],
+  $usuario->esDocente() || $usuario->esDirector() ?: [
+    'href' => 'inscripciones',
+    'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+    'titulo' => 'Lista de inscripciones'
+  ],
   ['href' => 'estudiantes/boletines', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Lista de boletines'],
 ]];
 
