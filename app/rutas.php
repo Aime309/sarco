@@ -2,9 +2,7 @@
 
 use flight\net\Router;
 use SARCO\App;
-use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
-use SARCO\Enumeraciones\Nacionalidad;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Aula;
 use SARCO\Modelos\Boletin;
