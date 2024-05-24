@@ -777,7 +777,7 @@ App::group('/', function (Router $router): void {
         }
 
         bd()->commit();
-        $_SESSION['mensajes.exito'] = "Período $viejoAñoInicio actualizado exitósamente";
+        $_SESSION['mensajes.exito'] = "Período $viejoAñoInicio actualizado a $añoInicio exitósamente";
         unset($_SESSION['datos']);
         App::redirect('/periodos');
 

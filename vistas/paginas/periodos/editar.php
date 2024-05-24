@@ -114,10 +114,16 @@ $ultimoAño = $periodo->inicio;
   function actualizarMomentos($añoInicio) {
     $momentos = $añoInicio.form.querySelectorAll('[name^="momentos"]')
 
-    $momentos.forEach($momento => {
+    $momentos.forEach(($momento, index) => {
       [, mes, dia] = $momento.value.split('-')
 
-      $momento.value = `${$añoInicio.value}-${mes}-${dia}`
+      if (index <= 1) {
+        $momento.value = `${$añoInicio.value}-${mes}-${dia}`
+
+        return
+      }
+
+      $momento.value = `${parseInt($añoInicio.value) + 1}-${mes}-${dia}`
     })
   }
 </script>

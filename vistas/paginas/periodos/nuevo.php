@@ -7,6 +7,7 @@ assert($vistas instanceof View);
 assert($ultimoPeriodo instanceof Periodo || $ultimoPeriodo === null);
 scripts('./recursos/js/validarFormulario.js');
 $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
+$siguienteAño = $ultimoAño + 1;
 
 ?>
 
@@ -42,7 +43,7 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
       'name' => 'momentos[1][inicio]',
       'placeholder' => 'Inicio',
       'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][1]['inicio'] ?? "$ultimoAño-01-01"
+      'value' => $_SESSION['datos']['momentos'][1]['inicio'] ?? "$ultimoAño-09-15"
     ])}
     {$vistas->fetch('componentes/Input', [
       'class' => 'col ml-2',
@@ -50,7 +51,7 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
       'name' => 'momentos[1][fin]',
       'placeholder' => 'Fin',
       'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][1]['fin'] ?? "$ultimoAño-04-30"
+      'value' => $_SESSION['datos']['momentos'][1]['fin'] ?? "$ultimoAño-12-12"
     ])}
   </div>
   <hr />
@@ -62,7 +63,7 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
       'name' => 'momentos[2][inicio]',
       'placeholder' => 'Inicio',
       'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][2]['inicio'] ?? "$ultimoAño-05-01"
+      'value' => $_SESSION['datos']['momentos'][2]['inicio'] ?? "$siguienteAño-01-17"
     ])}
     {$vistas->fetch('componentes/Input', [
       'class' => 'col ml-2',
@@ -70,7 +71,7 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
       'name' => 'momentos[2][fin]',
       'placeholder' => 'Fin',
       'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][2]['fin'] ?? "$ultimoAño-07-31"
+      'value' => $_SESSION['datos']['momentos'][2]['fin'] ?? "$siguienteAño-04-01"
     ])}
   </div>
   <hr />
@@ -82,7 +83,7 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
       'name' => 'momentos[3][inicio]',
       'placeholder' => 'Inicio',
       'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][3]['inicio'] ?? "$ultimoAño-08-01"
+      'value' => $_SESSION['datos']['momentos'][3]['inicio'] ?? "$siguienteAño-05-10"
     ])}
     {$vistas->fetch('componentes/Input', [
       'class' => 'col ml-2',
@@ -90,7 +91,7 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
       'name' => 'momentos[3][fin]',
       'placeholder' => 'Fin',
       'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][3]['fin'] ?? "$ultimoAño-12-31"
+      'value' => $_SESSION['datos']['momentos'][3]['fin'] ?? "$siguienteAño-06-30"
     ])}
   </div>
   html;
@@ -107,10 +108,16 @@ $ultimoAño = $ultimoPeriodo?->siguientePeriodo() ?? date('Y');
   function actualizarMomentos($añoInicio) {
     $momentos = $añoInicio.form.querySelectorAll('[name^="momentos"]')
 
-    $momentos.forEach($momento => {
+    $momentos.forEach(($momento, index) => {
       [, mes, dia] = $momento.value.split('-')
 
-      $momento.value = `${$añoInicio.value}-${mes}-${dia}`
+      if (index <= 1) {
+        $momento.value = `${$añoInicio.value}-${mes}-${dia}`
+
+        return
+      }
+
+      $momento.value = `${parseInt($añoInicio.value) + 1}-${mes}-${dia}`
     })
   }
 </script>
