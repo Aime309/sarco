@@ -17,22 +17,11 @@
   },
   "autoload": {
     "psr-4": {
-      "SARCO\\": [
-        "app",
-        "src"
-      ],
-      "SARCO\\Vistas\\": "vistas"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "SARCO\\Tests\\": "tests"
+      "SARCO\\": "app"
     }
   },
   "require-dev": {
     "filp/whoops": "^2.15",
-    "symfony/var-dumper": "^7.0",
-    "phpunit/phpunit": "^11.1",
-    "fakerphp/faker": "^1.23"
+    "symfony/var-dumper": "^7.0"
   }
 }
