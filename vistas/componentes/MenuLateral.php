@@ -70,7 +70,7 @@ if (!$usuario->esDocente()) {
         'titulo' => 'Lista de Salas'
       ],
       [
-        'href' => 'salas',
+        'href' => 'salas/asignar',
         'icono' => '<i class="fas fa-pen-to-square fa-fw"></i>',
         'titulo' => 'Asignar sala'
       ],

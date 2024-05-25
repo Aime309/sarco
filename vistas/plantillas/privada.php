@@ -64,8 +64,7 @@ scripts('recursos/js/cerrar-sesion.js');
   </script>
   <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
   <script src="recursos/libs/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
-  <script src="recursos/libs/popper/popper.min.js"></script>
-  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
   <script src="node_modules/noty/lib/noty.min.js"></script>
   <script type="module" src="recursos/js/main.js"></script>

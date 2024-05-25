@@ -47,5 +47,11 @@ $(document).ready(() => {
 })(jQuery)
 
 $(() => {
-  $('[data-toggle="popover"]').popover()
+  document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach($trigger => new bootstrap.Tooltip($trigger))
+
+  document
+    .querySelectorAll('[data-bs-toggle="popover"]')
+    .forEach($trigger => new bootstrap.Popover($trigger))
 })

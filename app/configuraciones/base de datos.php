@@ -13,6 +13,10 @@ function bd(bool $cerrar = false): ?PDO {
     $conexion = new PDO($dsn, @$_ENV['DB_USERNAME'], @$_ENV['DB_PASSWORD'], [
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
+
+    if (strtolower($_ENV['DB_CONNECTION']) === 'sqlite') {
+      $conexion->exec('PRAGMA foreign_keys = ON');
+    }
   }
 
   if ($cerrar) {

@@ -40,6 +40,7 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
           <th>Edad máxima</th>
           <th></th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -57,12 +58,29 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
             </td>
             <td>
               <?php if ($sala->estaActiva) : ?>
-                <a href="./salas/<?= $sala->id ?>/inhabilitar" class="btn btn-danger">
+                <a href="./salas/<?= $sala->id ?>/inhabilitar" class="btn btn-secondary">
                   Inhabilitar
                 </a>
               <?php else : ?>
                 <a href="./salas/<?= $sala->id ?>/habilitar" class="btn btn-success">
                   Habilitar
+                </a>
+              <?php endif ?>
+            </td>
+            <td>
+              <?php if ($sala->sePuedeEliminar) : ?>
+                <a
+                  href="./salas/<?= $sala->id ?>/eliminar"
+                  class="btn btn-danger">
+                  Eliminar
+                </a>
+              <?php else : ?>
+                <a
+                  data-bs-toggle="popover"
+                  data-bs-title="Esta sala ya ha sido asignada"
+                  class="btn btn-danger disabled"
+                  style="pointer-events: initial; cursor: not-allowed">
+                  Eliminar
                 </a>
               <?php endif ?>
             </td>

@@ -114,7 +114,7 @@ CREATE TABLE asignaciones_de_salas (
   id_docente2 VARCHAR(255) NOT NULL,
   id_docente3 VARCHAR(255),
 
-  FOREIGN KEY (id_sala) REFERENCES salas (id),
+  FOREIGN KEY (id_sala) REFERENCES salas (id) ON DELETE RESTRICT,
   FOREIGN KEY (id_aula) REFERENCES aulas (id),
   FOREIGN KEY (id_periodo) REFERENCES periodos (id),
   FOREIGN KEY (id_docente1) REFERENCES usuarios (id),

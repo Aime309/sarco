@@ -5,6 +5,9 @@ Sistema:
   ☐ Permite consultar datos registrados
   ☐ Se pueden modificar los registros
   ☐ Se pueden eliminar los registros
+    ✔ Se pueden eliminar las salas sin asignar @done (25/05/2024 14:44:26)
+    ☐ Se pueden eliminar las aulas sin asignar
+    ☐ Se pueden eliminar las períodos sin asignar
   ☐ Genera reportes por pantalla y por impresión
   ☐ Permite respaldar y restaurar la base de datos
   ☐ Valida los campos de entrada
