@@ -129,11 +129,12 @@ assert($usuario instanceof Usuario);
   ]);
 
   $vistas->render('componentes/Input', [
-    'validacion' => 'La nueva contraseña es requerida',
+    'validacion' => 'La contraseña debe tener al menos 1 mayúscula,
+    1 número y un símbolo',
     'name' => 'nueva_clave',
     'placeholder' => 'Nueva contraseña',
     'type' => 'password',
-    'pattern' => '(.+){8,}',
+    'pattern' => '(?=.*\d)(?=.*[A-ZÑ])(?=.*\W).{8,}',
     'minlength' => 8
   ]);
 

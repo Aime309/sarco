@@ -57,7 +57,7 @@ scripts('recursos/js/registro.js');
         'name' => 'clave',
         'placeholder' => 'Contraseña',
         'type' => 'password',
-        'pattern' => '(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,}',
+        'pattern' => '(?=.*\d)(?=.*[A-ZÑ])(?=.*\W).{8,}',
         'minlength' => 8
       ]
     );
