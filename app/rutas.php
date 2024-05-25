@@ -15,22 +15,7 @@ use SARCO\Modelos\Sala;
 use SARCO\Modelos\Usuario;
 use Symfony\Component\Uid\UuidV4;
 
-function autorizar(Rol ...$roles): callable {
-  return static function () use ($roles): void {
-    $usuario = App::view()->get('usuario');
-    assert($usuario instanceof Usuario);
-
-    foreach ($roles as $rol) {
-      if ($usuario->rol() === $rol) {
-        return;
-      }
-    }
-
-    $_SESSION['mensajes.error'] = 'Acceso denegado';
-
-    exit(App::redirect(App::request()->referrer, 403));
-  };
-}
+require_once __DIR__ . '/intermediarios.php';
 
 App::group('/api', function (Router $router): void {
   $router->get(
@@ -180,21 +165,7 @@ App::group('/registrate', function (Router $router): void {
     $_SESSION['usuario.id'] = $id;
     App::redirect('/');
   });
-}, [function (): void {
-  $hayDirectoresActivos = bd()
-    ->query("
-      SELECT COUNT(id)
-      FROM usuarios
-      WHERE rol IN ('Director', 'Directora')
-      AND esta_activo = true
-    ")->fetchColumn();
-
-  if ($hayDirectoresActivos) {
-    $_SESSION['mensajes.error'] = 'Ya existe un director activo';
-
-    exit(App::redirect('/'));
-  }
-}]);
+}, [permitirSiNoHayDirectoresActivos()]);
 
 App::post('/ingresar', function (): void {
   $credenciales = App::request()->data->getData();
@@ -1295,60 +1266,8 @@ App::group('/', function (Router $router): void {
       App::render('plantillas/privada', ['titulo' => 'Inscripciones']);
     });
   });
-}, [function (): void {
-  if (!key_exists('usuario.id', $_SESSION)) {
-    App::render('paginas/ingreso', [], 'pagina');
-
-    exit(App::render('plantillas/publica', ['titulo' => 'Ingreso']));
-  }
-
-  $sentencia = bd()->prepare('
-    SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
-    direccion, telefono, correo, rol, esta_activo as estaActivo,
-    fecha_registro as fechaRegistro, clave
-    FROM usuarios
-    WHERE id = ?
-  ');
-
-  $sentencia->execute([$_SESSION['usuario.id']]);
-  $usuario = $sentencia->fetchObject(Usuario::class);
-
-  App::view()->set('usuario', $usuario);
-}, function (): void {
-  $usuario = App::view()->get('usuario');
-  assert($usuario instanceof Usuario);
-
-  if (!$usuario->estaActivo) {
-    App::redirect('/salir');
-
-    return;
-  }
-}, function (): void {
-  $excepciones = [
-    '/periodos/nuevo',
-    '/periodos/nuevo/'
-  ];
-
-  $ultimoPeriodo = bd()->query('
-    SELECT anio_inicio + 1 FROM periodos ORDER BY anio_inicio DESC
-    LIMIT 1
-  ')->fetchColumn();
-
-  $fechaActual = date('Y-m-d');
-  $fechaLimite = "$ultimoPeriodo-08-01";
-  $fechaPreLimite = "$ultimoPeriodo-07-15";
-
-  if ($fechaActual >= $fechaLimite) {
-    $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
-
-    if (!in_array(App::request()->url, $excepciones)) {
-      App::redirect('/periodos/nuevo');
-    }
-
-    return;
-  }
-
-  if ($fechaActual >= $fechaPreLimite) {
-    $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
-  }
-}]);
+}, [
+  mostrarFormularioDeIngresoSiNoEstaAutenticado(),
+  permitirUsuariosActivos(),
+  notificarSiLimiteDePeriodoExcedido()
+]);
