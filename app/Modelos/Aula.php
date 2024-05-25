@@ -16,6 +16,10 @@ final class Aula extends Modelo implements Stringable {
     return '31-32';
   }
 
+  function esPequeña(): bool {
+    return $this->tipo === 'Pequeña';
+  }
+
   function __toString(): string {
     return $this->codigo;
   }

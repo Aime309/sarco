@@ -6,7 +6,7 @@ Sistema:
   ☐ Se pueden modificar los registros
   ☐ Se pueden eliminar los registros
     ✔ Se pueden eliminar las salas sin asignar @done (25/05/2024 14:44:26)
-    ☐ Se pueden eliminar las aulas sin asignar
+    ✔ Se pueden eliminar las aulas sin asignar @done (25/05/2024 17:02:25)
     ☐ Se pueden eliminar las períodos sin asignar
   ☐ Genera reportes por pantalla y por impresión
   ☐ Permite respaldar y restaurar la base de datos
@@ -20,6 +20,6 @@ Sistema:
   ☐ Añadir la reinscripción de estudiante
   ☐ Añadir la búsqueda de estudiante
   ☐ Listar y editar los boletines asociados al docente autenticado
-  ☐ Añadir la acción de eliminar registros que no hayan sido asignados
   ✔ Arreglar la redirección cuando se excede el límite de un período @done (25/08/2024 17:44:12)
   ✔ Redirigir a la apertura de período cuando no haya períodos aperturados @done (25/08/2024 17:46:24)
+  ☐ Tomar en cuenta 1 mes de adelanto para la sugerencia de salas durante la inscripción

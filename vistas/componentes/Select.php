@@ -34,7 +34,7 @@ $value = isset($value) ? (string) $value : null;
     <?php foreach ($opciones as $opcion) : ?>
       <option
         <?= @$opcion['selected'] || @$opcion['value'] === $value ? 'selected' : '' ?>
-        value="<?= $opcion['value'] ?>">
+        value="<?= $opcion['value'] ?? $opcion['children'] ?? null ?>">
         <?= $opcion['children'] ?>
       </option>
     <?php endforeach ?>

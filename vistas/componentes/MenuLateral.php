@@ -56,7 +56,7 @@ $enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo'
 
 if (!$usuario->esDocente()) {
   $enlaces[] = [
-    'icono' => '<i class="fas fa-school-flag fa-fw"></i>',
+    'icono' => '<i class="fas fa-swatchbook fa-fw"></i>',
     'titulo' => 'Salas',
     'subenlaces' => [
       [
@@ -106,6 +106,25 @@ if ($usuario->esDirector()) {
       ],
     ]
   ];
+
+  $enlaces[] = [
+    'icono' => '<i class="fas fa-school fa-fw"></i>',
+    'titulo' => 'Aulas',
+    'subenlaces' => [
+      [
+        'href' => 'aulas/nueva',
+        'icono' => '<i class="fas fa-plus fa-fw"></i>',
+        'titulo' => 'Aperturar Aula'
+      ],
+      [
+        'href' => 'aulas',
+        'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+        'titulo' => 'Lista de Aulas'
+      ],
+    ]
+  ];
+
+
 
   $enlaces[] = [
     'icono' => '<i class="fas fa-gears fa-fw"></i>',

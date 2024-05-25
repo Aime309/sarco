@@ -487,11 +487,13 @@ App::group('/', function (Router $router): void {
 
   $router->group('perfil', require __DIR__ . '/rutas/perfil.php');
 
-  $router->group(
-    'salas',
-    require __DIR__ . '/rutas/salas.php',
-    [autorizar(Rol::Director, Rol::Secretario)]
-  );
+  $router->group('salas', require __DIR__ . '/rutas/salas.php', [
+    autorizar(Rol::Director, Rol::Secretario)
+  ]);
+
+  $router->group('aulas', require __DIR__ . '/rutas/aulas.php', [
+    autorizar(Rol::Director, Rol::Secretario)
+  ]);
 
   $router->group('estudiantes', function (Router $router): void {
     $router->get('/', function (): void {

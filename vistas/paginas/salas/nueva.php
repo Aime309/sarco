@@ -8,12 +8,29 @@ scripts('./recursos/js/validarFormulario.js');
 ?>
 
 <header class="full-box page-header">
-  <h1 class="text-left">
+  <h3 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
     Aperturar sala
-  </h1>
+  </h3>
   <p class="text-justify"></p>
 </header>
+
+<div class="container-fluid">
+  <ul class="full-box list-unstyled page-nav-tabs">
+    <li>
+      <a class="active" href="./salas/nueva">
+        <i class="fas fa-plus fa-fw"></i>
+        &nbsp; Aperturar sala
+      </a>
+    </li>
+    <li>
+      <a href="./salas/">
+        <i class="fas fa-clipboard-list fa-fw"></i>
+        &nbsp; Lista de salas
+      </a>
+    </li>
+  </ul>
+</div>
 
 <form method="post" action="./salas" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <?php
