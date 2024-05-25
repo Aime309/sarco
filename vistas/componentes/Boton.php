@@ -6,9 +6,14 @@
  */
 
 $class ??= '';
+$onclick ??= '';
+$tipo ??= 'button';
 
 ?>
 
-<button type="<?= $tipo ?? 'button' ?>" class="button <?= $class ?>">
+<button
+  onclick="<?= $onclick ?>"
+  type="<?= $tipo ?>"
+  class="button <?= $class ?>">
   <?= $contenido ?>
 </button>

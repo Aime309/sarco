@@ -6,7 +6,6 @@ use SARCO\Modelos\Usuario;
 
 assert($vistas instanceof View);
 assert($usuario instanceof Usuario);
-// scripts('./recursos/js/validarFormulario.js');
 
 ?>
 
@@ -155,7 +154,11 @@ assert($usuario instanceof Usuario);
   ?>
 </form>
 
-<form method="post" action="./perfil/desactivar" class="my-5 form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+<form
+  method="post"
+  onsubmit="confirmarDesactivacion(event)"
+  action="./perfil/desactivar"
+  class="my-5 form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <div style="text-align: end">
     <?php
 
@@ -168,3 +171,24 @@ assert($usuario instanceof Usuario);
     ?>
   </div>
 </form>
+
+<script>
+  function confirmarDesactivacion(event) {
+    event.preventDefault()
+
+    Swal.fire({
+      title: '¿Estás seguro que deseas desactivar tu cuenta?',
+      text: 'Esta acción podría no ser reversible',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, desactivar',
+      cancelButtonText: 'No, cancelar'
+    }).then(result => {
+      if (result.value) {
+        event.target.submit()
+      }
+    })
+  }
+</script>
