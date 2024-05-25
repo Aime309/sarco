@@ -1,0 +1,22 @@
+Sistema:
+  ☐ Presenta autenticación de usuarios
+  ☐ El sistema Autoriza los usuarios (inicia sesión según privilegio)
+  ☐ Permite Insertar registros a la base de datos desde los módulos
+  ☐ Permite consultar datos registrados
+  ☐ Se pueden modificar los registros
+  ☐ Se pueden eliminar los registros
+  ☐ Genera reportes por pantalla y por impresión
+  ☐ Permite respaldar y restaurar la base de datos
+  ☐ Valida los campos de entrada
+  ☐ Las interfaces son de fácil comprensión al usuario y presenta uniformidad en el estilo (colores, tamaño de letra, ...)
+  --- ✄ -----------------------
+  ☐ Mejorar la actualización de momentos al ingresar la fecha de inicio de período
+  ☐ Preguntar si desea desactivar la cuenta
+  ☐ Arreglar la sugerencia de salas durante la inscripción
+  ☐ Completar la inscripción de estudiante
+  ☐ Añadir la reinscripción de estudiante
+  ☐ Añadir la búsqueda de estudiante
+  ☐ Listar y editar los boletines asociados al docente autenticado
+  ☐ Añadir la acción de eliminar registros que no hayan sido asignados
+  ☐ Arreglar la redirección cuando se excede el límite de un período
+  ☐ Redirigir a la apertura de período cuando no haya períodos aperturados
