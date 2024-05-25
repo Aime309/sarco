@@ -30,7 +30,7 @@ $ultimoAño = $periodo->inicio;
     'min' => 2006,
     'max' => date('Y') + 1,
     'value' => $_SESSION['datos']['anio_inicio'] ?? $ultimoAño,
-    'onchange' => 'actualizarMomentos(this)'
+    'onkeyup' => 'actualizarMomentos()'
   ]);
 
   echo <<<html
@@ -111,8 +111,13 @@ $ultimoAño = $periodo->inicio;
 </form>
 
 <script>
-  function actualizarMomentos($añoInicio) {
-    $momentos = $añoInicio.form.querySelectorAll('[name^="momentos"]')
+  $añoInicio = document.querySelector('[name="anio_inicio"]')
+  $momentos = $añoInicio.form.querySelectorAll('[name^="momentos"]')
+
+  function actualizarMomentos() {
+    if ($añoInicio.value.length !== 4) {
+      return
+    }
 
     $momentos.forEach(($momento, index) => {
       [, mes, dia] = $momento.value.split('-')

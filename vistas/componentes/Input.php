@@ -30,6 +30,8 @@ $class = isset($class) ? (string) $class : null;
 $list = isset($list) ? (string) $list : null;
 $onchange = isset($onchange) ? (string) $onchange : null;
 $onblur = isset($onblur) ? (string) $onblur : null;
+$onkeydown = isset($onkeydown) ? (string) $onkeydown : null;
+$onkeyup = isset($onkeyup) ? (string) $onkeyup : null;
 
 $type = (isset($type) and is_string($type))
   ? InputType::from($type)
@@ -52,6 +54,8 @@ $type = (isset($type) and is_string($type))
     value="<?= $value ?>"
     onchange="<?= $onchange ?>"
     onblur="<?= $onblur ?>"
+    onkeydown="<?= $onkeydown ?>"
+    onkeyup="<?= $onkeyup ?>"
     <?= $min !== null ? "min='$min'" : '' ?>
     <?= $max ? "max='$max'" : '' ?>
     <?= $minlength ? "minlength='$minlength'" : '' ?>
