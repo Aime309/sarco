@@ -41,6 +41,7 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
           <th>2do Momento</th>
           <th>3er Momento</th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -59,6 +60,23 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
               <a href="./periodos/<?= $periodo->inicio ?>/editar" class="btn btn-success">
                 Editar
               </a>
+            </td>
+            <td>
+              <?php if ($periodo->sePuedeEliminar) : ?>
+                <a
+                  href="./periodos/<?= $periodo->inicio ?>/eliminar"
+                  class="btn btn-danger">
+                  Eliminar
+                </a>
+              <?php else : ?>
+                <a
+                  data-bs-toggle="popover"
+                  data-bs-title="Este período ya tiene inscripciones o asignaciones registradas"
+                  class="btn btn-danger disabled"
+                  style="pointer-events: initial; cursor: not-allowed">
+                  Eliminar
+                </a>
+              <?php endif ?>
             </td>
           </tr>
         <?php endforeach ?>

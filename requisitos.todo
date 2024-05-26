@@ -4,10 +4,10 @@ Sistema:
   ☐ Permite Insertar registros a la base de datos desde los módulos
   ☐ Permite consultar datos registrados
   ☐ Se pueden modificar los registros
-  ☐ Se pueden eliminar los registros
+  ✔ Se pueden eliminar los registros @done (26/05/2024 12:19:24)
     ✔ Se pueden eliminar las salas sin asignar @done (25/05/2024 14:44:26)
     ✔ Se pueden eliminar las aulas sin asignar @done (25/05/2024 17:02:25)
-    ☐ Se pueden eliminar las períodos sin asignar
+    ✔ Se pueden eliminar las períodos sin asignar @done (26/05/2024 12:19:22)
   ☐ Genera reportes por pantalla y por impresión
   ☐ Permite respaldar y restaurar la base de datos
   ☐ Valida los campos de entrada
@@ -27,29 +27,20 @@ Sistema:
 
   Recomendaciones:
 
-Primera Parte:
+    Primera Parte:
 
-  ☐ Hacer la validación de los Campos "En General"
-  ☐ Realizar Módulos "Profesor y Secretaria"
-  ☐ Agregar Fecha de Registro (ejem: "Fecha de inscripción de x persona. Debe ser todo General")
-  ☐ Identificar las acciones de los botones "General" (Botones Generales, ej:
-  Botón de retroceso ubicado estratégicamente de acuerdo a la reglas web)
-  ☐ Pulir los módulos (Cumpliendo con los requisitos básicos "Registrar, Editar, Desactivar")
+      ☐ Hacer la validación de los Campos "En General"
+      ☐ Realizar Módulos "Profesor y Secretaria"
+      ☐ Agregar Fecha de Registro (ejem: "Fecha de inscripción de x persona. Debe ser todo General")
+      ☐ Identificar las acciones de los botones "General" (Botones Generales, ej: Botón de retroceso ubicado estratégicamente de acuerdo a la reglas web)
+      ☐ Pulir los módulos (Cumpliendo con los requisitos básicos "Registrar, Editar, Desactivar")
 
-Segunda Parte:
+    Segunda Parte:
 
-  ☐ Arreglar los excesos de iconos en inicio y registro (ejem: *....etc) al igual en los módulos que lo poseen.
-  ☐ Configurar la contraseña de al menos "8 caracteres mínimo,
-  incluyendo caracteres especiales y números"
-  ☐ Arreglar el Periodo escolar (Que se muestra en menú a la derecha "Al periodo actual con fecha y año" ejem: 2023-2024)
-  ☐ Realizar consultas de periodos (En este apartado como información fija a mostrar es:
-  Momentos "ejem: 1 de enero al 1 de abril" todo esto para los tres momentos actuales.
-  Como propuesta para el exceso de información, añadir acceso directos a los diferentes módulos habidos
-  teniendo en cuenta que la información a mostrar solo sea la actual de acuerdo al periodo actual.
-  Ejem: Modulo Salas "Mostrar solo las salas creadas en ese periodo")
-  ☐ Información fija "En cada formulario en el hipoteco caso de error en un campo, mantener la demas informacion guarda.
-  Sin la necesidad de repetir de nuevo"
-  ☐ Pulir Modulo de Profesor y Secretaria (Con solo las acciones que pueda ejecutar)
-  ☐ Realizar Diferentes tipos de consultas, en todo los "Modulos"
-
-
+      ☐ Arreglar los excesos de iconos en inicio y registro (ejem: *....etc) al igual en los módulos que lo poseen.
+      ☐ Configurar la contraseña de al menos "8 caracteres mínimo, incluyendo caracteres especiales y números"
+      ☐ Arreglar el Periodo escolar (Que se muestra en menú a la derecha "Al periodo actual con fecha y año" ejem: 2023-2024)
+      ☐ Realizar consultas de periodos (En este apartado como información fija a mostrar es: Momentos "ejem: 1 de enero al 1 de abril" todo esto para los tres momentos actuales. Como propuesta para el exceso de información, añadir acceso directos a los diferentes módulos habidos teniendo en cuenta que la información a mostrar solo sea la actual de acuerdo al periodo actual. Ejem: Modulo Salas "Mostrar solo las salas creadas en ese periodo")
+      ☐ Información fija "En cada formulario en el hipoteco caso de error en un campo, mantener la demas informacion guarda. Sin la necesidad de repetir de nuevo"
+      ☐ Pulir Modulo de Profesor y Secretaria (Con solo las acciones que pueda ejecutar)
+      ☐ Realizar Diferentes tipos de consultas, en todo los "Modulos"
