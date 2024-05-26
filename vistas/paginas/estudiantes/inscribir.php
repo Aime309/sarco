@@ -59,7 +59,7 @@ assert($periodoActual instanceof Periodo);
       echo '<fieldset class="mt-5 row justify-content-center"><legend>Datos del estudiante</legend>';
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los nombres sólo pueden contener letras',
+        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'estudiante[nombres]',
         'placeholder' => 'Nombres',
         'minlength' => 3,
@@ -69,7 +69,7 @@ assert($periodoActual instanceof Periodo);
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los apellidos sólo pueden contener letras',
+        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'estudiante[apellidos]',
         'placeholder' => 'Apellidos',
         'minlength' => 3,
@@ -188,7 +188,7 @@ assert($periodoActual instanceof Periodo);
       echo '</div></fieldset><fieldset class="mt-5 row justify-content-center"><legend>Datos de la madre</legend>';
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los nombres sólo pueden contener letras',
+        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'madre[nombres]',
         'placeholder' => 'Nombres',
         'minlength' => 3,
@@ -198,7 +198,7 @@ assert($periodoActual instanceof Periodo);
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los apellidos sólo pueden contener letras',
+        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'madre[apellidos]',
         'placeholder' => 'Apellidos',
         'minlength' => 3,
@@ -271,7 +271,7 @@ assert($periodoActual instanceof Periodo);
       echo '<div class="row justify-content-center">';
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los nombres sólo pueden contener letras',
+        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'padre[nombres]',
         'required' => false,
         'placeholder' => 'Nombres',
@@ -282,7 +282,7 @@ assert($periodoActual instanceof Periodo);
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los apellidos sólo pueden contener letras',
+        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'padre[apellidos]',
         'required' => false,
         'placeholder' => 'Apellidos',

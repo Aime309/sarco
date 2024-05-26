@@ -73,7 +73,12 @@ return function (Router $router): void {
       }
 
       $_SESSION['datos'] = $usuario;
-      App::redirect(App::request()->referrer);
+
+      if ($rol->esIgualA(Rol::Docente)) {
+        App::redirect('/maestros');
+      } else {
+        App::redirect(App::request()->referrer);
+      }
     }
   })->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
 

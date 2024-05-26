@@ -31,7 +31,7 @@ Sistema:
 
       ☐ Hacer la validación de los Campos "En General"
       ✔ Realizar Módulos "Profesor y Secretaria" @done (26/05/2024 16:39:20)
-      ☐ Agregar Fecha de Registro (ejem: "Fecha de inscripción de x persona. Debe ser todo General")
+      ✔ Agregar Fecha de Registro (ejem: "Fecha de inscripción de x persona. Debe ser todo General") @done (26/05/2024 18:21:39)
       ☐ Identificar las acciones de los botones "General" (Botones Generales, ej: Botón de retroceso ubicado estratégicamente de acuerdo a la reglas web)
       ☐ Pulir los módulos (Cumpliendo con los requisitos básicos "Registrar, Editar, Desactivar")
 
@@ -49,12 +49,12 @@ Lista de Sugerencias:
 
   ✔ Información Fija (La planilla de Registro de Director no conserva la información) @done (26/05/2024 16:09:23)
   ✔ En el apartado de mensaje en la planilla de registro (Los nombres solo pueden contener letras @done (26/05/2024 16:14:23)
-  Añadir, En el hipotético caso de que debe iniciar con Mayúscula. "Los nombres inician con Mayúscula")
+  ✔ Añadir, En el hipotético caso de que debe iniciar con Mayúscula. "Los nombres inician con Mayúscula" @done (26/05/2024 18:25:10)
   ☐ Agregar el icono del ojito (El que muestra la contraseña, para los demás navegadores)
   ☐ Agregar Función de edición de usuarios (En el apartado Director )
   ☐ Eliminar el auto-guardado de registro director (Se plasma la información del director la primera vez de registro)
   ☐ Ajustar los nombres y los apellidos a 3 palabras ejem (Rosalba del Carmen)
-  ☐ Si estoy registrando un Maestro Que redirigía a la lista de Maestro no a la de usuarios.
+  ✔ Si estoy registrando un Maestro Que redirigía a la lista de Maestro no a la de usuarios. @done (26/05/2024 18:27:10)
   ☐ Añadir el botón de atrás en los Formularios
 
 
