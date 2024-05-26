@@ -28,7 +28,7 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Nombres',
     'minlength' => 3,
     'maxlength' => 40,
-    'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})',
+    'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
     'value' => @$_SESSION['datos']['nombres']
   ]);
 
@@ -38,7 +38,7 @@ scripts('./recursos/js/validarFormulario.js');
     'placeholder' => 'Apellidos',
     'minlength' => 3,
     'maxlength' => 40,
-    'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})',
+    'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
     'value' => @$_SESSION['datos']['apellidos']
   ]);
 

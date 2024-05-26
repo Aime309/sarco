@@ -34,7 +34,7 @@ final class Estudiante extends Modelo {
 
   /** @throws InvalidArgumentException */
   static function asegurarValidez(array $datos): void {
-    $validacionNombresYApellidos = '/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})$/';
+    $validacionNombresYApellidos = '/^(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}$/';
     $edad = self::calcularEdad($datos['fecha_nacimiento'] ?? null);
 
     if (!preg_match($validacionNombresYApellidos,  $datos['nombres'] ?? '')) {

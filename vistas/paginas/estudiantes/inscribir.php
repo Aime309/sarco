@@ -64,7 +64,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 mr-md-2'
       ]);
 
@@ -74,7 +74,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 ml-md-2'
       ]);
 
@@ -193,7 +193,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 mr-md-2'
       ]);
 
@@ -203,7 +203,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 ml-md-2'
       ]);
 
@@ -277,7 +277,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 mr-md-2'
       ]);
 
@@ -288,7 +288,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚ][a-záéíóú]{2,19}(\s?|\s?[A-ZÁÉÍÓÚ][a-záéíóú]{2,19})',
+        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 ml-md-2'
       ]);
 

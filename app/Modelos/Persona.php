@@ -36,7 +36,7 @@ abstract class Persona extends Modelo {
 
   /** @throws InvalidArgumentException */
   static function asegurarValidez(array $datos): void {
-    $validacionNombresYApellidos = '/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})$/';
+    $validacionNombresYApellidos = '/^(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}$/';
     $cedula = $datos['cedula'] ?? -1;
     $edad = self::calcularEdad($datos['fecha_nacimiento'] ?? null);
 
