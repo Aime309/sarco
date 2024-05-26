@@ -11,7 +11,7 @@ Sistema:
   ☐ Genera reportes por pantalla y por impresión
   ✔ Permite respaldar y restaurar la base de datos @done (26/05/2024 14:46:36)
   ☐ Valida los campos de entrada
-  ☐ Las interfaces son de fácil comprensión al usuario y presenta uniformidad en el estilo (colores, tamaño de letra, ...)
+  ✔ Las interfaces son de fácil comprensión al usuario y presenta uniformidad en el estilo (colores, tamaño de letra, ...) @done (26/05/2024 16:27:15)
   --- ✄ -----------------------
   ✔ Mejorar la actualización de momentos al ingresar la fecha de inicio de período @done (25/05/2024 15:11:10)
   ✔ Preguntar si desea desactivar la cuenta @done (25/05/2024 14:57:45)
