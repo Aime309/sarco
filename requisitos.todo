@@ -30,7 +30,7 @@ Sistema:
     Primera Parte:
 
       ☐ Hacer la validación de los Campos "En General"
-      ☐ Realizar Módulos "Profesor y Secretaria"
+      ✔ Realizar Módulos "Profesor y Secretaria" @done (26/05/2024 16:39:20)
       ☐ Agregar Fecha de Registro (ejem: "Fecha de inscripción de x persona. Debe ser todo General")
       ☐ Identificar las acciones de los botones "General" (Botones Generales, ej: Botón de retroceso ubicado estratégicamente de acuerdo a la reglas web)
       ☐ Pulir los módulos (Cumpliendo con los requisitos básicos "Registrar, Editar, Desactivar")
@@ -43,7 +43,7 @@ Sistema:
       ☐ Realizar consultas de periodos (En este apartado como información fija a mostrar es: Momentos "ejem: 1 de enero al 1 de abril" todo esto para los tres momentos actuales. Como propuesta para el exceso de información, añadir acceso directos a los diferentes módulos habidos teniendo en cuenta que la información a mostrar solo sea la actual de acuerdo al periodo actual. Ejem: Modulo Salas "Mostrar solo las salas creadas en ese periodo")
       ☐ Información fija "En cada formulario en el hipoteco caso de error en un campo, mantener la demas informacion guarda. Sin la necesidad de repetir de nuevo"
       ☐ Pulir Modulo de Profesor y Secretaria (Con solo las acciones que pueda ejecutar)
-      ☐ Realizar Diferentes tipos de consultas, en todo los "Modulos"
+      ☐ Realizar Diferentes tipos de consultas, en todo los "Módulos"
 
 Lista de Sugerencias:
 
@@ -52,5 +52,10 @@ Lista de Sugerencias:
   Añadir, En el hipotético caso de que debe iniciar con Mayúscula. "Los nombres inician con Mayúscula")
   ☐ Agregar el icono del ojito (El que muestra la contraseña, para los demás navegadores)
   ☐ Agregar Función de edición de usuarios (En el apartado Director )
+  ☐ Eliminar el auto-guardado de registro director (Se plasma la información del director la primera vez de registro)
+  ☐ Ajustar los nombres y los apellidos a 3 palabras ejem (Rosalba del Carmen)
+  ☐ Si estoy registrando un Maestro Que redirigía a la lista de Maestro no a la de usuarios.
+  ☐ Añadir el botón de atrás en los Formularios
+
 
 
