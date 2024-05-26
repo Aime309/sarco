@@ -1,0 +1,3 @@
+@sarco = http://localhost/sarco
+
+POST {{sarco}}/registrate/

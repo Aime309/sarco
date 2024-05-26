@@ -23,7 +23,7 @@ scripts('./recursos/js/validarFormulario.js');
   <?php
 
   $vistas->render('componentes/Input', [
-    'validacion' => 'Los nombres sólo pueden contener letras',
+    'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
     'name' => 'nombres',
     'placeholder' => 'Nombres',
     'minlength' => 3,
@@ -33,7 +33,7 @@ scripts('./recursos/js/validarFormulario.js');
   ]);
 
   $vistas->render('componentes/Input', [
-    'validacion' => 'Los apellidos sólo pueden contener letras',
+    'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
     'name' => 'apellidos',
     'placeholder' => 'Apellidos',
     'minlength' => 3,

@@ -2,6 +2,7 @@
 
 namespace SARCO\Modelos;
 
+use InvalidArgumentException;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Rol;
 
@@ -45,5 +46,17 @@ final class Usuario extends Persona {
 
   static function encriptar(string $clave): string {
     return password_hash($clave, PASSWORD_DEFAULT);
+  }
+
+  static function asegurarValidez(array $datos): void {
+    parent::asegurarValidez($datos);
+
+    if (!preg_match('/^(?=.*\d)(?=.*[A-ZÑ])(?=.*\W).{8,}$/', $datos['clave'] ?? '')) {
+      throw new InvalidArgumentException('La contraseña debe tener al menos 1 mayúscula, 1 número y un símbolo');
+    } elseif (!Genero::tryFrom($datos['genero'] ?? '')) {
+      throw new InvalidArgumentException('Género inválido, debe ser Masculino o Femenino');
+    } elseif (mb_strlen($datos['direccion'] ?? '') < 3) {
+      throw new InvalidArgumentException('La dirección debe tener al menos 3 caracteres');
+    }
   }
 }

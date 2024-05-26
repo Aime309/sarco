@@ -4,7 +4,6 @@ use flight\template\View;
 use SARCO\Enumeraciones\Genero;
 
 assert($vistas instanceof View);
-scripts('recursos/js/registro.js');
 
 ?>
 
@@ -16,24 +15,26 @@ scripts('recursos/js/registro.js');
     $vistas->render(
       'componentes/Input',
       [
-        'validacion' => 'Los nombres sólo pueden contener letras',
+        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'nombres',
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})',
+        'value' => $_SESSION['datos']['nombres'] ?? ''
       ]
     );
 
     $vistas->render(
       'componentes/Input',
       [
-        'validacion' => 'Los apellidos sólo pueden contener letras',
+        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
         'name' => 'apellidos',
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})'
+        'pattern' => '[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}(\s?|\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19})',
+        'value' => $_SESSION['datos']['apellidos'] ?? ''
       ]
     );
 
@@ -44,8 +45,9 @@ scripts('recursos/js/registro.js');
         'name' => 'cedula',
         'placeholder' => 'Cédula',
         'type' => 'number',
-        'min' => 1000000,
-        'max' => 99999999
+        'min' => 1_000_000,
+        'max' => 31_000_000,
+        'value' => $_SESSION['datos']['cedula'] ?? ''
       ]
     );
 
@@ -58,7 +60,8 @@ scripts('recursos/js/registro.js');
         'placeholder' => 'Contraseña',
         'type' => 'password',
         'pattern' => '(?=.*\d)(?=.*[A-ZÑ])(?=.*\W).{8,}',
-        'minlength' => 8
+        'minlength' => 8,
+        'value' => $_SESSION['datos']['clave'] ?? ''
       ]
     );
 
@@ -68,7 +71,8 @@ scripts('recursos/js/registro.js');
         'validacion' => 'La fecha de nacimiento es requerida',
         'name' => 'fecha_nacimiento',
         'placeholder' => 'Fecha de nacimiento',
-        'type' => 'date'
+        'type' => 'date',
+        'value' => $_SESSION['datos']['fecha_nacimiento'] ?? ''
       ]
     );
 
@@ -80,7 +84,8 @@ scripts('recursos/js/registro.js');
         'placeholder' => 'Género',
         'opciones' => array_map(static fn (Genero $genero): array => [
           'value' => $genero->name,
-          'children' => $genero->name
+          'children' => $genero->name,
+          'selected' => @$_SESSION['datos']['genero'] === $genero->name
         ], Genero::cases())
       ]
     );
@@ -91,7 +96,8 @@ scripts('recursos/js/registro.js');
         'validacion' => 'La dirección es requerida',
         'name' => 'direccion',
         'placeholder' => 'Dirección',
-        'minlength' => 3
+        'minlength' => 3,
+        'value' => $_SESSION['datos']['direccion'] ?? ''
       ]
     );
 
@@ -104,7 +110,8 @@ scripts('recursos/js/registro.js');
         'placeholder' => 'Teléfono',
         'minlength' => 15,
         'maxlength' => 15,
-        'pattern' => '\+\d{2} \d{3}-\d{7}'
+        'pattern' => '\+\d{2} \d{3}-\d{7}',
+        'value' => $_SESSION['datos']['telefono'] ?? ''
       ]
     );
 
@@ -115,7 +122,8 @@ scripts('recursos/js/registro.js');
         'type' => 'email',
         'name' => 'correo',
         'placeholder' => 'Correo',
-        'minlength' => 5
+        'minlength' => 5,
+        'value' => $_SESSION['datos']['correo'] ?? ''
       ]
     );
 

@@ -135,7 +135,7 @@ if ($usuario->esDirector()) {
         'icono' => '<i class="fas fa-floppy-disk fa-fw"></i>',
         'titulo' => 'Respaldar sistema'
       ],
-      [
+      !$puedeRestaurar ?: [
         'href' => 'restaurar',
         'icono' => '<i class="fas fa-rotate-left fa-fw"></i>',
         'titulo' => 'Restaurar sistema'
