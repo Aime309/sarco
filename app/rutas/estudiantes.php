@@ -167,6 +167,8 @@ return function (Router $router): void {
       bd()->rollBack();
 
       throw $error;
+    } catch (InvalidArgumentException $error) {
+      $_SESSION['mensajes.error'] = $error->getMessage();
     }
 
     $_SESSION['datos'] = $inscripcion;

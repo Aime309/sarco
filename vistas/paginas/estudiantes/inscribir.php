@@ -42,7 +42,7 @@ assert($periodoActual instanceof Periodo);
 
   <details class="my-5" open>
     <summary class="h2 pl-5 mb-4">Inscribir por primera vez</summary>
-    <form method="post" class="form form--bordered form--with-validation form--with-padding mx-5 form--centered">
+    <form method="post" class="form form--bordered form--with-validation form--with-padding mx-5 form--centered" novalidate>
       <?php
 
       $vistas->render('componentes/Select', [
@@ -52,7 +52,10 @@ assert($periodoActual instanceof Periodo);
         'opciones' => array_map(static fn (Periodo $periodo): array => [
           'value' => $periodo->id,
           'children' => $periodo,
-          'selected' => $periodo == $periodoActual
+          'selected' => (
+            @$_SESSION['datos']['id_periodo'] === $periodo->id
+            || $periodo == $periodoActual
+          )
         ], $periodos)
       ]);
 
@@ -65,7 +68,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 3,
         'maxlength' => 40,
         'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['estudiante']['nombres']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -75,7 +79,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 3,
         'maxlength' => 40,
         'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['estudiante']['apellidos']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -85,7 +90,8 @@ assert($periodoActual instanceof Periodo);
         'type' => 'date',
         'class' => 'col-md-5 mr-md-2',
         'onblur' => 'obtenerSalas(this)',
-        'onchange' => 'calcularEdad(this)'
+        'onchange' => 'calcularEdad(this)',
+        'value' => @$_SESSION['datos']['estudiante']['fecha_nacimiento']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -94,7 +100,7 @@ assert($periodoActual instanceof Periodo);
         'disabled' => true,
         'name' => 'estudiante[edad]',
         'placeholder' => 'Edad',
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
       ]);
 
       $vistas->render('componentes/Textarea', [
@@ -103,6 +109,7 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Lugar de nacimiento',
         'minlength' => 3,
         'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['estudiante']['lugar_nacimiento']
       ]);
 
       $vistas->render('componentes/Select', [
@@ -111,7 +118,8 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Género',
         'opciones' => array_map(static fn (Genero $genero): array => [
           'value' => $genero->name,
-          'children' => $genero->name
+          'children' => $genero->name,
+          'selected' => @$_SESSION['datos']['estudiante']['genero'] === $genero->name
         ], Genero::cases()),
         'class' => 'col-md-5 ml-md-2'
       ]);
@@ -122,7 +130,8 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Tipo de sangre',
         'opciones' => array_map(static fn (GrupoSanguineo $grupo): array => [
           'value' => $grupo->value,
-          'children' => $grupo->value
+          'children' => $grupo->value,
+          'selected' => @$_SESSION['datos']['estudiante']['grupo_sanguineo'] === $grupo->value
         ], GrupoSanguineo::cases()),
         'class' => 'col-md-5'
       ]);
@@ -145,7 +154,7 @@ assert($periodoActual instanceof Periodo);
         'disabled' => true,
         'name' => 'id_aula',
         'placeholder' => 'Aula asignada',
-        'class' => 'col-md m-2'
+        'class' => 'col-md m-2',
       ]);
 
       echo '</div><div class="row">';
@@ -182,7 +191,7 @@ assert($periodoActual instanceof Periodo);
         'readonly' => true,
         'name' => 'id_asignacion_sala',
         'placeholder' => '',
-        'class' => 'd-none'
+        'class' => 'd-none',
       ]);
 
       echo '</div></fieldset><fieldset class="mt-5 row justify-content-center"><legend>Datos de la madre</legend>';
@@ -194,7 +203,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 3,
         'maxlength' => 40,
         'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['madre']['nombres']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -204,7 +214,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 3,
         'maxlength' => 40,
         'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['madre']['apellidos']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -214,7 +225,8 @@ assert($periodoActual instanceof Periodo);
         'type' => 'number',
         'min' => 1000000,
         'max' => 99999999,
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['madre']['cedula']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -222,7 +234,8 @@ assert($periodoActual instanceof Periodo);
         'name' => 'madre[fecha_nacimiento]',
         'placeholder' => 'Fecha de nacimiento',
         'type' => 'date',
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['madre']['fecha_nacimiento']
       ]);
 
       $vistas->render('componentes/Select', [
@@ -231,7 +244,8 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Estado civil',
         'opciones' => array_map(static fn (EstadoCivil $estado): array => [
           'value' => $estado->name,
-          'children' => $estado->name
+          'children' => $estado->name,
+          'selected' => @$_SESSION['datos']['madre']['estado_civil'] === $estado->name
         ], EstadoCivil::cases()),
         'class' => 'col-md-5 mr-md-2'
       ]);
@@ -242,7 +256,8 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Nacionalidad',
         'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
-          'children' => $nacionalidad->name
+          'children' => $nacionalidad->name,
+          'selected' => @$_SESSION['datos']['madre']['nacionalidad'] === $nacionalidad->name
         ], Nacionalidad::cases()),
         'class' => 'col-md-5 ml-md-2'
       ]);
@@ -255,7 +270,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 15,
         'maxlength' => 15,
         'pattern' => '\+\d{2} \d{3}-\d{7}',
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['madre']['telefono']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -264,7 +280,8 @@ assert($periodoActual instanceof Periodo);
         'name' => 'madre[correo]',
         'placeholder' => 'Correo',
         'minlength' => 5,
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['madre']['correo']
       ]);
 
       echo '</fieldset><details class="mt-5"><summary class="h4 mb-4">Datos del padre (opcional)</summary>';
@@ -278,7 +295,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 3,
         'maxlength' => 40,
         'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['padre']['nombres']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -289,7 +307,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 3,
         'maxlength' => 40,
         'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['padre']['apellidos']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -300,7 +319,8 @@ assert($periodoActual instanceof Periodo);
         'type' => 'number',
         'min' => 1000000,
         'max' => 99999999,
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['padre']['cedula']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -309,7 +329,8 @@ assert($periodoActual instanceof Periodo);
         'required' => false,
         'placeholder' => 'Fecha de nacimiento',
         'type' => 'date',
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['padre']['fecha_nacimiento']
       ]);
 
       $vistas->render('componentes/Select', [
@@ -319,7 +340,8 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Estado civil',
         'opciones' => array_map(static fn (EstadoCivil $estado): array => [
           'value' => $estado->name,
-          'children' => $estado->name
+          'children' => $estado->name,
+          'selected' => @$_SESSION['datos']['padre']['estado_civil'] === $estado->name
         ], EstadoCivil::cases()),
         'class' => 'col-md-5 mr-md-2'
       ]);
@@ -331,7 +353,8 @@ assert($periodoActual instanceof Periodo);
         'placeholder' => 'Nacionalidad',
         'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
-          'children' => $nacionalidad->name
+          'children' => $nacionalidad->name,
+          'selected' => @$_SESSION['datos']['padre']['nacionalidad'] === $nacionalidad->name
         ], Nacionalidad::cases()),
         'class' => 'col-md-5 ml-md-2'
       ]);
@@ -345,7 +368,8 @@ assert($periodoActual instanceof Periodo);
         'minlength' => 15,
         'maxlength' => 15,
         'pattern' => '\+\d{2} \d{3}-\d{7}',
-        'class' => 'col-md-5 mr-md-2'
+        'class' => 'col-md-5 mr-md-2',
+        'value' => @$_SESSION['datos']['padre']['telefono']
       ]);
 
       $vistas->render('componentes/Input', [
@@ -355,7 +379,8 @@ assert($periodoActual instanceof Periodo);
         'required' => false,
         'placeholder' => 'Correo',
         'minlength' => 5,
-        'class' => 'col-md-5 ml-md-2'
+        'class' => 'col-md-5 ml-md-2',
+        'value' => @$_SESSION['datos']['padre']['correo']
       ]);
 
       echo '</div></details>';
