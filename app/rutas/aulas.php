@@ -32,38 +32,23 @@ return function (Router $router): void {
   $router->post('/', function (): void {
     $aula = App::request()->data->getData();
 
-    if (empty($aula['tipo'])) {
-      $_SESSION['mensajes.error'] = 'El tipo de aula es requerido';
-    } elseif (!preg_match(
-      '/^(?=.*[0-9])(?=.*[A-ZÑa-zñ])(?=.*-).{3,}$/',
-      $aula['codigo'] ?? ''
-    )) {
-      $_SESSION['mensajes.error'] = 'El código de aula debe mínimo 3 letras, números y guiones';
-    }
-
-    if (!empty($_SESSION['mensajes.error'])) {
-      App::redirect(App::request()->referrer);
-
-      return;
-    }
-
-    $sentencia = bd()->prepare('
-      INSERT INTO aulas (id, codigo, tipo)
-      VALUES (:id, :codigo, :tipo)
-    ');
-
     try {
+      Aula::asegurarValidez($aula);
+
+      $sentencia = bd()->prepare('
+        INSERT INTO aulas (id, codigo, tipo)
+        VALUES (:id, :codigo, :tipo)
+      ');
+
       $sentencia->execute([
         ':id' => new UuidV4,
         ':codigo' => strtoupper($aula['codigo']),
-        ':tipo' => $aula['tipo']
+        ':tipo' => ucfirst($aula['tipo'])
       ]);
 
       $_SESSION['mensajes.exito'] = 'Aula aperturada exitósamente';
-      App::redirect('/aulas');
       unset($_SESSION['datos']);
-
-      return;
+      exit(App::redirect('/aulas'));
     } catch (PDOException $error) {
       if (str_contains($error->getMessage(), 'aulas.tipo')) {
         $_SESSION['mensajes.error'] = 'El tipo debe ser Pequeña o Grande';
@@ -72,6 +57,8 @@ return function (Router $router): void {
       } else {
         throw $error;
       }
+    } catch (InvalidArgumentException $error) {
+      $_SESSION['mensajes.error'] = $error->getMessage();
     }
 
     $_SESSION['datos'] = $aula;
@@ -86,9 +73,9 @@ return function (Router $router): void {
   $router->group('/@codigo', function (Router $router): void {
     $router->get('/', function (string $codigo): void {
       $sentencia = bd()->prepare('
-      SELECT id, fecha_registro as fechaRegistro, codigo, tipo FROM aulas
-      WHERE codigo = ?
-    ');
+        SELECT id, fecha_registro as fechaRegistro, codigo, tipo FROM aulas
+        WHERE codigo = ?
+      ');
 
       $sentencia->execute([$codigo]);
       $aula = $sentencia->fetchObject(Aula::class);
@@ -100,38 +87,23 @@ return function (Router $router): void {
     $router->post('/', function (string $id): void {
       $nuevaAula = App::request()->data->getData();
 
-      if (empty($nuevaAula['tipo'])) {
-        $_SESSION['mensajes.error'] = 'El tipo de aula es requerido';
-      } elseif (!preg_match(
-        '/^(?=.*[0-9])(?=.*[A-ZÑa-zñ])(?=.*-).{3,}$/',
-        $nuevaAula['codigo'] ?? ''
-      )) {
-        $_SESSION['mensajes.error'] = 'El código de aula debe mínimo 3 letras, números y guiones';
-      }
-
-      if (!empty($_SESSION['mensajes.error'])) {
-        App::redirect(App::request()->referrer);
-
-        return;
-      }
-
-      $sentencia = bd()->prepare('
-        UPDATE aulas SET codigo = :nuevoCodigo, tipo = :nuevoTipo
-        WHERE id = :id
-      ');
-
       try {
+        Aula::asegurarValidez($nuevaAula);
+
+        $sentencia = bd()->prepare('
+          UPDATE aulas SET codigo = :nuevoCodigo, tipo = :nuevoTipo
+          WHERE id = :id
+        ');
+
         $sentencia->execute([
           ':nuevoCodigo' => strtoupper($nuevaAula['codigo']),
-          ':nuevoTipo' => $nuevaAula['tipo'],
+          ':nuevoTipo' => ucfirst($nuevaAula['tipo']),
           ':id' => $id
         ]);
 
         $_SESSION['mensajes.exito'] = 'Aula actualizada exitósamente';
-        App::redirect('/aulas');
         unset($_SESSION['datos']);
-
-        return;
+        exit(App::redirect('/aulas'));
       } catch (PDOException $error) {
         if (str_contains($error->getMessage(), 'aulas.codigo')) {
           $_SESSION['mensajes.error'] = "El aula {$nuevaAula['codigo']} ya fue aperturada";
@@ -140,6 +112,8 @@ return function (Router $router): void {
         } else {
           throw $error;
         }
+      } catch (InvalidArgumentException $error) {
+        $_SESSION['mensajes.error'] = $error->getMessage();
       }
 
       $_SESSION['datos'] = $nuevaAula;

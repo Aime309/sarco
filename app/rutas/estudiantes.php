@@ -8,6 +8,7 @@ use SARCO\Modelos\Boletin;
 use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
+use SARCO\Modelos\Representante;
 use Symfony\Component\Uid\UuidV4;
 
 return function (Router $router): void {
@@ -58,33 +59,38 @@ return function (Router $router): void {
 
       if (!empty($inscripcion['padre']['nombres'])) {
         $idDelPapa = new UuidV4;
-        $sentencia->bindValue(':id', $idDelPapa);
-        $sentencia->bindValue(':nombres', $inscripcion['padre']['nombres']);
-        $sentencia->bindValue(':apellidos', $inscripcion['padre']['apellidos']);
-        $sentencia->bindValue(':cedula', $inscripcion['padre']['cedula'], PDO::PARAM_INT);
-        $sentencia->bindValue(':genero', Genero::Masculino->value);
-        $sentencia->bindValue(':fechaNacimiento', $inscripcion['padre']['fecha_nacimiento']);
-        $sentencia->bindValue(':estadoCivil', $inscripcion['padre']['estado_civil']);
-        $sentencia->bindValue(':nacionalidad', $inscripcion['padre']['nacionalidad']);
-        $sentencia->bindValue(':telefono', $inscripcion['padre']['telefono']);
-        $sentencia->bindValue(':correo', $inscripcion['padre']['correo']);
+        Representante::asegurarValidez($inscripcion['padre']);
 
-        $sentencia->execute();
+        $sentencia->execute([
+          ':id' => $idDelPapa,
+          ':nombres' => mb_convert_case($inscripcion['padre']['nombres'], MB_CASE_TITLE),
+          ':apellidos' => mb_convert_case($inscripcion['padre']['apellidos'], MB_CASE_TITLE),
+          ':cedula' => $inscripcion['padre']['cedula'],
+          ':genero' => Genero::Masculino->value,
+          ':fechaNacimiento' => $inscripcion['padre']['fecha_nacimiento'],
+          ':estadoCivil' => ucfirst($inscripcion['padre']['estado_civil']),
+          ':nacionalidad' => ucfirst($inscripcion['padre']['nacionalidad']),
+          ':telefono' => $inscripcion['padre']['telefono'],
+          ':correo' => $inscripcion['padre']['correo']
+        ]);
       }
 
       $idDeLaMama = new UuidV4;
-      $sentencia->bindValue(':id', $idDeLaMama);
-      $sentencia->bindValue(':nombres', $inscripcion['madre']['nombres']);
-      $sentencia->bindValue(':apellidos', $inscripcion['madre']['apellidos']);
-      $sentencia->bindValue(':cedula', $inscripcion['madre']['cedula'], PDO::PARAM_INT);
-      $sentencia->bindValue(':genero', Genero::Femenino->value);
-      $sentencia->bindValue(':fechaNacimiento', $inscripcion['madre']['fecha_nacimiento']);
-      $sentencia->bindValue(':estadoCivil', $inscripcion['madre']['estado_civil']);
-      $sentencia->bindValue(':nacionalidad', $inscripcion['madre']['nacionalidad']);
-      $sentencia->bindValue(':telefono', $inscripcion['madre']['telefono']);
-      $sentencia->bindValue(':correo', $inscripcion['madre']['correo']);
+      Representante::asegurarValidez($inscripcion['madre']);
 
-      $sentencia->execute();
+      $sentencia->execute([
+        ':id' => $idDeLaMama,
+        ':nombres' => mb_convert_case($inscripcion['madre']['nombres'], MB_CASE_TITLE),
+        ':apellidos' => mb_convert_case($inscripcion['madre']['apellidos'], MB_CASE_TITLE),
+        ':cedula' => $inscripcion['madre']['cedula'],
+        ':genero' => Genero::Femenino->value,
+        ':fechaNacimiento' => $inscripcion['madre']['fecha_nacimiento'],
+        ':estadoCivil' => ucfirst($inscripcion['madre']['estado_civil']),
+        ':nacionalidad' => ucfirst($inscripcion['madre']['nacionalidad']),
+        ':telefono' => $inscripcion['madre']['telefono'],
+        ':correo' => $inscripcion['madre']['correo']
+      ]);
+
       $idDelPapa ??= 'NULL';
       [$añoDeNacimiento] = explode('-', $inscripcion['estudiante']['fecha_nacimiento']);
       $ultimosDigitosAñoNacimiento = substr($añoDeNacimiento, 2);
@@ -98,26 +104,30 @@ return function (Router $router): void {
       ");
 
       $idDelEstudiante = new UuidV4;
-      $sentencia->bindValue(':id', $idDelEstudiante);
-      $sentencia->bindValue(':nombres', $inscripcion['estudiante']['nombres']);
-      $sentencia->bindValue(':apellidos', $inscripcion['estudiante']['apellidos']);
-      $sentencia->bindValue(':cedula', $cedulaEscolar);
-      $sentencia->bindValue(':fechaNacimiento', $inscripcion['estudiante']['fecha_nacimiento']);
-      $sentencia->bindValue(':lugarNacimiento', $inscripcion['estudiante']['lugar_nacimiento']);
-      $sentencia->bindValue(':genero', $inscripcion['estudiante']['genero']);
-      $sentencia->bindValue(':grupoSanguineo', $inscripcion['estudiante']['grupo_sanguineo']);
-      $sentencia->execute();
+      Estudiante::asegurarValidez($inscripcion['estudiante']);
+
+      $sentencia->execute([
+        ':id' => $idDelEstudiante,
+        ':nombres' => mb_convert_case($inscripcion['estudiante']['nombres'], MB_CASE_TITLE),
+        ':apellidos' => mb_convert_case($inscripcion['estudiante']['apellidos'], MB_CASE_TITLE),
+        ':cedula' => $cedulaEscolar,
+        ':fechaNacimiento' => $inscripcion['estudiante']['fecha_nacimiento'],
+        ':lugarNacimiento' => mb_convert_case($inscripcion['estudiante']['lugar_nacimiento'], MB_CASE_TITLE),
+        ':genero' => ucfirst($inscripcion['estudiante']['genero']),
+        ':grupoSanguineo' => strtoupper($inscripcion['estudiante']['grupo_sanguineo']),
+      ]);
 
       $sentencia = bd()->prepare("
         INSERT INTO inscripciones (id, id_periodo, id_estudiante,
         id_asignacion_sala) VALUES (:id, :idPeriodo, :idEstudiante, :idAsignacion)
       ");
 
-      $sentencia->bindValue(':id', new UuidV4);
-      $sentencia->bindValue(':idPeriodo', $inscripcion['id_periodo']);
-      $sentencia->bindValue(':idEstudiante', $idDelEstudiante);
-      $sentencia->bindValue(':idAsignacion', $inscripcion['id_asignacion_sala']);
-      $sentencia->execute();
+      $sentencia->execute([
+        ':id' => new UuidV4,
+        ':idPeriodo' => $inscripcion['id_periodo'],
+        ':idEstudiante' => $idDelEstudiante,
+        ':idAsignacion' => $inscripcion['id_asignacion_sala'],
+      ]);
 
       $momentos = bd()->query("
         SELECT m.id, numero, mes_inicio as mesInicio,
@@ -151,14 +161,16 @@ return function (Router $router): void {
 
       bd()->commit();
       $_SESSION['mensajes.exito'] = 'Estudiante inscrito exitósamente';
-      App::redirect('/inscripciones');
+      unset($_SESSION['datos']);
+      exit(App::redirect('/inscripciones'));
     } catch (PDOException $error) {
       bd()->rollBack();
 
-      dd($error, $inscripcion);
       throw $error;
-      App::redirect('/estudiantes/inscribir');
     }
+
+    $_SESSION['datos'] = $inscripcion;
+    App::redirect(App::request()->referrer);
   })->addMiddleware(autorizar(Rol::Secretario));
 
   $router->get('/boletines', function (): void {

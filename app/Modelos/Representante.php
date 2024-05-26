@@ -2,6 +2,7 @@
 
 namespace SARCO\Modelos;
 
+use InvalidArgumentException;
 use SARCO\Enumeraciones\EstadoCivil;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Nacionalidad;
@@ -31,5 +32,15 @@ final class Representante extends Persona {
       'Venezolana', 'Venezolano' => Nacionalidad::Venezolano,
       default => Nacionalidad::Extranjero
     };
+  }
+
+  static function asegurarValidez(array $datos): void {
+    parent::asegurarValidez($datos);
+
+    if (!EstadoCivil::tryFrom($datos['estado_civil'] ?? '')) {
+      throw new InvalidArgumentException('El estado civil debe ser Casado, Soltero, Divorciado o Viudo');
+    } elseif (!Nacionalidad::tryFrom($datos['nacionalidad'] ?? '')) {
+      throw new InvalidArgumentException('La nacionalidad debe ser Venezolano o Extranjero');
+    }
   }
 }

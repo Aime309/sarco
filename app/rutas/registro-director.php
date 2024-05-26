@@ -17,44 +17,39 @@ return function (Router $router): void {
 
     try {
       Usuario::asegurarValidez($usuario);
-    } catch (InvalidArgumentException $error) {
-      $_SESSION['mensajes.error'] = $error->getMessage();
-      exit(App::redirect(App::request()->referrer));
-    }
 
-    $clave = Usuario::encriptar($usuario['clave']);
-    $id = new UuidV4;
+      $clave = Usuario::encriptar($usuario['clave']);
+      $id = new UuidV4;
 
-    $sentencia = bd()->prepare("
-      INSERT INTO usuarios (
-        id, nombres, apellidos, cedula, fecha_nacimiento, genero, telefono,
-        correo, direccion, clave, rol
-      ) VALUES (
-        :id, :nombres, :apellidos, :cedula, :fechaNacimiento, :genero,
-        :telefono, :correo, :direccion, :clave, :rol
-      )
-    ");
+      $sentencia = bd()->prepare("
+        INSERT INTO usuarios (
+          id, nombres, apellidos, cedula, fecha_nacimiento, genero, telefono,
+          correo, direccion, clave, rol
+        ) VALUES (
+          :id, :nombres, :apellidos, :cedula, :fechaNacimiento, :genero,
+          :telefono, :correo, :direccion, :clave, :rol
+        )
+      ");
 
-    $sentencia->bindValue(':id', $id);
-    $sentencia->bindValue(':nombres', $usuario['nombres']);
-    $sentencia->bindValue(':apellidos', $usuario['apellidos']);
-    $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
-    $sentencia->bindValue(':fechaNacimiento', $usuario['fecha_nacimiento']);
-    $sentencia->bindValue(':genero', $usuario['genero']);
-    $sentencia->bindValue(':telefono', $usuario['telefono']);
-    $sentencia->bindValue(':correo', $usuario['correo']);
-    $sentencia->bindValue(':direccion', $usuario['direccion']);
-    $sentencia->bindValue(':clave', $clave);
-    $sentencia->bindValue(':rol', Rol::Director->value);
+      $sentencia->execute([
+        ':id' => $id,
+        ':nombres' => mb_convert_case($usuario['nombres'], MB_CASE_TITLE),
+        ':apellidos' => mb_convert_case($usuario['apellidos'], MB_CASE_TITLE),
+        ':cedula' => $usuario['cedula'],
+        ':fechaNacimiento' => $usuario['fecha_nacimiento'],
+        ':genero' => $usuario['genero'],
+        ':telefono' => $usuario['telefono'],
+        ':correo' => $usuario['correo'],
+        ':direccion' => mb_convert_case($usuario['direccion'], MB_CASE_TITLE),
+        ':clave' => $clave,
+        ':rol' => Rol::Director->value
+      ]);
 
-    try {
-      $sentencia->execute();
       $_SESSION['mensajes.exito'] = 'Director registrado existósamente';
       $_SESSION['usuario.id'] = $id;
       unset($_SESSION['datos']);
-      App::redirect('/');
 
-      return;
+      exit(App::redirect('/'));
     } catch (PDOException $error) {
       if (str_contains($error->getMessage(), 'usuarios.correo')) {
         $_SESSION['mensajes.error'] = "Ya existe un usuario con el correo {$usuario['correo']}";
@@ -67,6 +62,8 @@ return function (Router $router): void {
       } else {
         throw $error;
       }
+    } catch (InvalidArgumentException $error) {
+      $_SESSION['mensajes.error'] = $error->getMessage();
     }
 
     $_SESSION['datos'] = $usuario;

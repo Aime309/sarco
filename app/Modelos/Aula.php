@@ -2,6 +2,7 @@
 
 namespace SARCO\Modelos;
 
+use InvalidArgumentException;
 use Stringable;
 
 final class Aula extends Modelo implements Stringable {
@@ -18,6 +19,18 @@ final class Aula extends Modelo implements Stringable {
 
   function esPequeña(): bool {
     return $this->tipo === 'Pequeña';
+  }
+
+  /** @throws InvalidArgumentException */
+  final static function asegurarValidez(array $datos): void {
+    if (empty($datos['tipo'])) {
+      throw new InvalidArgumentException('El tipo de aula es requerido');
+    } elseif (!preg_match(
+      '/^(?=.*[0-9])(?=.*[A-ZÑa-zñ])(?=.*-).{3,}$/',
+      $datos['codigo'] ?? ''
+    )) {
+      throw new InvalidArgumentException('El código de aula debe mínimo 3 letras, números y guiones');
+    }
   }
 
   function __toString(): string {
