@@ -8,19 +8,21 @@ use SARCO\App;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Usuario;
+use SARCO\Repositorios\RepositorioDeUsuarios;
 use Symfony\Component\Uid\UuidV4;
 
 final readonly class ControladorDeUsuarios {
+  function __construct(private RepositorioDeUsuarios $repositorio) {
+  }
+
   function indice(): void {
     $idAutenticado = App::view()->get('usuario')->id;
+    $usuarios = $this->repositorio->todos();
 
-    $usuarios = bd()->query("
-      SELECT id, nombres, apellidos, cedula,
-      fecha_nacimiento as fechaNacimiento, direccion, telefono, correo,
-      rol, esta_activo as estaActivo, fecha_registro as fechaRegistro
-      FROM usuarios
-      WHERE id != '$idAutenticado'
-    ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
+    $usuarios = array_filter(
+      $usuarios,
+      fn (Usuario $usuario) => $usuario->id !== $idAutenticado
+    );
 
     App::render('paginas/usuarios/listado', compact('usuarios'), 'pagina');
     App::render('plantillas/privada', ['titulo' => 'Usuarios']);
@@ -91,13 +93,13 @@ final readonly class ControladorDeUsuarios {
   }
 
   function activar(int $cedula): void {
-    bd()->query("UPDATE usuarios SET esta_activo = TRUE WHERE cedula = $cedula");
+    $this->repositorio->activar($cedula);
     $_SESSION['mensajes.exito'] = 'Usuario activado existósamente';
     App::redirect(App::request()->referrer);
   }
 
   function desactivar(int $cedula): void {
-    bd()->query("UPDATE usuarios SET esta_activo = FALSE WHERE cedula = $cedula");
+    $this->repositorio->desactivar($cedula);
     $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
     App::redirect(App::request()->referrer);
   }
