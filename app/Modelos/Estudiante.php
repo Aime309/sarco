@@ -13,8 +13,8 @@ final class Estudiante extends Modelo {
   public readonly string $lugarNacimiento;
   public readonly string $genero;
   public readonly string $grupoSanguineo;
-  public readonly int $idMama;
-  public readonly ?int $idPapa;
+  public readonly string $idMama;
+  public readonly ?string $idPapa;
 
   function nombreCompleto(): string {
     return "$this->nombres $this->apellidos";
