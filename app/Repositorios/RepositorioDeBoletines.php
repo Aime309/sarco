@@ -6,7 +6,8 @@ use PDO;
 use SARCO\Modelos\Boletin;
 
 final readonly class RepositorioDeBoletines {
-  function __construct(private PDO $pdo) {}
+  function __construct(private PDO $pdo) {
+  }
 
   /** @return Boletin[] */
   function todos(): array {
