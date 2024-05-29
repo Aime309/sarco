@@ -18,8 +18,8 @@ final readonly class ControladorDeInscripciones {
   function __construct(private PDO $pdo) {
   }
 
-  function indice(): void {
-    $inscripciones = bd()->query("
+  function mostrarListado(): void {
+    $inscripciones = $this->pdo->query("
       SELECT i.id, i.fecha_registro as fechaRegistro,
       p.anio_inicio as periodo, e.nombres as nombresEstudiante,
       e.apellidos as apellidosEstudiante
@@ -37,13 +37,13 @@ final readonly class ControladorDeInscripciones {
     App::render('plantillas/privada', ['titulo' => 'Inscripciones']);
   }
 
-  function crear(): void {
-    $periodos = bd()->query("
+  function mostrarFormularioDeInscripcion(): void {
+    $periodos = $this->pdo->query("
       SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
       FROM periodos ORDER BY inicio DESC
     ")->fetchAll(PDO::FETCH_CLASS, Periodo::class);
 
-    $periodoActual = bd()->query("
+    $periodoActual = $this->pdo->query("
       SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
       FROM periodos ORDER BY inicio DESC LIMIT 1
     ")->fetchObject(Periodo::class) ?: null;
@@ -57,13 +57,13 @@ final readonly class ControladorDeInscripciones {
     App::render('plantillas/privada', ['titulo' => 'Inscribir estudiante']);
   }
 
-  function almacenar(): void {
+  function inscribir(): void {
     $inscripcion = App::request()->data->getData();
 
-    bd()->beginTransaction();
+    $this->pdo->beginTransaction();
 
     try {
-      $sentencia = bd()->prepare("
+      $sentencia = $this->pdo->prepare("
         INSERT INTO representantes (id, nombres, apellidos, cedula, genero,
         fecha_nacimiento, estado_civil, nacionalidad, telefono, correo)
         VALUES (:id, :nombres, :apellidos, :cedula, :genero, :fechaNacimiento,
@@ -109,7 +109,7 @@ final readonly class ControladorDeInscripciones {
       $ultimosDigitosAñoNacimiento = substr($añoDeNacimiento, 2);
       $cedulaEscolar = "v-1{$ultimosDigitosAñoNacimiento}{$inscripcion['madre']['cedula']}";
 
-      $sentencia = bd()->prepare("
+      $sentencia = $this->pdo->prepare("
         INSERT INTO estudiantes (id, nombres, apellidos, cedula,
         fecha_nacimiento, lugar_nacimiento, genero, tipo_sangre, id_mama,
         id_papa) VALUES (:id, :nombres, :apellidos, :cedula, :fechaNacimiento,
@@ -130,7 +130,7 @@ final readonly class ControladorDeInscripciones {
         ':grupoSanguineo' => strtoupper($inscripcion['estudiante']['grupo_sanguineo']),
       ]);
 
-      $sentencia = bd()->prepare("
+      $sentencia = $this->pdo->prepare("
         INSERT INTO inscripciones (id, id_periodo, id_estudiante,
         id_asignacion_sala) VALUES (:id, :idPeriodo, :idEstudiante, :idAsignacion)
       ");
@@ -142,7 +142,7 @@ final readonly class ControladorDeInscripciones {
         ':idAsignacion' => $inscripcion['id_asignacion_sala'],
       ]);
 
-      $momentos = bd()->query("
+      $momentos = $this->pdo->query("
         SELECT m.id, numero, mes_inicio as mesInicio,
         dia_inicio as diaInicio,
         mes_cierre as mesCierre,
@@ -155,7 +155,7 @@ final readonly class ControladorDeInscripciones {
         ORDER BY numero
       ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
 
-      $sentencia = bd()->prepare("
+      $sentencia = $this->pdo->prepare("
         INSERT INTO boletines (id, numero_inasistencias, nombre_proyecto,
         descripcion_formacion, descripcion_ambiente, recomendaciones,
         id_estudiante, id_momento, id_asignacion_sala) VALUES (:id, 0,
@@ -172,12 +172,12 @@ final readonly class ControladorDeInscripciones {
         ]);
       }
 
-      bd()->commit();
+      $this->pdo->commit();
       $_SESSION['mensajes.exito'] = 'Estudiante inscrito exitósamente';
       unset($_SESSION['datos']);
       exit(App::redirect('/inscripciones'));
     } catch (PDOException $error) {
-      bd()->rollBack();
+      $this->pdo->rollBack();
 
       throw $error;
     } catch (InvalidArgumentException $error) {

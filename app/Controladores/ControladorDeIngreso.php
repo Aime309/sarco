@@ -39,7 +39,7 @@ final readonly class ControladorDeIngreso {
     App::redirect('/');
   }
 
-  function salir(): void {
+  function cerrarSesion(): void {
     unset($_SESSION['usuario.id']);
     unset($_SESSION['usuario.recordar']);
 

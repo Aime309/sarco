@@ -11,8 +11,8 @@ final readonly class ControladorDeBoletines {
   function __construct(private PDO $pdo) {
   }
 
-  function indice(): void {
-    $boletines = bd()->query("
+  function mostrarListado(): void {
+    $boletines = $this->pdo->query("
       SELECT b.id, numero_inasistencias as inasistencias,
       nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
       descripcion_ambiente as descripcionAmbiente, recomendaciones,
@@ -30,8 +30,8 @@ final readonly class ControladorDeBoletines {
     App::render('plantillas/privada', ['titulo' => 'Boletines']);
   }
 
-  function editar(string $id): void {
-    $boletin = bd()->query("
+  function mostrarEdicion(string $id): void {
+    $boletin = $this->pdo->query("
       SELECT b.id, numero_inasistencias as inasistencias,
       nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
       descripcion_ambiente as descripcionAmbiente, recomendaciones,
@@ -49,7 +49,7 @@ final readonly class ControladorDeBoletines {
   function actualizar(string $id): void {
     $boletin = App::request()->data->getData();
 
-    $sentencia = bd()->prepare("
+    $sentencia = $this->pdo->prepare("
       UPDATE boletines SET numero_inasistencias = :inasistencias,
       nombre_proyecto = :proyecto, descripcion_formacion = :formacion,
       descripcion_ambiente = :ambiente, recomendaciones = :recomendaciones

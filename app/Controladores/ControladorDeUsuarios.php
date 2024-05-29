@@ -15,7 +15,7 @@ final readonly class ControladorDeUsuarios {
   function __construct(private RepositorioDeUsuarios $repositorio) {
   }
 
-  function indice(): void {
+  function mostrarListado(): void {
     $idAutenticado = App::view()->get('usuario')->id;
     $usuarios = $this->repositorio->todos();
 
@@ -28,7 +28,7 @@ final readonly class ControladorDeUsuarios {
     App::render('plantillas/privada', ['titulo' => 'Usuarios']);
   }
 
-  function almacenar(): void {
+  function crearCuenta(): void {
     $usuario = App::request()->data->getData();
     $genero = Genero::from($usuario['genero']);
     $rol = Rol::from($usuario['rol']);
@@ -87,7 +87,7 @@ final readonly class ControladorDeUsuarios {
     }
   }
 
-  function crear(): void {
+  function mostrarFormularioDeRegistro(): void {
     App::render('paginas/usuarios/nuevo', [], 'pagina');
     App::render('plantillas/privada', ['titulo' => 'Nuevo usuario']);
   }

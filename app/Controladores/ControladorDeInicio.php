@@ -11,7 +11,7 @@ final readonly class ControladorDeInicio {
   function __construct(private PDO $pdo) {
   }
 
-  function indice(): void {
+  function mostrarInicio(): void {
     $cantidadDeUsuarios = (int) $this->pdo
       ->query('SELECT COUNT(id) FROM usuarios')
       ->fetchColumn();

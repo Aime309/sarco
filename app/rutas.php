@@ -10,7 +10,7 @@ use SARCO\Enumeraciones\Rol;
 require_once __DIR__ . '/intermediarios.php';
 
 App::group('/api', require __DIR__ . '/rutas/api.php');
-App::route('GET /salir', [ControladorDeIngreso::class, 'salir']);
+App::route('GET /salir', [ControladorDeIngreso::class, 'cerrarSesion']);
 
 App::group('/registrate', require __DIR__ . '/rutas/registro-director.php', [
   permitirSiNoHayDirectoresActivos()
@@ -19,7 +19,7 @@ App::group('/registrate', require __DIR__ . '/rutas/registro-director.php', [
 App::post('/ingresar', [ControladorDeIngreso::class, 'autenticar']);
 
 App::group('/', function (Router $router): void {
-  $router->get('/', [ControladorDeInicio::class, 'indice']);
+  $router->get('/', [ControladorDeInicio::class, 'mostrarInicio']);
 
   $router
     ->get('respaldar', [ControladorDeRespaldos::class, 'respaldar'])

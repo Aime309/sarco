@@ -10,7 +10,7 @@ final readonly class ControladorDeEstudiantes {
   function __construct(private PDO $pdo) {
   }
 
-  function indice(): void {
+  function mostrarListado(): void {
     $estudiantes = $this->pdo->query("
       SELECT id, nombres, apellidos, cedula,
       fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
