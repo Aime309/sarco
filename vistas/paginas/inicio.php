@@ -83,7 +83,7 @@ $fechaActual = Date::now()->format('l j \d\e F');
 </header>
 
 <section class="full-box tile-container">
-  <?php foreach ($contadores as $contador) : ?>
+  <?php foreach ([] as $contador) : ?>
     <a href="<?= $contador['href'] ?>" class="tile">
       <div class="tile-tittle"><?= $contador['title'] ?></div>
       <div class="tile-icon">
