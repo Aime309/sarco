@@ -13,6 +13,7 @@ abstract class Persona extends Modelo {
   public string $fechaNacimiento;
   public string $telefono;
   public string $correo;
+  public string $genero;
 
   function nombreCompleto(): string {
     return "$this->nombres $this->apellidos";
