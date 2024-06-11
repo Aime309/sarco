@@ -7,7 +7,7 @@ use SARCO\Enumeraciones\Rol;
 
 return function (Router $router): void {
   $router->get('/', [ControladorDeEstudiantes::class, 'mostrarListado']);
-  $router->get('/@cedula', [ControladorDeEstudiantes::class, 'mostrarPerfil']);
+  $router->get('/@cedula:v-\d+', [ControladorDeEstudiantes::class, 'mostrarPerfil']);
 
   $router
     ->get('/inscribir', [
