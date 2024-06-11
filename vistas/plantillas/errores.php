@@ -12,7 +12,7 @@ assert(is_string($root));
 <head>
   <title>SARCO | <?= $titulo ?></title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width" />
   <base href="<?= $root ?>" />
   <link rel="icon" href="recursos/iconos/favicon.ico" />
   <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" />

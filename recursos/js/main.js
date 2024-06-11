@@ -51,7 +51,5 @@ $(() => {
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach($trigger => new bootstrap.Tooltip($trigger))
 
-  document
-    .querySelectorAll('[data-bs-toggle="popover"]')
-    .forEach($trigger => new bootstrap.Popover($trigger))
+  $('[data-bs-toggle="popover"]').popover()
 })

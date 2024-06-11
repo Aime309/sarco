@@ -71,7 +71,7 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
               <?php else : ?>
                 <a
                   data-bs-toggle="popover"
-                  data-bs-title="Este período ya tiene inscripciones o asignaciones registradas"
+                  data-content="Este período ya tiene inscripciones o asignaciones registradas"
                   class="btn btn-danger disabled"
                   style="pointer-events: initial; cursor: not-allowed">
                   Eliminar

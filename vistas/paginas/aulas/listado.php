@@ -65,7 +65,7 @@ $aulas = (static fn (Aula ...$aulas) => $aulas)(...$aulas);
               <?php else : ?>
                 <a
                   data-bs-toggle="popover"
-                  data-bs-title="Esta aula ya ha sido asignada"
+                  data-content="Esta aula ya ha sido asignada"
                   class="btn btn-danger disabled"
                   style="pointer-events: initial; cursor: not-allowed">
                   Eliminar

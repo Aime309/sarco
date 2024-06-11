@@ -77,7 +77,7 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
               <?php else : ?>
                 <a
                   data-bs-toggle="popover"
-                  data-bs-title="Esta sala ya ha sido asignada"
+                  data-content="Esta sala ya ha sido asignada"
                   class="btn btn-danger disabled"
                   style="pointer-events: initial; cursor: not-allowed">
                   Eliminar
