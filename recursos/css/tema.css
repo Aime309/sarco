@@ -580,3 +580,7 @@ table form {
 @media (min-width: 1200px) {}
 
 /*----------  Keyframes  ----------*/
+
+.modal-content {
+  background: #f5f5f5;
+}

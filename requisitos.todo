@@ -18,7 +18,7 @@ Sistema:
   ✔ Arreglar la sugerencia de salas durante la inscripción @done (26/05/2024 20:35:59)
   ✔ Completar la inscripción de estudiante @done (26/05/2024 20:35:57)
   ☐ Añadir la reinscripción de estudiante
-  ☐ Añadir la búsqueda de estudiante
+  ✔ Añadir la búsqueda de estudiante @done (11/06/2024 13:51:27)
   ☐ Listar y editar los boletines asociados al docente autenticado
   ✔ Arreglar la redirección cuando se excede el límite de un período @done (25/08/2024 17:44:12)
   ✔ Redirigir a la apertura de período cuando no haya períodos aperturados @done (25/08/2024 17:46:24)
@@ -40,7 +40,7 @@ Sistema:
       ✔ Arreglar los excesos de iconos en inicio y registro (ejem: *....etc) al igual en los módulos que lo poseen. @done (26/05/2024 16:16:32)
       ✔ Configurar la contraseña de al menos "8 caracteres mínimo, incluyendo caracteres especiales y números" @done (26/05/2024 16:16:36)
       ✔ Arreglar el Periodo escolar (Que se muestra en menú a la derecha "Al periodo actual con fecha y año" ejem: 2023-2024) @done (26/05/2024 16:16:54)
-      ☐ Realizar consultas de periodos (En este apartado como información fija a mostrar es: Momentos "ejem: 1 de enero al 1 de abril" todo esto para los tres momentos actuales. Como propuesta para el exceso de información, añadir acceso directos a los diferentes módulos habidos teniendo en cuenta que la información a mostrar solo sea la actual de acuerdo al periodo actual. Ejem: Modulo Salas "Mostrar solo las salas creadas en ese periodo")
+      ☐ Realizar consultas de periodos (En este apartado como información fija a mostrar es: Momentos "ejem: 1 de enero al 1 de abril" todo esto para los tres momentos actuales. Como propuesta para el exceso de información, añadir acceso directos a los diferentes módulos teniendo en cuenta que la información a mostrar solo sea la actual de acuerdo al periodo actual. Ejem: Modulo Salas "Mostrar solo las salas creadas en ese periodo")
       ✔ Información fija "En cada formulario en el hipoteco caso de error en un campo, mantener la demas informacion guarda. Sin la necesidad de repetir de nuevo" @done (26/05/2024 18:56:29)
       ☐ Pulir Modulo de Profesor y Secretaria (Con solo las acciones que pueda ejecutar)
       ☐ Realizar Diferentes tipos de consultas, en todo los "Módulos"

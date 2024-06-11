@@ -32,12 +32,12 @@ $estudiantes = (fn (Estudiante ...$estudiantes) => $estudiantes)(...$estudiantes
         &nbsp; Lista de estudiante
       </a>
     </li>
-    <!-- <li>
-      <a href="./estudiantes/buscar">
+    <li>
+      <a href="#buscar-estudiante" data-toggle="modal">
         <i class="fas fa-search fa-fw"></i>
         &nbsp; Buscar estudiante
       </a>
-    </li> -->
+    </li>
   </ul>
 </div>
 

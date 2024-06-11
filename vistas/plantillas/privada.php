@@ -62,7 +62,7 @@ scripts('recursos/js/cerrar-sesion.js');
 
 <body>
   <main class="full-box main-container">
-    <?= $vistas->fetch('componentes/MenuLateral', compact('usuario')) ?>
+    <?= $vistas->fetch('componentes/MenuLateral', compact('usuario', 'estudiantes')) ?>
     <section class="full-box page-content">
       <?= $vistas->fetch('componentes/BarraSuperior') ?>
       <?= $pagina ?>

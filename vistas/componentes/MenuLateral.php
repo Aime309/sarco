@@ -1,8 +1,11 @@
 <?php
 
+use flight\template\View;
+use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Usuario;
 
 assert($usuario instanceof Usuario);
+assert($vistas instanceof View);
 
 /**
  * @var array{
@@ -39,20 +42,38 @@ if (!$usuario->esDocente()) {
   ];
 }
 
-$enlaces[] = ['icono' => '<i class="fas fa-graduation-cap fa-fw"></i>', 'titulo' => 'Estudiantes', 'subenlaces' => [
-  $usuario->esDocente() || $usuario->esDirector() ?: [
-    'href' => 'estudiantes/inscribir',
-    'icono' => '<i class="fas fa-plus fa-fw"></i>',
-    'titulo' => 'Inscribir estudiante'
-  ],
-  ['href' => 'estudiantes', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de estudiantes'],
-  $usuario->esDocente() || $usuario->esDirector() ?: [
-    'href' => 'inscripciones',
-    'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
-    'titulo' => 'Lista de inscripciones'
-  ],
-  ['href' => 'estudiantes/boletines', 'icono' => '<i class="fas fa-search fa-fw"></i>', 'titulo' => 'Lista de boletines'],
-]];
+$enlaces[] = [
+  'icono' => '<i class="fas fa-graduation-cap fa-fw"></i>',
+  'titulo' => 'Estudiantes',
+  'subenlaces' => [
+
+    $usuario->esDocente() || $usuario->esDirector() ?: [
+      'href' => 'estudiantes/inscribir',
+      'icono' => '<i class="fas fa-plus fa-fw"></i>',
+      'titulo' => 'Inscribir estudiante'
+    ] + [
+      'href' => 'inscripciones',
+      'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+      'titulo' => 'Lista de inscripciones'
+    ],
+    [
+      'href' => 'estudiantes',
+      'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+      'titulo' => 'Lista de estudiantes'
+    ],
+    [
+      'href' => '#buscar-estudiante',
+      'icono' => '<i class="fas fa-search fa-fw"></i>',
+      'titulo' => 'Buscar estudiante',
+      'data-toggle' => 'modal'
+    ],
+    [
+      'href' => 'estudiantes/boletines',
+      'icono' => '<i class="fas fa-search fa-fw"></i>',
+      'titulo' => 'Lista de boletines'
+    ],
+  ]
+];
 
 if (!$usuario->esDocente()) {
   $enlaces[] = [
@@ -78,10 +99,22 @@ if (!$usuario->esDocente()) {
   ];
 }
 
-$enlaces[] = ['icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>', 'titulo' => 'Maestros', 'subenlaces' => [
-  ['href' => 'usuarios/nuevo?rol=maestro', 'icono' => '<i class="fas fa-plus fa-fw"></i>', 'titulo' => 'Registrar Maestro'],
-  ['href' => 'maestros', 'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>', 'titulo' => 'Lista de Maestros'],
-]];
+$enlaces[] = [
+  'icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>',
+  'titulo' => 'Maestros',
+  'subenlaces' => [
+    [
+      'href' => 'usuarios/nuevo?rol=maestro',
+      'icono' => '<i class="fas fa-plus fa-fw"></i>',
+      'titulo' => 'Registrar Maestro'
+    ],
+    [
+      'href' => 'maestros',
+      'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+      'titulo' => 'Lista de Maestros'
+    ],
+  ]
+];
 
 $enlaces[] = [
   'icono' => '<i class="fas fa-people-roof fa-fw"></i>',
@@ -123,8 +156,6 @@ if ($usuario->esDirector()) {
       ],
     ]
   ];
-
-
 
   $enlaces[] = [
     'icono' => '<i class="fas fa-gears fa-fw"></i>',
@@ -179,7 +210,7 @@ if ($usuario->esDirector()) {
                 <?php foreach ($enlace['subenlaces'] as $subenlace) :
                   if (is_bool($subenlace)) continue ?>
                   <li>
-                    <a href="<?= $subenlace['href'] ?>">
+                    <a data-toggle="<?= $subenlace['data-toggle'] ?? '' ?>" href="<?= $subenlace['href'] ?>">
                       <?= $subenlace['icono'] ?>
                       <?= $subenlace['titulo'] ?>
                     </a>
@@ -193,3 +224,37 @@ if ($usuario->esDirector()) {
     </nav>
   </div>
 </aside>
+
+<div class="modal fade" id="buscar-estudiante">
+  <div class="modal-dialog">
+    <form action="./estudiantes" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Buscar estudiante</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php
+
+        $vistas->render('componentes/Select', [
+          'validacion' => 'La cédula escolar es requerida',
+          'name' => 'cedula',
+          'placeholder' => 'Cédula escolar',
+          'opciones' => array_map(fn (Estudiante $estudiante) => [
+            'value' => $estudiante->cedula,
+            'children' => "$estudiante->cedula ~ {$estudiante->nombreCompleto()}"
+          ], $estudiantes)
+        ]);
+
+        ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancelar
+        </button>
+        <button class="btn btn-primary">Buscar</button>
+      </div>
+    </form>
+  </div>
+</div>
