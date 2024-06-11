@@ -48,6 +48,15 @@ scripts('recursos/js/cerrar-sesion.js');
       vertical-align: middle !important;
       white-space: nowrap;
     }
+
+    .nav-pills .nav-item.show .nav-link,
+    .nav-pills .nav-link.active,
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+      background-color: #f44336;
+      color: white;
+      font-weight: bold;
+    }
   </style>
 </head>
 

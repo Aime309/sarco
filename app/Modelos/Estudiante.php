@@ -3,6 +3,8 @@
 namespace SARCO\Modelos;
 
 use DateTime;
+use DateTimeImmutable;
+use Exception;
 use InvalidArgumentException;
 
 final class Estudiante extends Modelo {
@@ -15,6 +17,54 @@ final class Estudiante extends Modelo {
   public readonly string $grupoSanguineo;
   public readonly string $idMama;
   public readonly ?string $idPapa;
+  private array $representantes;
+
+  function __construct() {
+    $this->representantes = [];
+  }
+
+  function fechaNacimiento(string $formato = 'd/m/Y'): string {
+    $fechaRegistro = DateTimeImmutable::createFromFormat(
+      'Y-m-d H:i:s',
+      $this->fechaRegistro
+    );
+
+    return $fechaRegistro->format($formato);
+  }
+
+  function asignarRepresentantes(?Representante ...$representantes): self {
+    $this->representantes = $representantes;
+
+    return $this;
+  }
+
+  function mama(): Representante {
+    $mamas = array_filter(
+      $this->representantes,
+      fn (?Representante $representante) => $representante?->genero === 'Femenino'
+    );
+
+    $excepcion = new Exception('Mamá no ha sido asignada');
+
+    return array_values($mamas)[0] ?? throw $excepcion;
+  }
+
+  function papa(): ?Representante {
+    $papas =  array_filter(
+      $this->representantes,
+      fn (?Representante $representante) => $representante?->genero === 'Masculino'
+    );
+
+    return array_values($papas)[0] ?? null;
+  }
+
+  /** @return Representante[] */
+  function representantes(): array {
+    return array_filter(
+      $this->representantes,
+      fn (?Representante $representante) => $representante !== null
+    );
+  }
 
   function nombreCompleto(): string {
     return "$this->nombres $this->apellidos";

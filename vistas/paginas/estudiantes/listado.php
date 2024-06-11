@@ -46,6 +46,7 @@ $estudiantes = (fn (Estudiante ...$estudiantes) => $estudiantes)(...$estudiantes
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
+          <th></th>
           <th>Cédula</th>
           <th>Nombre completo</th>
           <th>Edad</th>
@@ -59,6 +60,11 @@ $estudiantes = (fn (Estudiante ...$estudiantes) => $estudiantes)(...$estudiantes
       <tbody>
         <?php foreach ($estudiantes as $estudiante) : ?>
           <tr class="text-center">
+            <td>
+              <a href="./estudiantes/<?= $estudiante->cedula ?>" class="btn btn-secondary">
+                Detalles
+              </a>
+            </td>
             <td><?= $estudiante->cedula ?></td>
             <td><?= $estudiante->nombreCompleto() ?></td>
             <td><?= $estudiante->edad() ?></td>
