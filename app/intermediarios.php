@@ -48,12 +48,12 @@ function mostrarFormularioDeIngresoSiNoEstaAutenticado(): callable {
     }
 
     $sentencia = bd()->prepare('
-    SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
-    direccion, telefono, correo, rol, esta_activo as estaActivo,
-    fecha_registro as fechaRegistro, clave
-    FROM usuarios
-    WHERE id = ?
-  ');
+      SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
+      direccion, telefono, correo, rol, esta_activo as estaActivo,
+      fecha_registro as fechaRegistro, clave
+      FROM usuarios
+      WHERE id = ?
+    ');
 
     $sentencia->execute([$_SESSION['usuario.id']]);
     $usuario = $sentencia->fetchObject(Usuario::class);

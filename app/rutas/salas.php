@@ -36,9 +36,9 @@ return function (Router $router): void {
     $sala = App::request()->data->getData();
 
     $sentencia = bd()->prepare('
-        INSERT INTO salas (id, nombre, edad_minima, edad_maxima)
-        VALUES (:id, :nombre, :edadMinima, :edadMaxima)
-      ');
+      INSERT INTO salas (id, nombre, edad_minima, edad_maxima)
+      VALUES (:id, :nombre, :edadMinima, :edadMaxima)
+    ');
 
     $sentencia->bindValue(
       ':nombre',
@@ -118,10 +118,10 @@ return function (Router $router): void {
     $asignacion = App::request()->data->getData();
 
     $sentencia = bd()->prepare("
-        INSERT INTO asignaciones_de_salas (id, id_sala, id_aula, id_periodo,
-        id_docente1, id_docente2, id_docente3) VALUES (:id, :idSala, :idAula,
-        :idPeriodo, :idDocente1, :idDocente2, :idDocente3)
-      ");
+      INSERT INTO asignaciones_de_salas (id, id_sala, id_aula, id_periodo,
+      id_docente1, id_docente2, id_docente3) VALUES (:id, :idSala, :idAula,
+      :idPeriodo, :idDocente1, :idDocente2, :idDocente3)
+    ");
 
     $sentencia->execute([
       ':id' => new UuidV4,
