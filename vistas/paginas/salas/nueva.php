@@ -8,10 +8,10 @@ scripts('./recursos/js/validarFormulario.js');
 ?>
 
 <header class="full-box page-header">
-  <h3 class="text-left">
+  <h1 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
     Aperturar sala
-  </h3>
+  </h1>
   <p class="text-justify"></p>
 </header>
 

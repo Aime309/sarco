@@ -25,10 +25,10 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
 ?>
 
 <div class="full-box page-header">
-  <h3 class="text-left">
+  <h1 class="text-left">
     <i class="fas fa-clipboard-list fa-fw"></i>
     <?= $estudiante->nombreCompleto() ?>
-  </h3>
+  </h1>
   <div class="text-right">
     <button class="btn btn-danger" onclick="imprimir()">
       <i class="fas fa-print"></i>

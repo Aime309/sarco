@@ -9,10 +9,10 @@ assert($aula instanceof Aula);
 ?>
 
 <header class="full-box page-header">
-  <h3 class="text-left">
+  <h1 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
     Editar aula
-  </h3>
+  </h1>
   <p class="text-justify"></p>
 </header>
 

@@ -7,9 +7,9 @@ $boletines = (fn (Boletin ...$boletines) => $boletines)(...$boletines);
 ?>
 
 <div class="full-box page-header">
-  <h3 class="text-left">
+  <h1 class="text-left">
     <i class="fas fa-clipboard-list fa-fw"></i> Lista de boletines
-  </h3>
+  </h1>
   <p class="text-justify"></p>
 </div>
 

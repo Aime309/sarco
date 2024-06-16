@@ -12,10 +12,10 @@ $siguienteAño = $ultimoAño + 1;
 ?>
 
 <header class="full-box page-header">
-  <h3 class="text-left">
+  <h1 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
     Aperturar período
-  </h3>
+  </h1>
   <p class="text-justify"></p>
 </header>
 

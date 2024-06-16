@@ -9,9 +9,9 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
 ?>
 
 <div class="full-box page-header">
-  <h3 class="text-left">
+  <h1 class="text-left">
     <i class="fas fa-clipboard-list fa-fw"></i> Lista de maestros
-  </h3>
+  </h1>
   <p class="text-justify"></p>
 </div>
 
