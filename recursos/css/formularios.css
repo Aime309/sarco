@@ -41,7 +41,7 @@
   box-sizing: border-box;
   width: var(--form-width);
   background-color: #f7f7f7;
-  padding: 75px 55px 55px 55px;
+  padding: 70px 55px 50px 55px;
 }
 
 .form__title {
