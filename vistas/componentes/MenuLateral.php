@@ -177,12 +177,12 @@ if ($usuario->esDirector()) {
 
 ?>
 
-<aside class="full-box nav-lateral" style="background-image: url(recursos/imagenes/nav-font.jpg)">
+<aside class="full-box nav-lateral" style="background-image: url(recursos/imagenes/nav-font.webp)">
   <div class="full-box nav-lateral-bg show-nav-lateral"></div>
   <div class="full-box nav-lateral-content">
     <figure class="full-box nav-lateral-avatar">
       <i class="far fa-times-circle show-nav-lateral"></i>
-      <img src="recursos/imagenes/logo.jpg" class="img-fluid rounded-circle" />
+      <img src="recursos/imagenes/logo.webp" class="img-fluid rounded-circle" />
       <figcaption class="roboto-medium text-center d-flex flex-column">
         <?= $usuario->nombreCompleto() ?>
         <small class="roboto-condensed-light"><?= $usuario->rol ?></small>
