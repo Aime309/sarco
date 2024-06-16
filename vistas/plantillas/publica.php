@@ -24,7 +24,7 @@ unset($_SESSION['mensajes.exito']);
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
   <base href="<?= $root ?>" />
-  <link rel="icon" href="recursos/iconos/favicon.ico" />
+  <link rel="icon" href="recursos/imagenes/favicon.png" />
   <link rel="stylesheet" href="recursos/css/reinicio.css" />
   <link rel="stylesheet" href="recursos/css/botones.css" />
   <link rel="stylesheet" href="recursos/css/formularios.css" />

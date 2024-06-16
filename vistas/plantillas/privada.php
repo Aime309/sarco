@@ -32,7 +32,7 @@ scripts('recursos/js/cerrar-sesion.js');
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
   <base href="<?= $root ?>" />
-  <link rel="icon" href="recursos/iconos/favicon.ico" />
+  <link rel="icon" href="recursos/imagenes/favicon.png" />
   <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
   <link rel="stylesheet" href="node_modules/noty/lib/noty.css" />
   <link rel="stylesheet" href="node_modules/noty/lib/themes/semanticui.css" />
