@@ -42,6 +42,8 @@ scripts('recursos/js/cerrar-sesion.js');
   <link rel="stylesheet" href="recursos/css/tema.css" />
   <link rel="stylesheet" href="recursos/css/formularios.css" />
   <link rel="stylesheet" href="recursos/css/botones.css" />
+
+  <link rel="preload" href="recursos/imagenes/logo.jpg" as="image" />
   <style>
     th,
     td {
@@ -56,6 +58,10 @@ scripts('recursos/js/cerrar-sesion.js');
       background-color: #f44336;
       color: white;
       font-weight: bold;
+    }
+
+    .nav-lateral-avatar img {
+      aspect-ratio: 1 / 1;
     }
   </style>
 </head>
