@@ -130,5 +130,5 @@ assert($vistas instanceof View);
     ?>
     <button class="button button--spaced">Registrarse</button>
   </div>
-  <div class="form__background" style="background-image: url(recursos/imagenes/OIG1.webp)"></div>
+  <div class="form__background" style="background-image: url(recursos/imagenes/OIG1.jpeg)"></div>
 </form>

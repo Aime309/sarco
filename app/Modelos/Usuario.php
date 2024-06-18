@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Rol;
 
-final class Usuario extends Persona {
+class Usuario extends Persona {
   public string $direccion;
   public string $rol;
   public bool $estaActivo;

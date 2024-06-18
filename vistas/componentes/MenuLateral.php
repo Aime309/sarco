@@ -177,19 +177,19 @@ if ($usuario->esDirector()) {
 
 ?>
 
-<aside class="full-box nav-lateral" style="background-image: url(recursos/imagenes/nav-font.webp)">
+<aside class="full-box nav-lateral" style="background-image: url(recursos/imagenes/nav-font.jpg)">
   <div class="full-box nav-lateral-bg show-nav-lateral"></div>
   <div class="full-box nav-lateral-content">
     <figure class="full-box nav-lateral-avatar">
       <i class="far fa-times-circle show-nav-lateral"></i>
-      <img src="recursos/imagenes/logo.webp" class="img-fluid rounded-circle" />
+      <img src="recursos/imagenes/logo.jpg" class="img-fluid rounded-circle" />
       <figcaption class="roboto-medium text-center d-flex flex-column">
         <?= $usuario->nombreCompleto() ?>
         <small class="roboto-condensed-light"><?= $usuario->rol ?></small>
       </figcaption>
     </figure>
     <div class="full-box nav-lateral-bar"></div>
-    <nav style="background: url(recursos/imagenes/nav-font.jpg) cover" class="full-box nav-lateral-menu">
+    <nav class="full-box nav-lateral-menu">
       <ul>
         <?php foreach ($enlaces as $enlace) : ?>
           <?php if (!key_exists('subenlaces', $enlace)) : ?>

@@ -10,6 +10,8 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .form--with-padding {

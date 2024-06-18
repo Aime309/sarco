@@ -39,6 +39,7 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
+          <th></th>
           <th>Cédula</th>
           <th>Nombre completo</th>
           <th>Edad</th>
@@ -51,6 +52,11 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
       <tbody>
         <?php foreach ($maestros as $maestroIterado) : ?>
           <tr class="text-center">
+            <td>
+              <a href="./maestros/<?= $maestroIterado->cedula ?>" class="btn btn-secondary">
+                Detalles
+              </a>
+            </td>
             <td><?= $maestroIterado->cedula ?></td>
             <td><?= $maestroIterado->nombreCompleto() ?></td>
             <td><?= $maestroIterado->edad() ?></td>

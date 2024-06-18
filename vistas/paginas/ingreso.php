@@ -8,7 +8,7 @@ assert($vistas instanceof View);
 ?>
 
 <form method="post" action="ingresar" class="form form--full form--with-validation">
-  <div class="form__background" style="background-image: url(recursos/imagenes/bg-01.webp)"></div>
+  <div class="form__background" style="background-image: url(recursos/imagenes/bg-01.jpg)"></div>
   <div class="form__body">
     <h1 class="form__title">Inicia sesión para continuar</h1>
     <?php
