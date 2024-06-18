@@ -76,7 +76,9 @@ return function (Router $router): void {
       $inscripciones = bd()->query("
         SELECT i.id, i.fecha_registro as fechaRegistro,
         e.nombres as nombresEstudiante, e.apellidos as apellidosEstudiante,
-        e.cedula as cedulaEstudiante, p.anio_inicio as periodo
+        e.cedula as cedulaEstudiante,
+        e.fecha_nacimiento as fechaNacimientoEstudiante,
+        p.anio_inicio as periodo
         FROM inscripciones i
         JOIN estudiantes e
         JOIN periodos p

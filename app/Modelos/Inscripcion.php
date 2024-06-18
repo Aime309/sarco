@@ -9,6 +9,7 @@ final class Inscripcion extends Modelo {
   public readonly string $nombresEstudiante;
   public readonly string $apellidosEstudiante;
   public readonly string $cedulaEstudiante;
+  public readonly string $fechaNacimientoEstudiante;
 
   function periodo(): string {
     return "$this->periodo-" . ($this->periodo + 1);
