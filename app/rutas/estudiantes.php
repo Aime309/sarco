@@ -3,6 +3,7 @@
 use flight\net\Router;
 use SARCO\Controladores\ControladorDeBoletines;
 use SARCO\Controladores\ControladorDeEstudiantes;
+use SARCO\Controladores\ControladorDeInscripciones;
 use SARCO\Enumeraciones\Rol;
 
 return function (Router $router): void {
@@ -11,13 +12,13 @@ return function (Router $router): void {
 
   $router
     ->get('/inscribir', [
-      ControladorDeEstudiantes::class,
+      ControladorDeInscripciones::class,
       'mostrarFormularioDeInscripcion'
     ])
     ->addMiddleware(autorizar(Rol::Secretario));
 
   $router
-    ->post('/inscribir', [ControladorDeEstudiantes::class, 'inscribir'])
+    ->post('/inscribir', [ControladorDeInscripciones::class, 'inscribir'])
     ->addMiddleware(autorizar(Rol::Secretario));
 
   $router
