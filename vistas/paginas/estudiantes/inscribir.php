@@ -420,7 +420,9 @@ assert($periodoActual instanceof Periodo);
     const asignaciones = await respuesta.json()
 
     if (asignaciones.length) {
-      $idSala.innerHTML = ''
+      $idSala.innerHTML = $idSala.firstElementChild.outerHTML
+    } else {
+      reiniciarSelectoresDeSala()
     }
 
     Object.entries(asignaciones).forEach(([, asignacion]) => {
@@ -482,5 +484,13 @@ assert($periodoActual instanceof Periodo);
     }
 
     $edad.value = edad
+  }
+
+  function reiniciarSelectoresDeSala() {
+    $idSala.innerHTML = $idSala.firstElementChild.outerHTML
+    $idAula.value = ''
+    $idDocente1.value = ''
+    $idDocente2.value = ''
+    $idDocente3.value = ''
   }
 </script>
