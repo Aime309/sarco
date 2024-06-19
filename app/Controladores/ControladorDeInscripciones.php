@@ -104,7 +104,7 @@ final readonly class ControladorDeInscripciones {
         ':correo' => $inscripcion['madre']['correo']
       ]);
 
-      $idDelPapa ??= 'NULL';
+      $idDelPapa ??= null;
       [$añoDeNacimiento] = explode('-', $inscripcion['estudiante']['fecha_nacimiento']);
       $ultimosDigitosAñoNacimiento = substr($añoDeNacimiento, 2);
       $cedulaEscolar = "v-1{$ultimosDigitosAñoNacimiento}{$inscripcion['madre']['cedula']}";
@@ -113,7 +113,7 @@ final readonly class ControladorDeInscripciones {
         INSERT INTO estudiantes (id, nombres, apellidos, cedula,
         fecha_nacimiento, lugar_nacimiento, genero, tipo_sangre, id_mama,
         id_papa) VALUES (:id, :nombres, :apellidos, :cedula, :fechaNacimiento,
-        :lugarNacimiento, :genero, :grupoSanguineo, '$idDeLaMama', '$idDelPapa')
+        :lugarNacimiento, :genero, :grupoSanguineo, '$idDeLaMama', :idDelPapa)
       ");
 
       $idDelEstudiante = new UuidV4;
@@ -128,6 +128,7 @@ final readonly class ControladorDeInscripciones {
         ':lugarNacimiento' => mb_convert_case($inscripcion['estudiante']['lugar_nacimiento'], MB_CASE_TITLE),
         ':genero' => ucfirst($inscripcion['estudiante']['genero']),
         ':grupoSanguineo' => strtoupper($inscripcion['estudiante']['grupo_sanguineo']),
+        ':idDelPapa' => $idDelPapa
       ]);
 
       $sentencia = $this->pdo->prepare("
