@@ -30,7 +30,7 @@ $value = isset($value) ? (string) $value : null;
     class="input-group__input"
     name="<?= $name ?>"
     placeholder="<?= $placeholder ?>">
-    <option data-type="placeholder" selected disabled>Selecciona una opción</option>
+    <option data-type="placeholder" selected disabled value="">Selecciona una opción</option>
     <?php foreach ($opciones as $opcion) : ?>
       <option
         <?= @$opcion['selected'] || @$opcion['value'] === $value ? 'selected' : '' ?>
