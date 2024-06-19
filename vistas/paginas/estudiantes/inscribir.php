@@ -42,7 +42,7 @@ assert($periodoActual instanceof Periodo);
 
   <details class="my-5" open>
     <summary class="h2 pl-5 mb-4">Inscribir por primera vez</summary>
-    <form method="post" class="form form--bordered form--with-validation form--with-padding mx-5 form--centered" novalidate>
+    <form method="post" class="form form--bordered form--with-validation form--with-padding mx-5 form--centered">
       <?php
 
       $vistas->render('componentes/Select', [
