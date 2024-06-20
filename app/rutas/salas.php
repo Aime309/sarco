@@ -3,6 +3,7 @@
 use flight\net\Router;
 use SARCO\App;
 use SARCO\Modelos\Aula;
+use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Maestro;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Sala;
@@ -100,11 +101,11 @@ return function (Router $router): void {
       ")->fetchAll(PDO::FETCH_CLASS, Aula::class);
 
     $asignaciones = bd()->query("
-        SELECT id as idAsignacion, id_sala as idSala,
-        id_aula as idAula, id_periodo as idPeriodo, id_docente1 as idDocente1,
-        id_docente2 as idDocente2, id_docente3 as idDocente3
-        FROM asignaciones_de_salas
-      ")->fetchAll(PDO::FETCH_ASSOC);
+      SELECT id as idAsignacion, id_sala as idSala,
+      id_aula as idAula, id_periodo as idPeriodo, id_docente1 as idDocente1,
+      id_docente2 as idDocente2, id_docente3 as idDocente3
+      FROM asignaciones_de_salas
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
     App::render(
       'paginas/salas/asignar',
@@ -152,7 +153,7 @@ return function (Router $router): void {
       assert($sala instanceof Sala);
 
       $asignaciones = bd()->query("
-        SELECT a.id, id_aula, p.anio_inicio as periodo,
+        SELECT a.id, id_aula, id_periodo, p.anio_inicio as periodo,
         id_docente1, id_docente2, id_docente3
         FROM asignaciones_de_salas a
         JOIN periodos p
@@ -196,10 +197,24 @@ return function (Router $router): void {
           ")->fetchObject(Maestro::class);
         }
 
+        $estudiantes = bd()->query("
+          SELECT e.id, e.fecha_registro as fechaRegistro, nombres, apellidos,
+          cedula, fecha_nacimiento as fechaNacimiento, genero,
+          lugar_nacimiento as lugarNacimiento, tipo_sangre as grupoSanguineo,
+          id_mama as idMama, id_papa as idPapa
+          FROM estudiantes e
+          JOIN inscripciones i
+          ON i.id_estudiante = e.id
+          WHERE i.id_asignacion_sala = '{$asignacion['id']}'
+          AND i.id_periodo = '{$asignacion['id_periodo']}'
+        ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+
+        dd($estudiantes);
+
         $detalles[$periodo] = compact('aula', 'docente1', 'docente2', 'docente3');
       }
 
-      dd($detalles);
+      dd($sala, $detalles);
 
       App::render('paginas/salas/detalles', [], 'pagina');
       App::render('plantillas/privada', ['titulo' => '<nombre de sala>']);

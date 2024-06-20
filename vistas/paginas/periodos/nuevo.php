@@ -115,7 +115,8 @@ $siguienteAño = $ultimoAño + 1;
 
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
-    'contenido' => 'Registrar'
+    'contenido' => 'Registrar',
+    'onclick' => 'this.form.submit()'
   ]);
 
   ?>
