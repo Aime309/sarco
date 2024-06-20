@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "76410b293f16a36ab837ab475490a6aa",
+  "content-hash": "16b782140d4fb97fbc0e9348fd70d84d",
   "packages": [
     {
       "name": "carbonphp/carbon-doctrine-types",
@@ -77,27 +77,28 @@
     },
     {
       "name": "flightphp/core",
-      "version": "dev-fix/bug-with-multiple-view-renders",
+      "version": "v3.10.1",
       "source": {
         "type": "git",
         "url": "https://github.com/flightphp/core.git",
-        "reference": "276a9e69f3993da79e18caf2dd239823d27f7cd3"
+        "reference": "39ac87c54bd567c5fd326d1126aace7e386f7ed0"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/flightphp/core/zipball/276a9e69f3993da79e18caf2dd239823d27f7cd3",
-        "reference": "276a9e69f3993da79e18caf2dd239823d27f7cd3",
+        "url": "https://api.github.com/repos/flightphp/core/zipball/39ac87c54bd567c5fd326d1126aace7e386f7ed0",
+        "reference": "39ac87c54bd567c5fd326d1126aace7e386f7ed0",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
-        "php": "^7.4|^8.0|^8.1|^8.2|^8.3"
+        "php": ">=7.4"
       },
       "replace": {
         "mikecao/flight": "2.0.2"
       },
       "require-dev": {
         "ext-pdo_sqlite": "*",
+        "flightphp/runway": "^0.2.0",
         "league/container": "^4.2",
         "level-2/dice": "^4.0",
         "phpstan/extension-installer": "^1.3",
@@ -144,9 +145,9 @@
       "homepage": "http://flightphp.com",
       "support": {
         "issues": "https://github.com/flightphp/core/issues",
-        "source": "https://github.com/flightphp/core/tree/fix/bug-with-multiple-view-renders"
+        "source": "https://github.com/flightphp/core/tree/v3.10.1"
       },
-      "time": "2024-04-25T01:03:44+00:00"
+      "time": "2024-06-03T15:18:17+00:00"
     },
     {
       "name": "illuminate/container",
@@ -1419,14 +1420,13 @@
   ],
   "aliases": [],
   "minimum-stability": "stable",
-  "stability-flags": {
-    "flightphp/core": 20
-  },
+  "stability-flags": [],
   "prefer-stable": false,
   "prefer-lowest": false,
   "platform": {
     "php": ">=8.2",
-    "ext-sqlite3": "*"
+    "ext-sqlite3": "*",
+    "ext-pdo_sqlite": "*"
   },
   "platform-dev": [],
   "plugin-api-version": "2.6.0"
