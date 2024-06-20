@@ -47,7 +47,7 @@ $fechaActual = Date::now()->format('l j \d\e F');
 
 ?>
 
-<header class="full-box page-header">
+<header class="full-box page-header" style="padding-bottom: 0">
   <h1 class="text-left row text-center">
     <span class="col-md-7 text-left">
       <i class="fab fa-dashcube fa-fw"></i>
@@ -82,14 +82,4 @@ $fechaActual = Date::now()->format('l j \d\e F');
   <p class="text-justify"></p>
 </header>
 
-<section class="full-box tile-container">
-  <?php foreach ([] as $contador) : ?>
-    <a href="<?= $contador['href'] ?>" class="tile">
-      <div class="tile-tittle"><?= $contador['title'] ?></div>
-      <div class="tile-icon">
-        <?= $contador['icon'] ?>
-        <p><?= $contador['footer'] ?? '&nbsp;' ?></p>
-      </div>
-    </a>
-  <?php endforeach ?>
-</section>
+<img src="recursos/imagenes/fondo-niños.png" style="width: 100%" />
