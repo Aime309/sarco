@@ -93,6 +93,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
               </td>
             </tr>
           </table>
+        </div>
       </div>
       <div class="tab-pane fade" id="estado-laboral">
         <h2 class="card-header">Estado laboral</h2>
@@ -130,7 +131,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
               <div class="row">
                 <?php foreach ($informacion['compañeros'] as $docente) : ?>
                   <div class="col-md">
-                    <article class="card pt-2">
+                    <a href="./maestros/<?= $docente->cedula ?>" target="_blank" class="card pt-2">
                       <img src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg" class="card-img-top w-25 mx-auto" />
                       <h4 class="card-header h6 text-center">
                         <?= $docente->nombreCompleto() ?>
@@ -139,7 +140,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
                         <li class="list-group-item">v-<?= $docente->cedula ?></li>
                         <li class="list-group-item"><?= $docente->genero ?></li>
                       </ul>
-                    </article>
+                    </a>
                   </div>
                 <?php endforeach ?>
               </div>

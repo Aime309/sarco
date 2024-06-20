@@ -158,7 +158,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
               <h3>Docentes asignados:</h3>
               <div class="row">
                 <?php foreach ($informacion['docentes'] as $docente) : ?>
-                  <div class="col-md">
+                  <a href="./maestros/<?= $docente->cedula ?>" target="_blank" class="col-md">
                     <article class="card pt-2">
                       <img src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg" class="card-img-top w-25 mx-auto" />
                       <h4 class="card-header h6 text-center">
@@ -169,7 +169,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
                         <li class="list-group-item"><?= $docente->genero ?></li>
                       </ul>
                     </article>
-                  </div>
+                  </a>
                 <?php endforeach ?>
               </div>
             </div>

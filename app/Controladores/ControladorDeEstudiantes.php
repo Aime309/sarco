@@ -124,6 +124,6 @@ final readonly class ControladorDeEstudiantes {
       'estudiante',
       'informacionAcademica'
     ), 'pagina');
-    App::render('plantillas/privada', ['titulo' => 'Perfil de estudiante']);
+    App::render('plantillas/privada', ['titulo' => $estudiante->nombreCompleto()]);
   }
 }

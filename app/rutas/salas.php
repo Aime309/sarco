@@ -187,6 +187,7 @@ return function (Router $router): void {
         ")->fetchObject(Maestro::class);
 
         $docente3 = null;
+        $docentes = [$docente1, $docente2];
 
         if ($asignacion['id_docente3']) {
           $docente3 = bd()->query("
@@ -195,6 +196,8 @@ return function (Router $router): void {
             correo, direccion, clave, esta_activo as estaActivo, rol
             FROM usuarios WHERE id = '{$asignacion['id_docente3']}'
           ")->fetchObject(Maestro::class);
+
+          $docentes[] = $docente3;
         }
 
         $estudiantes = bd()->query("
@@ -209,15 +212,12 @@ return function (Router $router): void {
           AND i.id_periodo = '{$asignacion['id_periodo']}'
         ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
 
-        dd($estudiantes);
 
-        $detalles[$periodo] = compact('aula', 'docente1', 'docente2', 'docente3');
+        $detalles[$periodo] = compact('aula', 'docentes', 'estudiantes');
       }
 
-      dd($sala, $detalles);
-
-      App::render('paginas/salas/detalles', [], 'pagina');
-      App::render('plantillas/privada', ['titulo' => '<nombre de sala>']);
+      App::render('paginas/salas/detalles', compact('sala', 'detalles'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => "Sala $sala"]);
     });
 
     $router->get('/editar', function (string $id): void {

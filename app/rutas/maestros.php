@@ -99,6 +99,6 @@ return function (Router $router): void {
       'maestro',
       'informacionLaboral'
     ), 'pagina');
-    App::render('plantillas/privada', ['titulo' => 'Perfil de maestro']);
+    App::render('plantillas/privada', ['titulo' => $maestro->nombreCompleto()]);
   });
 };
