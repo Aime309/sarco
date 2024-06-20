@@ -3,6 +3,7 @@
 use flight\net\Router;
 use SARCO\App;
 use SARCO\Modelos\Aula;
+use SARCO\Modelos\Maestro;
 use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Sala;
 use SARCO\Modelos\Usuario;
@@ -139,6 +140,72 @@ return function (Router $router): void {
 
   $router->group('/@id', function (Router $router): void {
     $router->get('/', function (string $id): void {
+      $consulta = '
+        SELECT id, fecha_registro as fechaRegistro, nombre,
+        edad_minima as edadMinima, edad_maxima as edadMaxima,
+        esta_activa as estaActiva FROM salas WHERE id = ?
+      ';
+
+      $sentencia = bd()->prepare($consulta);
+      $sentencia->execute([$id]);
+      $sala = $sentencia->fetchObject(Sala::class);
+      assert($sala instanceof Sala);
+
+      $asignaciones = bd()->query("
+        SELECT a.id, id_aula, p.anio_inicio as periodo,
+        id_docente1, id_docente2, id_docente3
+        FROM asignaciones_de_salas a
+        JOIN periodos p
+        ON a.id_periodo = p.id
+        WHERE id_sala = '$sala->id'
+        ORDER BY periodo DESC
+      ")->fetchAll(PDO::FETCH_ASSOC);
+
+      $detalles = [];
+
+      foreach ($asignaciones as $asignacion) {
+        $periodo = $asignacion['periodo'] . '-' . ($asignacion['periodo'] + 1);
+
+        $aula = bd()->query("
+          SELECT id, fecha_registro as fechaRegistro, codigo, tipo FROM aulas
+          WHERE id = '{$asignacion['id_aula']}'
+        ")->fetchObject(Aula::class);
+
+        $docente1 = bd()->query("
+          SELECT id, fecha_registro as fechaRegistro, nombres, apellidos,
+          cedula, fecha_nacimiento as fechaNacimiento, genero, telefono,
+          correo, direccion, clave, esta_activo as estaActivo, rol
+          FROM usuarios WHERE id = '{$asignacion['id_docente1']}'
+        ")->fetchObject(Maestro::class);
+
+        $docente2 = bd()->query("
+          SELECT id, fecha_registro as fechaRegistro, nombres, apellidos,
+          cedula, fecha_nacimiento as fechaNacimiento, genero, telefono,
+          correo, direccion, clave, esta_activo as estaActivo, rol
+          FROM usuarios WHERE id = '{$asignacion['id_docente2']}'
+        ")->fetchObject(Maestro::class);
+
+        $docente3 = null;
+
+        if ($asignacion['id_docente3']) {
+          $docente3 = bd()->query("
+            SELECT id, fecha_registro as fechaRegistro, nombres, apellidos,
+            cedula, fecha_nacimiento as fechaNacimiento, genero, telefono,
+            correo, direccion, clave, esta_activo as estaActivo, rol
+            FROM usuarios WHERE id = '{$asignacion['id_docente3']}'
+          ")->fetchObject(Maestro::class);
+        }
+
+        $detalles[$periodo] = compact('aula', 'docente1', 'docente2', 'docente3');
+      }
+
+      dd($detalles);
+
+      App::render('paginas/salas/detalles', [], 'pagina');
+      App::render('plantillas/privada', ['titulo' => '<nombre de sala>']);
+    });
+
+    $router->get('/editar', function (string $id): void {
       $sala = bd()->query("
         SELECT id, nombre, edad_minima as edadMinima, edad_maxima as edadMaxima,
         esta_activa as estaActiva, fecha_registro as fechaRegistro FROM salas
