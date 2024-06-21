@@ -24,6 +24,19 @@ final readonly class RepositorioDeUsuarios {
     ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
   }
 
+  function buscar(string $id): ?Usuario {
+    $sentencia = $this->pdo->prepare("
+      SELECT id, nombres, apellidos, cedula,
+      fecha_nacimiento as fechaNacimiento, genero, direccion, telefono, correo,
+      rol, esta_activo as estaActivo, fecha_registro as fechaRegistro, clave
+      FROM usuarios WHERE id = ?
+    ");
+
+    $sentencia->execute([$id]);
+
+    return $sentencia->fetchObject(Usuario::class) ?: null;
+  }
+
   /**
    * @param array{
    *   genero: string,
@@ -62,10 +75,10 @@ final readonly class RepositorioDeUsuarios {
         ':correo' => $usuario['correo'],
         ':direccion' => $usuario['direccion'],
         ':clave' => Usuario::encriptar($usuario['clave']),
-        ':rol' => $usuario['rol'],
+        ':rol' => $usuario['rol']
       ]);
 
-      return Resultado::exito($usuario);
+      return Resultado::exito(null);
     } catch (PDOException $error) {
       if (str_contains($error, 'usuarios.nombres')) {
         return Resultado::fallo("Usuario {$usuario['nombres']} {$usuario['apellidos']} ya existe");

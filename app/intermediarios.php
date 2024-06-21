@@ -64,13 +64,12 @@ function mostrarFormularioDeIngresoSiNoEstaAutenticado(): callable {
 
 function permitirUsuariosActivos(): callable {
   return function (): void {
-    $usuario = App::view()->get('usuario');
-    assert($usuario instanceof Usuario);
+    $usuario = App::view()->get('usuario') ?: null;
 
-    if (!$usuario->estaActivo) {
+    if (!$usuario?->estaActivo) {
       App::redirect('/salir');
 
-      return;
+      exit;
     }
   };
 }
