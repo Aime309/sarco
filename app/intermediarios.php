@@ -67,6 +67,7 @@ function permitirUsuariosActivos(): callable {
     $usuario = App::view()->get('usuario') ?: null;
 
     if (!$usuario?->estaActivo) {
+      $_SESSION['mensajes.error'] = 'Ha sido desactivado, comuníquese con el director de turno';
       App::redirect('/salir');
 
       exit;
