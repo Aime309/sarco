@@ -54,11 +54,11 @@ CREATE TABLE estudiantes (
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP CHECK (fecha_registro > '2006-01-01 00:00:00'),
   nombres VARCHAR(40) NOT NULL CHECK (LENGTH(nombres) BETWEEN 3 AND 40),
   apellidos VARCHAR(40) NOT NULL CHECK (LENGTH(apellidos) BETWEEN 3 AND 40),
-  cedula CHAR(13) NOT NULL UNIQUE CHECK (LENGTH(cedula) = 13 AND cedula LIKE 'v-1__%'),
+  cedula CHAR(13) NOT NULL UNIQUE CHECK (LENGTH(cedula) >= 12 AND cedula LIKE 'v-1__%'),
   fecha_nacimiento DATE NOT NULL CHECK (fecha_nacimiento >= '1996-01-01'),
   genero VARCHAR(9) NOT NULL CHECK (genero IN ('Femenino', 'Masculino')),
   lugar_nacimiento TEXT NOT NULL CHECK (LENGTH(lugar_nacimiento) >= 3),
-  tipo_sangre CHAR(3) NOT NULL CHECK (tipo_sangre IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')),
+  tipo_sangre CHAR(3) NOT NULL CHECK (tipo_sangre IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', '0+', '0-')),
   id_mama VARCHAR(255) NOT NULL,
   id_papa VARCHAR(255),
 

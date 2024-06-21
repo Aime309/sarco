@@ -55,7 +55,7 @@
       "password": "",
       "encoding": "utf-8",
     },
-    "sarco-sqlite": {
+    "sarco-sqlite-fadrian": {
       "type": "sqlite",
       "database": "C:\\xampp\\htdocs\\proyectos\\sarco\\base de datos\\sarco.db",
     },
