@@ -13,11 +13,7 @@ class Usuario extends Persona {
   public string $clave;
 
   function rol(): Rol {
-    return match ($this->rol) {
-      'Director', 'Directora' => Rol::Director,
-      'Secretario', 'Secretaria' => Rol::Secretario,
-      default => Rol::Docente
-    };
+    return Rol::from($this->rol);
   }
 
   function genero(): ?Genero {

@@ -16,24 +16,30 @@ final readonly class RepositorioDeUsuarios {
 
   /** @return Usuario[] */
   function todos(): array {
-    return bd()->query("
+    return $this->pdo->query("
       SELECT id, nombres, apellidos, cedula,
-      fecha_nacimiento as fechaNacimiento, direccion, telefono, correo,
-      rol, esta_activo as estaActivo, fecha_registro as fechaRegistro
+      fecha_nacimiento as fechaNacimiento, genero, direccion, telefono, correo,
+      rol, esta_activo as estaActivo, fecha_registro as fechaRegistro, clave
       FROM usuarios
     ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
   }
 
   /**
-   * @template T
-   * @param T $usuario
-   * @return Resultado<array>
+   * @param array{
+   *   genero: string,
+   *   rol: string,
+   *   clave: string,
+   *   nombres: string,
+   *   apellidos: string,
+   *   cedula: int,
+   *   fecha_nacimiento: string,
+   *   telefono: string,
+   *   correo: string,
+   *   direccion: string
+   * } $usuario
+   * @return Resultado<null>
    */
   function guardar(array $usuario): Resultado {
-    $genero = Genero::from($usuario['genero']);
-    $rol = Rol::from($usuario['rol']);
-    $clave = Usuario::encriptar($usuario['clave']);
-
     $sentencia = $this->pdo->prepare("
       INSERT INTO usuarios (
         id, nombres, apellidos, cedula, fecha_nacimiento, genero, telefono,
@@ -51,12 +57,12 @@ final readonly class RepositorioDeUsuarios {
         ':apellidos' => $usuario['apellidos'],
         ':cedula' => $usuario['cedula'],
         ':fechaNacimiento' => $usuario['fecha_nacimiento'],
-        ':genero' => $genero->value,
+        ':genero' => $usuario['genero'],
         ':telefono' => $usuario['telefono'],
         ':correo' => $usuario['correo'],
         ':direccion' => $usuario['direccion'],
-        ':clave' => $clave,
-        ':rol' => $rol->value,
+        ':clave' => Usuario::encriptar($usuario['clave']),
+        ':rol' => $usuario['rol'],
       ]);
 
       return Resultado::exito($usuario);
