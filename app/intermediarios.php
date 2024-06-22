@@ -22,12 +22,14 @@ function autorizar(Rol ...$roles): callable {
 }
 
 function permitirSiNoHayDirectoresActivos(): callable {
-  return function (): void {
+  $director = Rol::Director;
+
+  return function () use ($director): void {
     $hayDirectoresActivos = bd()
       ->query("
       SELECT COUNT(id)
       FROM usuarios
-      WHERE rol IN ('Director', 'Directora')
+      WHERE rol = '{$director->value}'
       AND esta_activo = true
     ")->fetchColumn();
 
@@ -67,7 +69,7 @@ function permitirUsuariosActivos(): callable {
     $usuario = App::view()->get('usuario') ?: null;
 
     if (!$usuario?->estaActivo) {
-      $_SESSION['mensajes.error'] = 'Ha sido desactivado, comuníquese con el director de turno';
+      $_SESSION['mensajes.error'] = 'Has sido desactivado o eliminado, comuníquese con el director de turno';
       App::redirect('/salir');
 
       exit;
@@ -96,7 +98,9 @@ function notificarSiLimiteDePeriodoExcedido(): callable {
 
     if ($fechaActual >= $fechaLimite) {
       if ($usuarioAutenticado->esDirector()) {
-        $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
+        $_SESSION['mensajes.advertencia'] = $ultimoPeriodo === false
+         ? 'Por favor aperture un período escolar'
+         : "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
 
         if (!in_array(App::request()->url, $excepciones)) {
           App::redirect('/periodos/nuevo');
