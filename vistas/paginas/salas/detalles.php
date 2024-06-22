@@ -1,9 +1,9 @@
 <?php
 
-use Jenssegers\Date\Date;
 use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Maestro;
 use SARCO\Modelos\Aula;
+use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Sala;
 
 /**
@@ -14,8 +14,12 @@ use SARCO\Modelos\Sala;
  * }> $detalles
  */
 
+assert($periodoActual === null || $periodoActual instanceof Periodo);
 assert($sala instanceof Sala);
-$periodoSeleccionado = (string) max(array_keys($detalles));
+
+$periodoSeleccionado = (string) max(array_keys($detalles ?: [
+  $periodoActual->__toString() => []
+]));
 
 ?>
 
@@ -134,6 +138,42 @@ $periodoSeleccionado = (string) max(array_keys($detalles));
                       </ul>
                     </article>
                   </a>
+                <?php endforeach ?>
+              </div>
+            </div>
+          <?php endforeach ?>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="estudiantes">
+        <h2 class="card-header">Estudiantes</h2>
+        <div class="dropdown d-inline-block">
+          <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+            Visualizar período
+          </button>
+          <div class="dropdown-menu">
+            <?php foreach (array_keys($detalles) as $periodo) : ?>
+              <a class="dropdown-item" data-toggle="tab" onclick="cambiarPeriodo(`<?= $periodo ?>`)" href="#estudiantes-<?= $periodo ?>">
+                <?= $periodo ?>
+              </a>
+            <?php endforeach ?>
+          </div>
+        </div>
+        <button class="btn text-dark" disabled>
+          <?= $periodoSeleccionado ?>
+        </button>
+        <div class="tab-content">
+          <?php foreach ($detalles as $periodo => $asignacion) : ?>
+            <div class="tab-pane fade <?= $periodo === $periodoSeleccionado ? 'show active' : '' ?>" id="estudiantes-<?= $periodo ?>">
+              <div class="row">
+                <?php foreach ($asignacion['estudiantes'] as $estudiante) : ?>
+                  <div class="col-md-4">
+                    <div class="card">
+                      <img src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg">
+                      <div class="card-body">
+                        <h5 class="card-title"><?= $estudiante ?></h5>
+                      </div>
+                    </div>
+                  </div>
                 <?php endforeach ?>
               </div>
             </div>

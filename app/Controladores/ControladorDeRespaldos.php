@@ -30,10 +30,10 @@ final readonly class ControladorDeRespaldos {
       );
 
       foreach ($queries as $query) {
-        bd()->query($query);
+        $this->pdo->query($query);
       }
     } elseif (strtolower($_ENV['DB_CONNECTION']) === 'sqlite') {
-      bd(cerrar: true);
+      // TODO: limpiar todas las instancias de PDO para eliminar el archivo
       unlink($_ENV['DB_DATABASE']);
       rename($_ENV['DB_DATABASE'] . '.backup', $_ENV['DB_DATABASE']);
     }

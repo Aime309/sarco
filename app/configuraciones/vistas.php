@@ -2,6 +2,7 @@
 
 use SARCO\App;
 use SARCO\Modelos\Estudiante;
+use SARCO\Modelos\Periodo;
 
 require_once __DIR__ . '/base de datos.php';
 
@@ -16,6 +17,11 @@ App::view()->set('estudiantes', bd()->query("
   genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
   id_mama as idMama, id_papa as idPapa FROM estudiantes
 ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class));
+
+App::view()->set('periodoActual', bd()->query("
+  SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+  FROM periodos ORDER BY inicio DESC LIMIT 1
+")->fetchObject(Periodo::class) ?: null);
 
 App::view()->set(
   'puedeRestaurar',
