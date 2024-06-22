@@ -4,6 +4,24 @@ use flight\net\Router;
 use SARCO\App;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Estudiante;
+use SARCO\Repositorios\RepositorioDeUsuarios;
+
+App::post('/api/ingresar', function (): void {
+  $credenciales = App::request()->data->getData();
+
+  $usuarioEncontrado = App::get('contenedor')
+    ->get(RepositorioDeUsuarios::class)
+    ->buscar($credenciales['cedula']);
+
+  if (!$usuarioEncontrado?->validarClave($credenciales['clave'])) {
+    exit(App::halt(401, 'Cédula o contraseña incorrecta'));
+  } elseif (!$usuarioEncontrado->estaActivo) {
+    exit(App::halt(401, 'Este usuario se encuentra desactivado'));
+  }
+
+  $_SESSION['usuario.id'] = $usuarioEncontrado->id;
+  App::redirect('/');
+});
 
 return function (Router $router): void {
   $router->get('/', function (): void {

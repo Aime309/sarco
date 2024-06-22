@@ -42,3 +42,49 @@ assert($vistas instanceof View);
     <button class="button">Ingresar</button>
   </div>
 </form>
+
+<script>
+  document.querySelector('[href="registrate"]').addEventListener('click', evento => {
+    evento.preventDefault()
+    $loader.show()
+
+    fetch(evento.target.href)
+      .then(respuesta => {
+        if (respuesta.redirected) {
+          new Noty({
+            text: '<span style="margin-right: 1em">❌</span> Ya existe un director activo',
+            type: 'error',
+            theme: 'semanticui',
+            timeout: 10000
+          }).show()
+
+          $loader.hide()
+        } else {
+          location.href = evento.target.href
+        }
+      })
+  })
+
+  document.querySelector('form').addEventListener('submit', evento => {
+    evento.preventDefault()
+    $loader.show()
+
+    fetch('./api/ingresar', {
+      method: evento.target.method,
+      body: new FormData(evento.target)
+    }).then(async respuesta => {
+      if (respuesta.redirected) {
+        location.reload()
+      } else {
+        new Noty({
+          text: `<span style="margin-right: 1em">❌</span> ${await respuesta.text()}`,
+          type: 'error',
+          theme: 'semanticui',
+          timeout: 10000
+        }).show()
+
+        $loader.hide()
+      }
+    })
+  })
+</script>
