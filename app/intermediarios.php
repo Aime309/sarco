@@ -16,9 +16,6 @@ function autorizar(Rol ...$roles): callable {
       }
     }
 
-    $_SESSION['mensajes.error'] = 'Acceso denegado';
-    $referido = App::request()->referrer ?: '/';
-
     if (str_contains(App::request()->url, '/api')) {
       header('Content-Type: application/json');
       App::halt(403, json_encode(['error' => 'Acceso denegado']));
@@ -26,7 +23,9 @@ function autorizar(Rol ...$roles): callable {
       exit;
     }
 
-    exit(App::redirect($referido, 403));
+    $_SESSION['mensajes.error'] = 'Acceso denegado';
+
+    exit(App::redirect(App::request()->referrer ?: '/', 403));
   };
 }
 
