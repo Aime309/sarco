@@ -22,6 +22,7 @@ require_once __DIR__ . '/app/configuraciones/vistas.php';
 require_once __DIR__ . '/app/configuraciones/sesion.php';
 require_once __DIR__ . '/app/configuraciones/base de datos.php';
 require_once __DIR__ . '/app/configuraciones/dependencias.php';
+require_once __DIR__ . '/app/utilidades.php';
 require_once __DIR__ . '/app/rutas.php';
 
 App::start();
