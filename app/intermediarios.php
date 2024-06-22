@@ -3,6 +3,7 @@
 use SARCO\App;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Usuario;
+use SARCO\Repositorios\RepositorioDeUsuarios;
 
 function autorizar(Rol ...$roles): callable {
   return static function () use ($roles): void {
@@ -16,8 +17,16 @@ function autorizar(Rol ...$roles): callable {
     }
 
     $_SESSION['mensajes.error'] = 'Acceso denegado';
+    $referido = App::request()->referrer ?: '/';
 
-    exit(App::redirect(App::request()->referrer, 403));
+    if (str_contains(App::request()->url, '/api')) {
+      header('Content-Type: application/json');
+      App::halt(403, json_encode(['error' => 'Acceso denegado']));
+
+      exit;
+    }
+
+    exit(App::redirect($referido, 403));
   };
 }
 
@@ -59,6 +68,24 @@ function mostrarFormularioDeIngresoSiNoEstaAutenticado(): callable {
 
     $sentencia->execute([$_SESSION['usuario.id']]);
     $usuario = $sentencia->fetchObject(Usuario::class);
+
+    App::view()->set('usuario', $usuario);
+  };
+}
+
+function permitirUsuariosAutenticados(): callable {
+  return function (): void {
+    if (!key_exists('usuario.id', $_SESSION)) {
+      header('Content-Type: application/json');
+
+      App::halt(401, json_encode([
+        'error' => 'Acceso denegado, debes estar autenticado'
+      ]));
+    }
+
+    $usuario = App::get('contenedor')
+      ?->get(RepositorioDeUsuarios::class)
+      ->buscar($_SESSION['usuario.id']);
 
     App::view()->set('usuario', $usuario);
   };

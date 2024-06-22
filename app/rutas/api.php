@@ -2,9 +2,14 @@
 
 use flight\net\Router;
 use SARCO\App;
+use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Estudiante;
 
 return function (Router $router): void {
+  $router->get('/', function (): void {
+    App::json(['mensaje' => 'API funcionando correctamente']);
+  });
+
   $router->get(
     '/asignaciones/@idPeriodo/@fechaNacimiento:\d{4}-\d{2}-\d{2}',
     function (string $idPeriodo, string $fechaNacimiento): void {
@@ -27,7 +32,7 @@ return function (Router $router): void {
 
       App::json($salas);
     }
-  );
+  )->addMiddleware(autorizar(Rol::Secretario));
 
   $router->get(
     '/asignaciones/@idPeriodo/@idSala',
@@ -105,5 +110,5 @@ return function (Router $router): void {
         'idAsignacion'
       ));
     }
-  );
+  )->addMiddleware(autorizar(Rol::Secretario));
 };

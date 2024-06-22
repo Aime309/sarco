@@ -23,3 +23,4 @@ $contenedor->singleton(PDO::class, function (): PDO {
 });
 
 App::registerContainerHandler(fn (string $id) => $contenedor->get($id));
+App::set('contenedor', $contenedor);
