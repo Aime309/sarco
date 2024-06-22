@@ -19,9 +19,6 @@ unset($_SESSION['mensajes.error']);
 unset($_SESSION['mensajes.exito']);
 unset($_SESSION['mensajes.advertencia']);
 
-scripts('recursos/js/alertas.js');
-scripts('recursos/js/cerrar-sesion.js');
-
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +80,8 @@ scripts('recursos/js/cerrar-sesion.js');
   <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
   <script src="node_modules/noty/lib/noty.min.js"></script>
+  <script src="recursos/js/alertas.js"></script>
+  <script src="recursos/js/cerrar-sesion.js"></script>
   <script type="module" src="recursos/js/main.js"></script>
   <?php foreach (scripts() as $ruta) : ?>
     <script type="module" src="<?= $ruta ?>"></script>
