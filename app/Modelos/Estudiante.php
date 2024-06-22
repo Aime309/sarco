@@ -6,8 +6,9 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
+use Stringable;
 
-final class Estudiante extends Modelo {
+final class Estudiante extends Modelo implements Stringable {
   public readonly string $nombres;
   public readonly string $apellidos;
   public readonly string $cedula;
@@ -94,5 +95,9 @@ final class Estudiante extends Modelo {
     } elseif ($edad > 5) {
       throw new InvalidArgumentException('Debe tener máximo 5 años de edad');
     }
+  }
+
+  function __toString(): string {
+    return $this->nombreCompleto();
   }
 }
