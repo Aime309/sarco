@@ -32,59 +32,25 @@ final readonly class ControladorDeUsuarios {
     $usuario = App::request()->data->getData();
     $genero = Genero::from($usuario['genero']);
     $rol = Rol::from($usuario['rol']);
-    $clave = password_hash($usuario['clave'], PASSWORD_DEFAULT);
+    $resultado = $this->repositorio->guardar($usuario);
 
-    $sentencia = bd()->prepare("
-      INSERT INTO usuarios (
-        id, nombres, apellidos, cedula, fecha_nacimiento, genero, telefono,
-        correo, direccion, clave, rol
-      ) VALUES (
-        :id, :nombres, :apellidos, :cedula, :fechaNacimiento, :genero,
-        :telefono, :correo, :direccion, :clave, :rol
-      )
-    ");
-
-    $sentencia->bindValue(':id', new UuidV4);
-    $sentencia->bindValue(':nombres', $usuario['nombres']);
-    $sentencia->bindValue(':apellidos', $usuario['apellidos']);
-    $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
-    $sentencia->bindValue(':fechaNacimiento', $usuario['fecha_nacimiento']);
-    $sentencia->bindValue(':genero', $genero->value);
-    $sentencia->bindValue(':telefono', $usuario['telefono']);
-    $sentencia->bindValue(':correo', $usuario['correo']);
-    $sentencia->bindValue(':direccion', $usuario['direccion']);
-    $sentencia->bindValue(':clave', $clave);
-    $sentencia->bindValue(':rol', $rol->value);
-
-    try {
-      $sentencia->execute();
-
-      $mensaje = $genero === Genero::Femenino ? 'registrada' : 'registrado';
-      $_SESSION['mensajes.exito'] = "{$rol->obtenerPorGenero($genero)} $mensaje exitósamente";
-      unset($_SESSION['datos']);
-
-      App::redirect('/usuarios');
-    } catch (PDOException $error) {
-      if (str_contains($error, 'usuarios.nombres')) {
-        $_SESSION['mensajes.error'] = "Usuario {$usuario['nombres']} {$usuario['apellidos']} ya existe";
-      } elseif (str_contains($error, 'usuarios.cedula')) {
-        $_SESSION['mensajes.error'] = "Usuario {$usuario['cedula']} ya existe";
-      } elseif (str_contains($error, 'usuarios.telefono')) {
-        $_SESSION['mensajes.error'] = "Teléfono {$usuario['telefono']} ya existe";
-      } elseif (str_contains($error, 'usuarios.correo')) {
-        $_SESSION['mensajes.error'] = "Correo {$usuario['correo']} ya existe";
-      } else {
-        throw $error;
-      }
-
+    if ($resultado->error) {
+      $_SESSION['mensajes.error'] = $resultado->error;
       $_SESSION['datos'] = $usuario;
 
-      if ($rol->esIgualA(Rol::Docente)) {
+      if ($rol->esIgualA(Rol::Docente) && !$resultado->error) {
         App::redirect('/maestros');
       } else {
         App::redirect(App::request()->referrer);
       }
+
+      return;
     }
+
+    $mensaje = $genero === Genero::Femenino ? 'registrada' : 'registrado';
+    $_SESSION['mensajes.exito'] = "{$rol->obtenerPorGenero($genero)} $mensaje exitósamente";
+    unset($_SESSION['datos']);
+    App::redirect('/usuarios');
   }
 
   function mostrarFormularioDeRegistro(): void {
