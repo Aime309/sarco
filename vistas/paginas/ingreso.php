@@ -13,29 +13,23 @@ assert($vistas instanceof View);
     <h1 class="form__title">Inicia sesión para continuar</h1>
     <?php
 
-    echo $vistas->fetch(
-      'componentes/Input',
-      [
-        'validacion' => 'La cédula es requerida',
-        'name' => 'cedula',
-        'placeholder' => 'Cédula',
-        'type' => 'number',
-        'min' => 1000000,
-        'max' => 99999999
-      ]
-    );
+    $vistas->render('componentes/Input', [
+      'validacion' => 'La cédula es requerida',
+      'name' => 'cedula',
+      'placeholder' => 'Cédula',
+      'type' => 'number',
+      'min' => 1000000,
+      'max' => 99999999
+    ]);
 
-    echo $vistas->fetch(
-      'componentes/Input',
-      [
-        'validacion' => 'La contraseña es requerida',
-        'name' => 'clave',
-        'placeholder' => 'Contraseña',
-        'type' => 'password',
-        'pattern' => '(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,}',
-        'minlength' => 8
-      ]
-    );
+    $vistas->render('componentes/Input', [
+      'validacion' => 'La contraseña es requerida',
+      'name' => 'clave',
+      'placeholder' => 'Contraseña',
+      'type' => 'password',
+      'pattern' => '(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,}',
+      'minlength' => 8
+    ]);
 
     ?>
     <div class="form__remember">
