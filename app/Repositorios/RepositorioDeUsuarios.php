@@ -4,7 +4,7 @@ namespace SARCO\Repositorios;
 
 use PDO;
 use PDOException;
-use Resultado;
+use SARCO\Resultado;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Usuario;
@@ -80,17 +80,19 @@ final readonly class RepositorioDeUsuarios {
 
       return Resultado::exito(null);
     } catch (PDOException $error) {
-      if (str_contains($error, 'usuarios.nombres')) {
+      if (str_contains($error, 'usuarios.id')) {
+        return Resultado::fallo('Ha ocurrido un error, por favor intente nuevamente');
+      } elseif (str_contains($error, 'usuarios.nombres')) {
         return Resultado::fallo("Usuario {$usuario['nombres']} {$usuario['apellidos']} ya existe");
       } elseif (str_contains($error, 'usuarios.cedula')) {
-        return Resultado::fallo("Usuario {$usuario['cedula']} ya existe");
+        return Resultado::fallo("Cédula {$usuario['cedula']} ya existe");
       } elseif (str_contains($error, 'usuarios.telefono')) {
         return Resultado::fallo("Teléfono {$usuario['telefono']} ya existe");
       } elseif (str_contains($error, 'usuarios.correo')) {
         return Resultado::fallo("Correo {$usuario['correo']} ya existe");
-      } else {
-        throw $error;
       }
+
+      return Resultado::fallo($error->getMessage());
     }
   }
 

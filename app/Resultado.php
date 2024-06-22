@@ -1,8 +1,8 @@
 <?php
 
-/**
- * @template T of mixed
- */
+namespace SARCO;
+
+/** @template T */
 final readonly class Resultado {
   /**
    * @param T $valor
@@ -15,17 +15,15 @@ final readonly class Resultado {
   }
 
   /**
-   * @template V of mixed
-   * @param V $valor
-   * @return self<V>
+   * @template T
+   * @param T $valor
+   * @return self<T>
    */
   static function exito(mixed $valor): self {
     return new self($valor, true, null);
   }
 
-  /**
-   * @return self<null>
-   */
+  /** @return self<null> */
   static function fallo(string $error): self {
     return new self(null, false, $error);
   }
