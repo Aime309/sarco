@@ -2,14 +2,11 @@
 
 namespace SARCO\Controladores;
 
-use PDO;
-use PDOException;
 use SARCO\App;
 use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Usuario;
 use SARCO\Repositorios\RepositorioDeUsuarios;
-use Symfony\Component\Uid\UuidV4;
 
 final readonly class ControladorDeUsuarios {
   function __construct(private RepositorioDeUsuarios $repositorio) {

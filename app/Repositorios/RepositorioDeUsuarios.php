@@ -87,9 +87,21 @@ final readonly class RepositorioDeUsuarios {
       } elseif (str_contains($error, 'usuarios.cedula')) {
         return Resultado::fallo("Cédula {$usuario['cedula']} ya existe");
       } elseif (str_contains($error, 'usuarios.telefono')) {
-        return Resultado::fallo("Teléfono {$usuario['telefono']} ya existe");
+        return Resultado::fallo("Teléfono {$usuario['telefono']} ya existe o es inválido (ej: +12 123-1234567)");
       } elseif (str_contains($error, 'usuarios.correo')) {
-        return Resultado::fallo("Correo {$usuario['correo']} ya existe");
+        return Resultado::fallo("Correo {$usuario['correo']} ya existe o es inválido");
+      } elseif (str_contains($error, 'usuarios.fecha_registro')) {
+        return Resultado::fallo('Ha ocurrido un error, por favor sincronice la fecha y hora correctamente');
+      } elseif (str_contains($error, 'usuarios.fecha_nacimiento')) {
+        return Resultado::fallo('El usuario debe haber nacido después del año 1906');
+      } elseif (str_contains($error, 'usuarios.genero')) {
+        return Resultado::fallo('Género inválido, debe ser Masculino o Femenino');
+      } elseif (str_contains($error, 'usuarios.direccion')) {
+        return Resultado::fallo('Dirección inválida, debe tener al menos 3 letras');
+      } elseif (str_contains($error, 'usuarios.clave')) {
+        return Resultado::fallo('La clave debe tener al menos 8 caracteres');
+      } elseif (str_contains($error, 'usuarios.rol')) {
+        return Resultado::fallo('Rol inválido, debe ser Director, Docente o Secretario');
       }
 
       return Resultado::fallo($error->getMessage());
