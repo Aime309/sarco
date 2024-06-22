@@ -3,7 +3,6 @@
 namespace SARCO\Controladores;
 
 use PDO;
-use PDOException;
 use SARCO\App;
 use SARCO\Modelos\Usuario;
 use SARCO\Repositorios\RepositorioDeUsuarios;
@@ -18,40 +17,13 @@ final readonly class ControladorDePerfil {
 
   function actualizarPerfil(): void {
     $usuarioAutenticado = obtenerComo(App::view()->get('usuario'), Usuario::class);
-    $usuario = App::request()->data->getData();
+    $datos = App::request()->data->getData();
+    $resultado = $this->repositorio->actualizar($usuarioAutenticado->id, $datos);
 
-    $sentencia = bd()->prepare("
-      UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos,
-      cedula = :cedula, fecha_nacimiento = :fechaNacimiento,
-      direccion = :direccion, telefono = :telefono, correo = :correo
-      WHERE id = :id
-    ");
-
-    $sentencia->bindValue(':id', $usuarioAutenticado->id);
-    $sentencia->bindValue(':nombres', $usuario['nombres']);
-    $sentencia->bindValue(':apellidos', $usuario['apellidos']);
-    $sentencia->bindValue(':cedula', $usuario['cedula'], PDO::PARAM_INT);
-    $sentencia->bindValue(':fechaNacimiento', $usuario['fecha_nacimiento']);
-    $sentencia->bindValue(':direccion', $usuario['direccion']);
-    $sentencia->bindValue(':telefono', $usuario['telefono']);
-    $sentencia->bindValue(':correo', $usuario['correo']);
-
-    try {
-      $sentencia->execute();
+    if ($resultado->error) {
+      $_SESSION['mensajes.error'] = $resultado->error;
+    } else {
       $_SESSION['mensajes.exito'] = 'Perfil actualizado exitósamente';
-    } catch (PDOException $error) {
-      if (str_contains($error, 'usuarios.nombres')) {
-        $nombreCompleto = "{$usuario['nombres']} {$usuario['apellidos']}";
-        $_SESSION['mensajes.error'] = "Usuario $nombreCompleto ya existe";
-      } elseif (str_contains($error, 'usuarios.cedula')) {
-        $_SESSION['mensajes.error'] = "Usuario {$usuario['cedula']} ya existe";
-      } elseif (str_contains($error, 'usuarios.telefono')) {
-        $_SESSION['mensajes.error'] = "Teléfono {$usuario['telefono']} ya existe";
-      } elseif (str_contains($error, 'usuarios.correo')) {
-        $_SESSION['mensajes.error'] = "Correo {$usuario['correo']} ya existe";
-      } else {
-        throw $error;
-      }
     }
 
     App::redirect('/perfil');

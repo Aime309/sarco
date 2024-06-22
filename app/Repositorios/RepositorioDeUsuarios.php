@@ -84,8 +84,20 @@ final readonly class RepositorioDeUsuarios {
     }
   }
 
-  /** @return Resultado<null> */
-  function actualizar(Usuario $usuario): Resultado {
+  /**
+   * @param array{
+   *   genero: string,
+   *   nombres: string,
+   *   apellidos: string,
+   *   cedula: int,
+   *   fecha_nacimiento: string,
+   *   telefono: string,
+   *   correo: string,
+   *   direccion: string
+   * } $datos
+   * @return Resultado<null>
+   */
+  function actualizar(string $id, array $datos): Resultado {
     $sentencia = $this->pdo->prepare("
       UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos,
       cedula = :cedula, fecha_nacimiento = :fechaNacimiento,
@@ -95,19 +107,19 @@ final readonly class RepositorioDeUsuarios {
 
     try {
       $sentencia->execute([
-        ':id' => $usuario->id,
-        ':nombres' => $usuario->nombres,
-        ':apellidos' => $usuario->apellidos,
-        ':cedula' => $usuario->cedula,
-        ':fechaNacimiento' => $usuario->fechaNacimiento,
-        ':direccion' => $usuario->direccion,
-        ':telefono' => $usuario->telefono,
-        ':correo' => $usuario->correo
+        ':id' => $id,
+        ':nombres' => $datos['nombres'],
+        ':apellidos' => $datos['apellidos'],
+        ':cedula' => $datos['cedula'],
+        ':fechaNacimiento' => $datos['fechaNacimiento'],
+        ':direccion' => $datos['direccion'],
+        ':telefono' => $datos['telefono'],
+        ':correo' => $datos['correo']
       ]);
 
       return Resultado::exito(null);
     } catch (PDOException $error) {
-      return self::controlarError($error, $usuario);
+      return self::controlarError($error, $datos);
     }
   }
 
