@@ -92,7 +92,10 @@ unset($_SESSION['mensajes.advertencia']);
     })
 
     document.querySelectorAll('a').forEach($link => {
-      if ($link.href.endsWith('#')) {
+      if (
+        $link.href.endsWith('#')
+        || $link.dataset.toggle
+      ) {
         return
       }
 
