@@ -28,6 +28,29 @@ return function (Router $router): void {
     App::json(['mensaje' => 'API funcionando correctamente']);
   });
 
+  $router->get('/estudiantes', function (): void {
+    $cedula = $_GET['cedula'] ?? '';
+
+    if ($cedula) {
+      $estudiantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula,
+        fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
+        genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
+        id_mama as idMama, id_papa as idPapa FROM estudiantes
+        WHERE cedula LIKE '$cedula%'
+      ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+    } else {
+      $estudiantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula,
+        fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
+        genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
+        id_mama as idMama, id_papa as idPapa FROM estudiantes
+      ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+    }
+
+    App::json($estudiantes);
+  });
+
   $router->get(
     '/asignaciones/@idPeriodo/@fechaNacimiento:\d{4}-\d{2}-\d{2}',
     function (string $idPeriodo, string $fechaNacimiento): void {

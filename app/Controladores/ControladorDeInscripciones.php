@@ -22,7 +22,7 @@ final readonly class ControladorDeInscripciones {
     $inscripciones = $this->pdo->query("
       SELECT i.id, i.fecha_registro as fechaRegistro,
       p.anio_inicio as periodo, e.nombres as nombresEstudiante,
-      e.apellidos as apellidosEstudiante
+      e.apellidos as apellidosEstudiante, e.cedula as cedulaEstudiante
       FROM inscripciones i JOIN periodos p JOIN estudiantes e
       JOIN asignaciones_de_salas a ON i.id_periodo = p.id AND i.id_estudiante = e.id
       AND i.id_asignacion_sala = a.id

@@ -80,7 +80,7 @@ final class Estudiante extends Modelo implements Stringable {
     $fechaActual = time();
     $diferencia = $fechaActual - $fechaNacimiento->getTimestamp();
 
-    return date('Y', $diferencia) - 1970;
+    return date('Y', (int) $diferencia) - 1970;
   }
 
   /** @throws InvalidArgumentException */

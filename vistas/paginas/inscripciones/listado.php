@@ -49,7 +49,11 @@ $inscripciones = (fn (Inscripcion ...$inscripciones) => $inscripciones)(...$insc
         <?php foreach ($inscripciones as $inscripcion) : ?>
           <tr class="text-center">
             <td><?= $inscripcion->periodo() ?></td>
-            <td><?= $inscripcion->estudiante() ?></td>
+            <td>
+              <a target="_blank" href="./estudiantes/<?= $inscripcion->cedulaEstudiante ?>">
+                <?= $inscripcion->estudiante() ?>
+              </a>
+            </td>
             <td><?= $inscripcion->fechaRegistro() ?></td>
           </tr>
         <?php endforeach ?>

@@ -237,17 +237,21 @@ if ($usuario->esDirector()) {
       <div class="modal-body">
         <?php
 
-        $vistas->render('componentes/Select', [
-          'validacion' => 'La cédula escolar es requerida',
+        $vistas->render('componentes/Input', [
+          'validacion' => 'La cédula escolar es requerida (v-1__________)',
           'name' => 'cedula',
           'placeholder' => 'Cédula escolar',
-          'opciones' => array_map(fn (Estudiante $estudiante) => [
-            'value' => $estudiante->cedula,
-            'children' => "$estudiante->cedula ~ {$estudiante->nombreCompleto()}"
-          ], $estudiantes)
+          'pattern' => 'v-1\d{2}\d{7,8}',
+          'value' => 'v-1'
         ]);
 
         ?>
+
+        <div class="text-center">
+          <div class="spinner-border d-none"></div>
+        </div>
+
+        <ul id="lista-estudiantes" class="list-group"></ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -258,3 +262,40 @@ if ($usuario->esDirector()) {
     </form>
   </div>
 </div>
+
+<script>
+  $cedula = document.querySelector('#buscar-estudiante [name="cedula"]')
+  $spinner = document.querySelector('#buscar-estudiante .spinner-border')
+  $lista = document.querySelector('#lista-estudiantes')
+
+  let interval
+
+  $cedula.addEventListener('keydown', () => {
+    clearInterval(interval)
+
+    interval = setTimeout(async () => {
+      $spinner.classList.remove('d-none')
+      let estudiantes = await buscarEstudiantes($cedula.value)
+      $lista.innerHTML = estudiantes.map(estudiante => `
+        <li class="list-group-item p-2">
+          <a href="./estudiantes?cedula=${estudiante.cedula}">
+            ${estudiante.cedula} ~ ${estudiante.nombres} ${estudiante.apellidos}
+          </a>
+        </li>
+      `).join('')
+      $spinner.classList.add('d-none')
+    }, 0)
+  })
+
+  async function buscarEstudiantes(cedula) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        fetch('./api/estudiantes?cedula=' + cedula)
+          .then(respuesta => respuesta.json())
+          .then(estudiantes => {
+            resolve(estudiantes)
+          })
+      }, 0)
+    })
+  }
+</script>
