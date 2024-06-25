@@ -84,7 +84,7 @@ function permitirUsuariosAutenticados(): callable {
 
     $usuario = App::get('contenedor')
       ?->get(RepositorioDeUsuarios::class)
-      ->buscar($_SESSION['usuario.id']);
+      ->buscarPorId($_SESSION['usuario.id']);
 
     App::view()->set('usuario', $usuario);
   };

@@ -396,7 +396,6 @@ assert($periodoActual instanceof Periodo);
 <?php endif ?>
 
 <script>
-  const theme = 'semanticui'
   const $idPeriodo = document.querySelector('[name="id_periodo"]')
   const $idSala = $idPeriodo.form.querySelector('[name="id_sala"]')
   const $idAula = $idPeriodo.form.querySelector('[name="id_aula"]')

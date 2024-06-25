@@ -24,17 +24,25 @@ final readonly class RepositorioDeUsuarios {
     ")->fetchAll(PDO::FETCH_CLASS, Usuario::class);
   }
 
-  function buscar(int $cedula): ?Usuario {
+  private function buscarPor(string $campo, mixed $valor): ?Usuario {
     $sentencia = $this->pdo->prepare("
       SELECT id, nombres, apellidos, cedula,
       fecha_nacimiento as fechaNacimiento, genero, direccion, telefono, correo,
       rol, esta_activo as estaActivo, fecha_registro as fechaRegistro, clave
-      FROM usuarios WHERE cedula = ?
+      FROM usuarios WHERE $campo = ?
     ");
 
-    $sentencia->execute([$cedula]);
+    $sentencia->execute([$valor]);
 
     return $sentencia->fetchObject(Usuario::class) ?: null;
+  }
+
+  function buscar(int $cedula): ?Usuario {
+    return $this->buscarPor('cedula', $cedula);
+  }
+
+  function buscarPorId(string $id): ?Usuario {
+    return $this->buscarPor('id', $id);
   }
 
   /**
