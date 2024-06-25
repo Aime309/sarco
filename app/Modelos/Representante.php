@@ -10,6 +10,17 @@ use SARCO\Enumeraciones\Nacionalidad;
 final class Representante extends Persona {
   public string $estadoCivil;
   public string $nacionalidad;
+  /** @var Estudiante[] */
+  private array $estudiantes = [];
+
+  function asignarEstudiantes(Estudiante ...$estudiantes) {
+    $this->estudiantes = $estudiantes;
+  }
+
+  /** @return Estudiante[] */
+  function estudiantes(): array {
+    return $this->estudiantes;
+  }
 
   function genero(): Genero {
     return match ($this->nacionalidad) {

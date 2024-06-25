@@ -3,6 +3,7 @@
 use flight\net\Router;
 use SARCO\App;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Representante;
 
 return function (Router $router): void {
@@ -24,6 +25,30 @@ return function (Router $router): void {
   });
 
   $router->group('/@cedula:[0-9]{7,8}', function (Router $router): void {
+    $router->get('/', function (int $cedula): void {
+      $representante = bd()->query("
+        SELECT id, nombres, apellidos, cedula,
+        fecha_nacimiento as fechaNacimiento, estado_civil as estadoCivil,
+        nacionalidad, telefono, correo, fecha_registro as fechaRegistro,
+        genero, correo
+        FROM representantes WHERE cedula = $cedula
+      ")->fetchObject(Representante::class);
+      assert($representante instanceof Representante);
+
+      $estudiantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula,
+        fecha_nacimiento as fechaNacimiento, lugar_nacimiento as lugarNacimiento,
+        genero, tipo_sangre as grupoSanguineo, fecha_registro as fechaRegistro,
+        id_mama as idMama, id_papa as idPapa FROM estudiantes
+        WHERE idMama = '$representante->id' OR idPapa = '$representante->id'
+      ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
+
+      $representante->asignarEstudiantes(...$estudiantes);
+
+      App::render('paginas/representantes/perfil', compact('representante'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => $representante->nombreCompleto()]);
+    });
+
     $router->get('/editar', function (int $cedula): void {
       $representante = bd()->query("
         SELECT id, nombres, apellidos, cedula,

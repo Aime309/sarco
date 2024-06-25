@@ -20,6 +20,7 @@ $representantes = (fn (Representante ...$representantes) => $representantes)(...
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
+          <th></th>
           <th>Cédula</th>
           <th>Nombre completo</th>
           <th>Edad</th>
@@ -31,6 +32,11 @@ $representantes = (fn (Representante ...$representantes) => $representantes)(...
       <tbody>
         <?php foreach ($representantes as $representante) : ?>
           <tr class="text-center">
+            <td>
+              <a href="./representantes/<?= $representante->cedula ?>" class="btn btn-secondary">
+                Detalles
+              </a>
+            </td>
             <td><?= $representante->cedula ?></td>
             <td><?= $representante->nombreCompleto() ?></td>
             <td><?= $representante->edad() ?></td>
