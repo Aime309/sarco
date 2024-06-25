@@ -92,6 +92,28 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
                 <?= $maestro->edad() . ($maestro->edad() === 1 ? ' año' : ' años') ?>
               </td>
             </tr>
+            <tr>
+              <th>Correo:</th>
+              <td>
+                <a target="_blank" href="mailto:<?= $maestro->correo ?>">
+                  <?= $maestro->correo ?>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Teléfono:</th>
+              <td>
+                <a href="tel:<?= str_replace([' ', '-'], '', $maestro->telefono) ?>">
+                  <?= $maestro->telefono ?>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Dirección:</th>
+              <td>
+                <?= $maestro->direccion ?>
+              </td>
+            </tr>
           </table>
         </div>
       </div>

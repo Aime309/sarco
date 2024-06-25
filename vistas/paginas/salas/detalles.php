@@ -168,9 +168,9 @@ $periodoSeleccionado = (string) max(array_keys($detalles ?: [
                 <?php foreach ($asignacion['estudiantes'] as $estudiante) : ?>
                   <div class="col-md-4">
                     <div class="card">
-                      <img src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg">
+                      <img class="px-5" src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg">
                       <div class="card-body">
-                        <h5 class="card-title"><?= $estudiante ?></h5>
+                        <h4><?= $estudiante ?></h4>
                       </div>
                     </div>
                   </div>
