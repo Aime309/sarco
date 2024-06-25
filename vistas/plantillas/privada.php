@@ -33,6 +33,7 @@ unset($_SESSION['mensajes.advertencia']);
   <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
   <link rel="stylesheet" href="node_modules/noty/lib/noty.css" />
   <link rel="stylesheet" href="node_modules/noty/lib/themes/semanticui.css" />
+  <link rel="stylesheet" href="node_modules/pure-css-loader/dist/loader-bouncing.css" />
   <link rel="stylesheet" href="recursos/libs/bootstrap/bootstrap-material-design.min.css" />
   <link rel="stylesheet" href="recursos/libs/jquery/jquery.mCustomScrollbar.css" />
   <link rel="stylesheet" href="recursos/css/reinicio.css" />
@@ -65,6 +66,7 @@ unset($_SESSION['mensajes.advertencia']);
 </head>
 
 <body>
+  <div class="loader loader-bouncing is-active"></div>
   <main class="full-box main-container">
     <?= $vistas->fetch('componentes/MenuLateral', compact('usuario', 'estudiantes')) ?>
     <section class="full-box page-content">
@@ -82,6 +84,23 @@ unset($_SESSION['mensajes.advertencia']);
   <script src="node_modules/noty/lib/noty.min.js"></script>
   <script src="recursos/js/alertas.js"></script>
   <script src="recursos/js/cerrar-sesion.js"></script>
+  <script>
+    const $loader = document.querySelector('.loader')
+
+    document.addEventListener('DOMContentLoaded', () => {
+      $loader.classList.remove('is-active')
+    })
+
+    document.querySelectorAll('a').forEach($link => {
+      if ($link.href.endsWith('#')) {
+        return
+      }
+
+      $link.addEventListener('click', () => {
+        $loader.classList.add('is-active')
+      })
+    })
+  </script>
   <script type="module" src="recursos/js/main.js"></script>
   <?php foreach (scripts() as $ruta) : ?>
     <script type="module" src="<?= $ruta ?>"></script>
