@@ -167,12 +167,12 @@ $periodoSeleccionado = (string) max(array_keys($detalles ?: [
               <div class="row">
                 <?php foreach ($asignacion['estudiantes'] as $estudiante) : ?>
                   <div class="col-md-4">
-                    <div class="card">
+                    <a href="./estudiantes/<?= $estudiante->cedula ?>" target="_blank" class="card">
                       <img class="px-5" src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg">
                       <div class="card-body">
                         <h4><?= $estudiante ?></h4>
                       </div>
-                    </div>
+                    </a>
                   </div>
                 <?php endforeach ?>
               </div>
