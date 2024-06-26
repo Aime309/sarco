@@ -95,6 +95,7 @@ unset($_SESSION['mensajes.advertencia']);
       if (
         $link.href.endsWith('#')
         || $link.dataset.toggle
+        || $link.target === '_blank'
       ) {
         return
       }
