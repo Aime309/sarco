@@ -212,7 +212,6 @@ return function (Router $router): void {
           AND i.id_periodo = '{$asignacion['id_periodo']}'
         ")->fetchAll(PDO::FETCH_CLASS, Estudiante::class);
 
-
         $detalles[$periodo] = compact('aula', 'docentes', 'estudiantes');
       }
 
