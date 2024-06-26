@@ -52,7 +52,11 @@ $periodos = (fn (Periodo ...$periodos) => $periodos)(...$periodos);
                 <span class="badge bg-dark text-white">Actual</span>
               <?php endif ?>
             </td>
-            <td><?= $periodo ?></td>
+            <td>
+              <a href="./periodos/<?= $periodo->inicio ?>">
+                <?= $periodo ?>
+              </a>
+            </td>
             <td><?= $periodo->momento(1)->fechaCompleta() ?></td>
             <td><?= $periodo->momento(2)->fechaCompleta() ?></td>
             <td><?= $periodo->momento(3)->fechaCompleta() ?></td>

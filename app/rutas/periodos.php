@@ -2,8 +2,10 @@
 
 use flight\net\Router;
 use SARCO\App;
+use SARCO\Modelos\Aula;
 use SARCO\Modelos\Momento;
 use SARCO\Modelos\Periodo;
+use SARCO\Modelos\Sala;
 use Symfony\Component\Uid\UuidV4;
 
 return function (Router $router): void {
@@ -168,6 +170,52 @@ return function (Router $router): void {
   });
 
   $router->group('/@periodo:[0-9]{4}', function (Router $router): void {
+    $router->get('/', function (int $periodo): void {
+      $periodo = bd()->query("
+        SELECT p.id, p.anio_inicio as inicio, p.fecha_registro as fechaRegistro
+        FROM periodos p
+        WHERE inicio = $periodo
+      ")->fetchObject(Periodo::class);
+
+      $momentos = bd()->query("
+        SELECT m.id, numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio,
+        mes_cierre as mesCierre,
+        dia_cierre as diaCierre,
+        m.fecha_registro as fechaRegistro
+        FROM momentos m
+        JOIN periodos p
+        ON id_periodo = p.id
+        WHERE id_periodo = '{$periodo->id}'
+        ORDER BY numero
+      ")->fetchAll(PDO::FETCH_CLASS, Momento::class);
+
+      $periodo->asignarMomentos(...$momentos);
+
+      $asignaciones = bd()->query("
+        SELECT * FROM asignaciones_de_salas WHERE id_periodo = '$periodo->id'
+      ")->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($asignaciones as $asignacion) {
+        $sala = bd()->query("
+          SELECT id, fecha_registro as fechaRegistro, nombre,
+          edad_minima as edadMinima, edad_maxima as edadMaxima,
+          esta_activa as estaActiva FROM salas WHERE id = '{$asignacion['id_sala']}'
+        ")->fetchObject(Sala::class);
+        assert($sala instanceof Sala);
+
+        $aula = bd()->query("
+          SELECT id, fecha_registro as fechaRegistro, codigo, tipo FROM aulas
+          WHERE id = '{$asignacion['id_aula']}'
+        ")->fetchObject(Aula::class);
+
+        $sala->aula = $aula;
+      }
+
+      App::render('paginas/periodos/detalles', compact('periodo'), 'pagina');
+      App::render('plantillas/privada', ['titulo' => "Periodo $periodo"]);
+    });
+
     $router->get('/editar', function (int $periodo): void {
       $periodo = bd()->query("
         SELECT p.id, p.anio_inicio as inicio, p.fecha_registro as fechaRegistro
