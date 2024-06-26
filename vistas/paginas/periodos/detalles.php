@@ -18,7 +18,7 @@ $idsSalasAsignadas = array_map(fn (Sala $sala) => $sala->id, $detalles['salasAsi
 
 ?>
 
-<div class="full-box page-header">
+<div class="full-box page-header pb-0">
   <h1 class="text-left">
     <i class="fas fa-clipboard-list fa-fw"></i>
     Período <?= $periodo ?>
@@ -30,6 +30,44 @@ $idsSalasAsignadas = array_map(fn (Sala $sala) => $sala->id, $detalles['salasAsi
     </button>
   </div>
 </div>
+
+<section class="container">
+  <div class="row mx-0 mb-4">
+    <article class="col-md-4 card">
+      <h3 class="card-header">1er momento</h3>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>Inicio:</strong> <?= $periodo->momento(1)->inicio('d/m/Y') ?>
+        </li>
+        <li class="list-group-item">
+          <strong>Cierre:</strong> <?= $periodo->momento(1)->cierre('d/m/Y') ?>
+        </li>
+      </ul>
+    </article>
+    <article class="col-md-4 card">
+      <h3 class="card-header">2do momento</h3>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>Inicio:</strong> <?= $periodo->momento(2)->inicio('d/m/Y') ?>
+        </li>
+        <li class="list-group-item">
+          <strong>Cierre:</strong> <?= $periodo->momento(2)->cierre('d/m/Y') ?>
+        </li>
+      </ul>
+    </article>
+    <article class="col-md-4 card">
+      <h3 class="card-header">3er momento</h3>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>Inicio:</strong> <?= $periodo->momento(3)->inicio('d/m/Y') ?>
+        </li>
+        <li class="list-group-item">
+          <strong>Cierre:</strong> <?= $periodo->momento(3)->cierre('d/m/Y') ?>
+        </li>
+      </ul>
+    </article>
+  </div>
+</section>
 
 <h2 class="container">Estado de salas</h2>
 
