@@ -1,10 +1,7 @@
 <?php
 
 use flight\net\Router;
-use SARCO\App;
 use SARCO\Controladores\ControladorDeAulas;
-use SARCO\Modelos\Aula;
-use Symfony\Component\Uid\UuidV4;
 
 return function (Router $router): void {
   $router->get('/', [ControladorDeAulas::class, 'mostrarListado']);

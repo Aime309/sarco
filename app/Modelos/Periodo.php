@@ -6,6 +6,7 @@ use Stringable;
 
 final class Periodo extends Modelo implements Stringable {
   public readonly int $inicio;
+  public bool $sePuedeEliminar = true;
 
   /** @var Momento[] */
   private array $momentos;

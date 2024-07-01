@@ -123,7 +123,12 @@ $periodoSeleccionado = (string) max(array_keys($detalles ?: [
                   </ul>
                 </footer>
               </article>
-              <h3 class="mt-4">Docentes asignados:</h3>
+              <div class="row mx-0 align-items-center">
+                <h3 class="mt-4 col-md-9">Docentes asignados:</h3>
+                <a href="./salas/<?= $sala->id ?>/reasignar" class="btn btn-outline col-md-3">
+                  Reasignar
+                </a>
+              </div>
               <div class="row">
                 <?php foreach ($asignacion['docentes'] as $docente) : ?>
                   <a href="./maestros/<?= $docente->cedula ?>" target="_blank" class="col-md">

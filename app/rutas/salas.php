@@ -2,6 +2,8 @@
 
 use flight\net\Router;
 use SARCO\App;
+use SARCO\Controladores\ControladorDeSalas;
+use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Aula;
 use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Maestro;
@@ -218,6 +220,15 @@ return function (Router $router): void {
       App::render('paginas/salas/detalles', compact('sala', 'detalles'), 'pagina');
       App::render('plantillas/privada', ['titulo' => "Sala $sala"]);
     });
+
+    $router
+      ->get('/reasignar', [ControladorDeSalas::class, 'mostrarFormularioDeReasignar'])
+      ->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
+
+    $router
+      ->post('/reasignar', [ControladorDeSalas::class, 'mostrarFormularioDeReasignar'])
+      ->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
+
 
     $router->get('/editar', function (string $id): void {
       $sala = bd()->query("

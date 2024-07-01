@@ -45,6 +45,20 @@ final readonly class RepositorioDeUsuarios {
     return $this->buscarPor('id', $id);
   }
 
+  /** @return Usuario[] */
+  function todosPorRol(Rol $rol): array {
+    $sentencia = $this->pdo->prepare("
+      SELECT id, nombres, apellidos, cedula,
+      fecha_nacimiento as fechaNacimiento, genero, direccion, telefono, correo,
+      rol, esta_activo as estaActivo, fecha_registro as fechaRegistro, clave
+      FROM usuarios WHERE rol = ?
+    ");
+
+    $sentencia->execute([$rol->value]);
+
+    return $sentencia->fetchAll(PDO::FETCH_CLASS, Usuario::class);
+  }
+
   /**
    * @param array{
    *   genero: string,
