@@ -103,7 +103,7 @@ return function (Router $router): void {
 
       App::json($salas);
     }
-  )->addMiddleware(autorizar(Rol::Secretario));
+  )->addMiddleware(autorizar(Rol::Secretario, Rol::Director));
 
   $router->get(
     '/asignaciones/@idPeriodo/@idSala',
@@ -181,5 +181,5 @@ return function (Router $router): void {
         'idAsignacion'
       ));
     }
-  )->addMiddleware(autorizar(Rol::Secretario));
+  )->addMiddleware(autorizar(Rol::Secretario, Rol::Director));
 };
