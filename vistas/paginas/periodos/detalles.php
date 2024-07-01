@@ -69,6 +69,16 @@ $idsSalasAsignadas = array_map(fn (Sala $sala) => $sala->id, $detalles['salasAsi
   </div>
 </section>
 
+<section class="full-box tile-container">
+  <article class="tile">
+    <div class="tile-tittle">Inscripciones</div>
+    <div class="tile-icon">
+      <i class="fas fa-graduation-cap fa-fw"></i>
+      <p><?= 0 ?? '&nbsp;' ?></p>
+    </div>
+  </article>
+</section>
+
 <h2 class="container">Estado de salas</h2>
 
 <div class="container row mx-auto mb-5">

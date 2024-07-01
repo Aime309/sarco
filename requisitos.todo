@@ -64,3 +64,15 @@ Lista de Sugerencias:
   ☐ Consulta de sala, lista de estudiantes, el maestro asignado.
   ☐ Consulta de período -> todo
   ☐ Dar soporte a cédulas escolares de gemelos (tienen la misma cédula)
+
+  ☐ Colocar el nombre del sistema en la pantalla antes de ingresar.
+  ☐ Agregar etiqueta de desactivar cuando el maestro está desactivado.
+  ☐ Agregar búsqueda con número de búsqueda en el estado de maestros.
+  ☐ Cuando se registre un nuevo maestro, agregar en detalles la información.
+  ☐ En asignar maestros, en la sala sólo deben aparecer el período activo.
+  ☐ Poder modificar maestros en las salas.
+  ☐ Que el director maneje el sistema en su totalidad.
+  ☐ Hacer la impresión del boletín.
+  ☐ Agregar modificar claves en administradores.
+  ☐ Eliminar menú maestro de docente.
+  ☐ Sólo dejar estudiantes, representantes y boletines en el usuario docente.
