@@ -15,15 +15,14 @@ return function (Router $router): void {
       ControladorDeInscripciones::class,
       'mostrarFormularioDeInscripcion'
     ])
-    ->addMiddleware(autorizar(Rol::Secretario));
+    ->addMiddleware(autorizar(Rol::Secretario, Rol::Director));
 
   $router
     ->post('/inscribir', [ControladorDeInscripciones::class, 'inscribir'])
-    ->addMiddleware(autorizar(Rol::Secretario));
+    ->addMiddleware(autorizar(Rol::Secretario, Rol::Director));
 
   $router
-    ->get('/boletines', [ControladorDeBoletines::class, 'mostrarListado'])
-    ->addMiddleware(Rol::Secretario, Rol::Docente);
+    ->get('/boletines', [ControladorDeBoletines::class, 'mostrarListado']);
 
   $router->group('/boletines/@id', function (Router $router): void {
     $router->get('/', [ControladorDeBoletines::class, 'mostrarEdicion']);

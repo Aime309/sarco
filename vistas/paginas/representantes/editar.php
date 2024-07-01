@@ -116,7 +116,8 @@ scripts('./recursos/js/validarFormulario.js');
 
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
-    'contenido' => 'Actualizar'
+    'contenido' => 'Actualizar',
+    'onclick' => 'this.form.checkValidity() && this.form.submit()'
   ]);
 
   ?>

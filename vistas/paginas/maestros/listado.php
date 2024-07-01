@@ -3,9 +3,10 @@
 use SARCO\Modelos\Maestro;
 use SARCO\Modelos\Usuario;
 
-/** @var Maestro[] $maestros */
-
-assert($usuario instanceof Usuario);
+/**
+ * @var Maestro[] $maestros
+ * @var Usuario $usuario
+ */
 
 $maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
 
@@ -73,7 +74,7 @@ $maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
             <td><?= $maestroIterado->correo ?></td>
             <td><?= $maestroIterado->direccion ?></td>
             <td>
-              <?php if ($usuario->esDirector()) : ?>
+              <?php if (!$usuario->esDocente()) : ?>
                 <?php if ($maestroIterado->estaActivo) : ?>
                   <a href="./usuarios/<?= $maestroIterado->cedula ?>/desactivar" class="btn btn-danger">
                     Desactivar

@@ -46,7 +46,7 @@ $enlaces[] = [
   'titulo' => 'Estudiantes',
   'subenlaces' => [
 
-    $usuario->esDocente() || $usuario->esDirector() ?: [
+    $usuario->esDocente() ?: [
       'href' => 'estudiantes/inscribir',
       'icono' => '<i class="fas fa-plus fa-fw"></i>',
       'titulo' => 'Inscribir estudiante'

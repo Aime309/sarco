@@ -24,6 +24,12 @@ App::post('/api/ingresar', function (): void {
   App::redirect('/');
 });
 
+App::route('/sesion/limpiar', function (): void {
+  $_SESSION = [
+    'usuario.id' => $_SESSION['usuario.id'] ?? null
+  ];
+});
+
 return function (Router $router): void {
   $router->get('/', function (): void {
     App::json(['mensaje' => 'API funcionando correctamente']);

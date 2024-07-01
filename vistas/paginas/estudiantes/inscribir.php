@@ -384,12 +384,23 @@ assert($periodoActual instanceof Periodo);
       ]);
 
       echo '</div></details>';
+      echo '<div class="row">';
 
       $vistas->render('componentes/Boton', [
         'tipo' => 'submit',
-        'contenido' => 'Inscribir'
-        'onclick' => 'this.form.checkValidity() && this.form.submit()'
+        'contenido' => 'Inscribir',
+        'onclick' => 'this.form.checkValidity() && this.form.submit()',
+        'class' => 'col-md-7 mt-3 mr-md-2'
       ]);
+
+      $vistas->render('componentes/Boton', [
+        'tipo' => 'reset',
+        'contenido' => 'Empezar de nuevo',
+        'class' => 'col-md bg-secondary mt-3 ml-md-2',
+        'onclick' => "resetInputs(this.closest('form'))"
+      ]);
+
+      echo '</div>';
 
       ?>
     </form>
@@ -397,6 +408,15 @@ assert($periodoActual instanceof Periodo);
 <?php endif ?>
 
 <script>
+  function resetInputs($form) {
+    fetch('./sesion/limpiar')
+
+    $form.querySelectorAll('input').forEach($input => $input.setAttribute('value', ''))
+    $form.querySelectorAll('textarea').forEach($textarea => {
+      $textarea.innerText = ''
+    })
+  }
+
   const $idPeriodo = document.querySelector('[name="id_periodo"]')
   const $idSala = $idPeriodo.form.querySelector('[name="id_sala"]')
   const $idAula = $idPeriodo.form.querySelector('[name="id_aula"]')

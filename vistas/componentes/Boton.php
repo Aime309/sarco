@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var 'button'|'submit' $tipo
+ * @var 'button'|'submit'|'reset' $tipo
  * @var string $contenido
  */
 

@@ -59,7 +59,7 @@ return function (Router $router): void {
 
       App::render('paginas/representantes/editar', compact('representante'), 'pagina');
       App::render('plantillas/privada', ['titulo' => 'Editar representante']);
-    })->addMiddleware(autorizar(Rol::Secretario));
+    })->addMiddleware(autorizar(Rol::Secretario, Rol::Director));
 
     $router->post('/', function (int $cedula): void {
       $representante = App::request()->data->getData();
@@ -101,6 +101,6 @@ return function (Router $router): void {
 
         App::redirect("/representantes/$cedula/editar");
       }
-    })->addMiddleware(Rol::Secretario);
+    })->addMiddleware(Rol::Secretario, Rol::Director);
   });
 };

@@ -67,7 +67,7 @@ scripts('./recursos/js/validarFormulario.js');
     'name' => 'rol',
     'placeholder' => 'Rol',
     'value' => @$_SESSION['datos']['rol'],
-    'opciones' => array_map(static fn (Rol $rol): array => [
+    'opciones' => array_map(static fn(Rol $rol): array => [
       'value' => $rol->name,
       'children' => $rol->name,
       'selected' => @$_GET['rol'] === 'maestro'
@@ -87,7 +87,7 @@ scripts('./recursos/js/validarFormulario.js');
     'name' => 'genero',
     'placeholder' => 'Género',
     'value' => @$_SESSION['datos']['genero'],
-    'opciones' => array_map(static fn (Genero $genero): array => [
+    'opciones' => array_map(static fn(Genero $genero): array => [
       'value' => $genero->name,
       'children' => $genero->name
     ], Genero::cases())
@@ -121,11 +121,34 @@ scripts('./recursos/js/validarFormulario.js');
     'value' => @$_SESSION['datos']['correo'],
   ]);
 
+  echo '<div class="row">';
+
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
     'contenido' => 'Registrar',
-    'onclick' => 'this.form.checkValidity() && this.form.submit()'
+    'onclick' => 'this.form.checkValidity() && this.form.submit()',
+    'class' => 'col-md-7 mt-3 mr-md-2'
   ]);
+
+  $vistas->render('componentes/Boton', [
+    'tipo' => 'reset',
+    'contenido' => 'Empezar de nuevo',
+    'class' => 'col-md bg-secondary mt-3 ml-md-2',
+    'onclick' => "resetInputs(this.closest('form'))"
+  ]);
+
+  echo '</div>';
 
   ?>
 </form>
+
+<script>
+  function resetInputs($form) {
+    fetch('./sesion/limpiar')
+
+    $form.querySelectorAll('input').forEach($input => $input.setAttribute('value', ''))
+    $form.querySelectorAll('textarea').forEach($textarea => {
+      $textarea.innerText = ''
+    })
+  }
+</script>
