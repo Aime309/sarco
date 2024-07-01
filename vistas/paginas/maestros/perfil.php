@@ -140,6 +140,16 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
               <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                   <tr>
+                    <th>Estado actual:</th>
+                    <td>
+                      <?php if ($maestro->estaActivo) : ?>
+                        <span class="badge badge-success">Activo</span>
+                      <?php else : ?>
+                        <span class="badge badge-danger">Inactivo</span>
+                      <?php endif ?>
+                    </td>
+                  </tr>
+                  <tr>
                     <th>Sala asignada:</th>
                     <td><?= $informacion['sala'] ?></td>
                   </tr>
@@ -152,13 +162,20 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
               <h3>Compañeros de sala/aula:</h3>
               <div class="row">
                 <?php foreach ($informacion['compañeros'] as $docente) : ?>
-                  <div class="col-md">
+                  <div class="col-md-4">
                     <a href="./maestros/<?= $docente->cedula ?>" target="_blank" class="card pt-2">
                       <img src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg" class="card-img-top w-25 mx-auto" />
                       <h4 class="card-header h6 text-center">
                         <?= $docente->nombreCompleto() ?>
                       </h4>
                       <ul class="list-group">
+                        <li class="list-group-item">
+                          <?php if ($docente->estaActivo) : ?>
+                            <span class="badge badge-success">Activo</span>
+                          <?php else : ?>
+                            <span class="badge badge-danger">Inactivo</span>
+                          <?php endif ?>
+                        </li>
                         <li class="list-group-item">v-<?= $docente->cedula ?></li>
                         <li class="list-group-item"><?= $docente->genero ?></li>
                       </ul>

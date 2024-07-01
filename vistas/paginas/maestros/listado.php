@@ -51,7 +51,7 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
       </thead>
       <tbody>
         <?php foreach ($maestros as $maestroIterado) : ?>
-          <tr class="text-center">
+          <tr class="text-center <?= !$maestroIterado->estaActivo ? 'bg-light' : '' ?>">
             <td>
               <a href="./maestros/<?= $maestroIterado->cedula ?>" class="btn btn-secondary">
                 Detalles

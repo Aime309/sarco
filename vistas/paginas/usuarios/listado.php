@@ -32,12 +32,6 @@ $usuarioAutenticado = $usuario;
         &nbsp; Lista de usuarios
       </a>
     </li>
-    <!-- <li>
-      <a href="./usuarios/buscar">
-        <i class="fas fa-search fa-fw"></i>
-        &nbsp; Buscar usuario
-      </a>
-    </li> -->
   </ul>
 </div>
 
@@ -46,6 +40,7 @@ $usuarioAutenticado = $usuario;
     <table class="table table-dark table-sm">
       <thead>
         <tr class="text-center roboto-medium">
+          <th></th>
           <th>Cédula</th>
           <th>Nombre completo</th>
           <th>Edad</th>
@@ -58,7 +53,7 @@ $usuarioAutenticado = $usuario;
       </thead>
       <tbody>
         <?php foreach ($usuarios as $usuarioIterado) : ?>
-          <tr class="text-center">
+          <tr class="text-center <?= !$usuarioIterado->estaActivo ? 'bg-light' : '' ?>">
             <td><?= $usuarioIterado->cedula ?></td>
             <td><?= $usuarioIterado->nombreCompleto() ?></td>
             <td><?= $usuarioIterado->edad() ?></td>

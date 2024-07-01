@@ -8,3 +8,4 @@ node_modules
 *.backup
 *.cache
 *.bkp
+test.html

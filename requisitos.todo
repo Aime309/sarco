@@ -65,11 +65,11 @@ Lista de Sugerencias:
   ☐ Consulta de período -> todo
   ☐ Dar soporte a cédulas escolares de gemelos (tienen la misma cédula)
 
-  ☐ Colocar el nombre del sistema en la pantalla antes de ingresar.
-  ☐ Agregar etiqueta de desactivar cuando el maestro está desactivado.
+  ✔ Colocar el nombre del sistema en la pantalla antes de ingresar. @done (01/07/2024 09:55:13)
+  ✔ Agregar etiqueta de desactivar cuando el maestro está desactivado. @done (01/07/2024 10:54:15)
   ☐ Agregar búsqueda con número de búsqueda en el estado de maestros.
   ☐ Cuando se registre un nuevo maestro, agregar en detalles la información.
-  ☐ En asignar maestros, en la sala sólo deben aparecer el período activo.
+  ✘ En asignar maestros, en la sala sólo deben aparecer el período activo. @cancelled (01/07/2024 10:53:00)
   ☐ Poder modificar maestros en las salas.
   ☐ Que el director maneje el sistema en su totalidad.
   ☐ Hacer la impresión del boletín.

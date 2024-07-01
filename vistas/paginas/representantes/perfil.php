@@ -19,48 +19,48 @@ assert($representante instanceof Representante);
   </div>
 </div>
 
-<div class="table-responsive px-3">
-  <table class="table table-bordered table-hover">
-    <tr>
-      <th>Nombre completo:</th>
-      <td><?= $representante->nombreCompleto() ?></td>
-    </tr>
-    <tr>
-      <th>Cédula:</th>
-      <td><?= $representante->cedula ?></td>
-    </tr>
-    <tr>
-      <th>Edad</th>
-      <th><?= $representante->edad() ?></th>
-    </tr>
-    <tr>
-      <th>Correo</th>
-      <th>
-        <a href="mailto:<?= $representante->correo ?>">
-          <?= $representante->correo ?>
-        </a>
-      </th>
-    </tr>
-    <tr>
-      <th>Teléfono</th>
-      <th>
-        <a href="tel:<?= str_replace([' ', '-'], '', $representante->telefono) ?>">
-          <?= $representante->telefono ?>
-        </a>
-      </th>
-    </tr>
-    <tr>
-      <th>Estado civil</th>
-      <th><?= $representante->estadoCivil ?></th>
-    </tr>
-  </table>
-</div>
-
-<section class="p-4">
-  <h3>Mis estudiantes:</h3>
-  <div class="row">
+<div class="row mx-0 px-3">
+  <section class="col-md-8 table-responsive">
+    <h3>Datos personales:</h3>
+    <table class="table table-bordered table-hover">
+      <tr>
+        <th>Nombre completo:</th>
+        <td><?= $representante->nombreCompleto() ?></td>
+      </tr>
+      <tr>
+        <th>Cédula:</th>
+        <td><?= $representante->cedula ?></td>
+      </tr>
+      <tr>
+        <th>Edad</th>
+        <th><?= $representante->edad() ?></th>
+      </tr>
+      <tr>
+        <th>Correo</th>
+        <th>
+          <a href="mailto:<?= $representante->correo ?>">
+            <?= $representante->correo ?>
+          </a>
+        </th>
+      </tr>
+      <tr>
+        <th>Teléfono</th>
+        <th>
+          <a href="tel:<?= str_replace([' ', '-'], '', $representante->telefono) ?>">
+            <?= $representante->telefono ?>
+          </a>
+        </th>
+      </tr>
+      <tr>
+        <th>Estado civil</th>
+        <th><?= $representante->estadoCivil ?></th>
+      </tr>
+    </table>
+  </section>
+  <section class="col-md-4">
+    <h3>Mis estudiantes:</h3>
     <?php foreach ($representante->estudiantes() as $estudiante) : ?>
-      <a href="./estudiantes/<?= $estudiante->cedula ?>" target="_blank" class="col-md-3">
+      <a href="./estudiantes/<?= $estudiante->cedula ?>" target="_blank">
         <article class="card pt-2">
           <img src="./node_modules/@fortawesome/fontawesome-free/svgs/solid/user.svg" class="card-img-top w-25 mx-auto" />
           <h4 class="card-header h6 text-center">
@@ -73,8 +73,8 @@ assert($representante instanceof Representante);
         </article>
       </a>
     <?php endforeach ?>
-  </div>
-</section>
+  </section>
+</div>
 
 <script>
   function imprimir() {

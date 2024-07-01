@@ -133,6 +133,13 @@ $periodoSeleccionado = (string) max(array_keys($detalles ?: [
                         <?= $docente->nombreCompleto() ?>
                       </h4>
                       <ul class="list-group">
+                        <li class="list-group-item">
+                          <?php if ($docente->estaActivo) : ?>
+                            <span class="badge badge-success">Activo</span>
+                          <?php else : ?>
+                            <span class="badge badge-danger">Inactivo</span>
+                          <?php endif ?>
+                        </li>
                         <li class="list-group-item">v-<?= $docente->cedula ?></li>
                         <li class="list-group-item"><?= $docente->genero ?></li>
                       </ul>

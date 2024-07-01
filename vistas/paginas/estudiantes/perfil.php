@@ -15,9 +15,10 @@ use SARCO\Modelos\Usuario;
  *   aula: Aula,
  *   docentes: Usuario[]
  * }> $informacionAcademica
+ *
+ * @var Estudiante $estudiante
 */
 
-assert($estudiante instanceof Estudiante);
 assert($vistas instanceof View);
 
 $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
@@ -165,6 +166,13 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
                         <?= $docente->nombreCompleto() ?>
                       </h4>
                       <ul class="list-group">
+                        <li class="list-group-item">
+                          <?php if ($docente->estaActivo) : ?>
+                            <span class="badge badge-success">Activo</span>
+                          <?php else : ?>
+                            <span class="badge badge-danger">Inactivo</span>
+                          <?php endif ?>
+                        </li>
                         <li class="list-group-item">v-<?= $docente->cedula ?></li>
                         <li class="list-group-item"><?= $docente->genero ?></li>
                       </ul>

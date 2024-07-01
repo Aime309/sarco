@@ -42,7 +42,6 @@ unset($_SESSION['mensajes.advertencia']);
   <link rel="stylesheet" href="recursos/css/botones.css" />
 
   <link rel="preload" href="recursos/imagenes/logo.jpg" as="image" />
-  <link rel="preload" href="recursos/imagenes/fondo-niños.png" as="image" />
   <style>
     th,
     td {
