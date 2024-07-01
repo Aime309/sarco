@@ -188,7 +188,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
         </div>
       </div>
       <div class="tab-pane fade" id="estudiantes">
-        <h2 class="table-responsive">Estudiantes</h2>
+        <h2>Estudiantes</h2>
         <div class="dropdown d-inline-block">
           <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
             Visualizar período

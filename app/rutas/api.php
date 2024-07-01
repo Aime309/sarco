@@ -4,6 +4,7 @@ use flight\net\Router;
 use SARCO\App;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Estudiante;
+use SARCO\Modelos\Maestro;
 use SARCO\Repositorios\RepositorioDeUsuarios;
 
 App::post('/api/ingresar', function (): void {
@@ -49,6 +50,29 @@ return function (Router $router): void {
     }
 
     App::json($estudiantes);
+  });
+
+  $router->get('/maestros', function (): void {
+    $cedula = $_GET['cedula'] ?? '';
+    $rol = Rol::Docente->value;
+
+    if ($cedula) {
+      $maestros = bd()->query("
+        SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
+        direccion, telefono, correo, rol, esta_activo as estaActivo,
+        fecha_registro as fechaRegistro
+        FROM usuarios WHERE rol = '$rol' AND cedula LIKE '$cedula%'
+      ")->fetchAll(PDO::FETCH_CLASS, Maestro::class);
+    } else {
+      $maestros = $maestros = bd()->query("
+        SELECT id, nombres, apellidos, cedula, fecha_nacimiento as fechaNacimiento,
+        direccion, telefono, correo, rol, esta_activo as estaActivo,
+        fecha_registro as fechaRegistro
+        FROM usuarios WHERE rol = '$rol'
+      ")->fetchAll(PDO::FETCH_CLASS, Maestro::class);
+    }
+
+    App::json($maestros);
   });
 
   $router->get(

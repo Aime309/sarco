@@ -1,10 +1,13 @@
 <?php
 
+use SARCO\Modelos\Maestro;
 use SARCO\Modelos\Usuario;
+
+/** @var Maestro[] $maestros */
 
 assert($usuario instanceof Usuario);
 
-$maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
+$maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
 
 ?>
 
@@ -16,7 +19,7 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
 </div>
 
 <div class="container-fluid">
-  <ul class="full-box list-unstyled page-nav-tabs">
+  <ul class="full-box list-unstyled page-nav-tabs mx-2">
     <?php if (!$usuario->esDocente()) : ?>
       <li>
         <a href="./usuarios/nuevo?rol=maestro">
@@ -29,6 +32,12 @@ $maestros = (fn (Usuario ...$maestros) => $maestros)(...$maestros);
       <a class="active" href="./maestros/">
         <i class="fas fa-clipboard-list fa-fw"></i>
         &nbsp; Lista de maestros
+      </a>
+    </li>
+    <li>
+      <a href="#buscar-maestro" data-toggle="modal">
+        <i class="fas fa-search fa-fw"></i>
+        &nbsp; Buscar maestro
       </a>
     </li>
   </ul>
