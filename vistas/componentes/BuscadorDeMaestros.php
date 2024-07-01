@@ -46,27 +46,29 @@ use flight\template\View;
 </div>
 
 <script>
-  $cedula = document.querySelector('#buscar-maestro [name="cedula"]')
-  $spinner = document.querySelector('#buscar-maestro .spinner-border')
-  $lista = document.querySelector('#lista-maestros')
+  document.addEventListener('DOMContentLoaded', () => {
+    const $cedula = document.querySelector('#buscar-maestro [name="cedula"]')
+    const $spinner = document.querySelector('#buscar-maestro .spinner-border')
+    const $lista = document.querySelector('#lista-maestros')
 
-  var interval
+    let interval
 
-  $cedula.addEventListener('keydown', () => {
-    clearInterval(interval)
+    $cedula.addEventListener('keydown', () => {
+      clearInterval(interval)
 
-    interval = setTimeout(async () => {
-      $spinner.classList.remove('d-none')
-      let maestros = await buscarMaestros($cedula.value)
-      $lista.innerHTML = maestros.map(maestro => `
-        <li class="list-group-item p-2">
-          <a href="./maestros/${maestro.cedula}">
-            ${maestro.cedula} ~ ${maestro.nombres} ${maestro.apellidos}
-          </a>
-        </li>
-      `).join('')
-      $spinner.classList.add('d-none')
-    }, 0)
+      interval = setTimeout(async () => {
+        $spinner.classList.remove('d-none')
+        let maestros = await buscarMaestros($cedula.value)
+        $lista.innerHTML = maestros.map(maestro => `
+          <li class="list-group-item p-2">
+            <a href="./maestros/${maestro.cedula}">
+              ${maestro.cedula} ~ ${maestro.nombres} ${maestro.apellidos}
+            </a>
+          </li>
+        `).join('')
+        $spinner.classList.add('d-none')
+      }, 0)
+    })
   })
 
   async function buscarMaestros(cedula) {

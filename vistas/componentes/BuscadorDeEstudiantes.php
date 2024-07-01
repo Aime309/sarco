@@ -45,27 +45,29 @@ use flight\template\View;
 </div>
 
 <script>
-  $cedula = document.querySelector('#buscar-estudiante [name="cedula"]')
-  $spinner = document.querySelector('#buscar-estudiante .spinner-border')
-  $lista = document.querySelector('#lista-estudiantes')
+  document.addEventListener('DOMContentLoaded', () => {
+    const $cedula = document.querySelector('#buscar-estudiante [name="cedula"]')
+    const $spinner = document.querySelector('#buscar-estudiante .spinner-border')
+    const $lista = document.querySelector('#lista-estudiantes')
 
-  var interval
+    let interval
 
-  $cedula.addEventListener('keydown', () => {
-    clearInterval(interval)
+    $cedula.addEventListener('keydown', () => {
+      clearInterval(interval)
 
-    interval = setTimeout(async () => {
-      $spinner.classList.remove('d-none')
-      let estudiantes = await buscarEstudiantes($cedula.value)
-      $lista.innerHTML = estudiantes.map(estudiante => `
-        <li class="list-group-item p-2">
-          <a href="./estudiantes?cedula=${estudiante.cedula}">
-            ${estudiante.cedula} ~ ${estudiante.nombres} ${estudiante.apellidos}
-          </a>
-        </li>
-      `).join('')
-      $spinner.classList.add('d-none')
-    }, 0)
+      interval = setTimeout(async () => {
+        $spinner.classList.remove('d-none')
+        let estudiantes = await buscarEstudiantes($cedula.value)
+        $lista.innerHTML = estudiantes.map(estudiante => `
+          <li class="list-group-item p-2">
+            <a href="./estudiantes?cedula=${estudiante.cedula}">
+              ${estudiante.cedula} ~ ${estudiante.nombres} ${estudiante.apellidos}
+            </a>
+          </li>
+        `).join('')
+        $spinner.classList.add('d-none')
+      }, 0)
+    })
   })
 
   async function buscarEstudiantes(cedula) {
