@@ -18,7 +18,11 @@ use SARCO\Modelos\Persona;
 
 assert($maestro instanceof Maestro);
 
-$periodoSeleccionado = (string) max(array_keys($informacionLaboral));
+if ($informacionLaboral) {
+  $periodoSeleccionado = (string) max(array_keys($informacionLaboral));
+} else {
+  $periodoSeleccionado = (string) $periodoActual;
+}
 
 ?>
 
