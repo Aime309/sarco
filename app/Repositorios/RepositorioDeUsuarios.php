@@ -74,14 +74,14 @@ final readonly class RepositorioDeUsuarios {
     try {
       $sentencia->execute([
         ':id' => new UuidV4,
-        ':nombres' => $usuario['nombres'],
-        ':apellidos' => $usuario['apellidos'],
+        ':nombres' => mb_convert_case($usuario['nombres'], MB_CASE_TITLE),
+        ':apellidos' => mb_convert_case($usuario['apellidos'], MB_CASE_TITLE),
         ':cedula' => $usuario['cedula'],
         ':fechaNacimiento' => $usuario['fecha_nacimiento'],
         ':genero' => $usuario['genero'],
         ':telefono' => $usuario['telefono'],
         ':correo' => $usuario['correo'],
-        ':direccion' => $usuario['direccion'],
+        ':direccion' => mb_convert_case($usuario['direccion'], MB_CASE_TITLE),
         ':clave' => Usuario::encriptar($usuario['clave']),
         ':rol' => $usuario['rol']
       ]);

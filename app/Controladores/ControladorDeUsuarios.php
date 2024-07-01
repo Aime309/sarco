@@ -51,8 +51,12 @@ final readonly class ControladorDeUsuarios {
   }
 
   function mostrarFormularioDeRegistro(): void {
+    $rol = $_GET['rol'] ?? 'usuario';
+
+    $titulo = strtolower($rol) === 'maestro' ? 'Nuevo maestro' : 'Nuevo usuario';
+
     App::render('paginas/usuarios/nuevo', [], 'pagina');
-    App::render('plantillas/privada', ['titulo' => 'Nuevo usuario']);
+    App::render('plantillas/privada', ['titulo' => $titulo]);
   }
 
   function activar(int $cedula): void {

@@ -49,7 +49,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El período es requerido',
         'name' => 'id_periodo',
         'placeholder' => 'Período',
-        'opciones' => array_map(static fn (Periodo $periodo): array => [
+        'opciones' => array_map(static fn(Periodo $periodo): array => [
           'value' => $periodo->id,
           'children' => $periodo,
           'selected' => (
@@ -62,23 +62,23 @@ assert($periodoActual instanceof Periodo);
       echo '<fieldset class="mt-5 row justify-content-center"><legend>Datos del estudiante</legend>';
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
+        'validacion' => 'Debe tener mínimo 1 nombre',
+        'pattern' => '(\s?[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}){1,5}',
         'name' => 'estudiante[nombres]',
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 mr-md-2',
         'value' => @$_SESSION['datos']['estudiante']['nombres']
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
+        'validacion' => 'Debe tener mínimo 2 apellidos',
+        'pattern' => '[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s{1}([a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s?){1,3}',
         'name' => 'estudiante[apellidos]',
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 ml-md-2',
         'value' => @$_SESSION['datos']['estudiante']['apellidos']
       ]);
@@ -116,7 +116,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El género es requerido',
         'name' => 'estudiante[genero]',
         'placeholder' => 'Género',
-        'opciones' => array_map(static fn (Genero $genero): array => [
+        'opciones' => array_map(static fn(Genero $genero): array => [
           'value' => $genero->name,
           'children' => $genero->name,
           'selected' => @$_SESSION['datos']['estudiante']['genero'] === $genero->name
@@ -128,7 +128,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El tipo de sangre es requerido',
         'name' => 'estudiante[grupo_sanguineo]',
         'placeholder' => 'Tipo de sangre',
-        'opciones' => array_map(static fn (GrupoSanguineo $grupo): array => [
+        'opciones' => array_map(static fn(GrupoSanguineo $grupo): array => [
           'value' => $grupo->value,
           'children' => $grupo->value,
           'selected' => @$_SESSION['datos']['estudiante']['grupo_sanguineo'] === $grupo->value
@@ -197,23 +197,23 @@ assert($periodoActual instanceof Periodo);
       echo '</div></fieldset><fieldset class="mt-5 row justify-content-center"><legend>Datos de la madre</legend>';
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
+        'validacion' => 'Debe tener mínimo 1 nombre',
+        'pattern' => '(\s?[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}){1,5}',
         'name' => 'madre[nombres]',
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 mr-md-2',
         'value' => @$_SESSION['datos']['madre']['nombres']
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
+        'validacion' => 'Debe tener mínimo 2 apellidos',
+        'pattern' => '[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s{1}([a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s?){1,3}',
         'name' => 'madre[apellidos]',
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 ml-md-2',
         'value' => @$_SESSION['datos']['madre']['apellidos']
       ]);
@@ -242,7 +242,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El estado civil es requerido',
         'name' => 'madre[estado_civil]',
         'placeholder' => 'Estado civil',
-        'opciones' => array_map(static fn (EstadoCivil $estado): array => [
+        'opciones' => array_map(static fn(EstadoCivil $estado): array => [
           'value' => $estado->name,
           'children' => $estado->name,
           'selected' => @$_SESSION['datos']['madre']['estado_civil'] === $estado->name
@@ -254,7 +254,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'La nacionalidad es requerido',
         'name' => 'madre[nacionalidad]',
         'placeholder' => 'Nacionalidad',
-        'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
+        'opciones' => array_map(static fn(Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
           'children' => $nacionalidad->name,
           'selected' => @$_SESSION['datos']['madre']['nacionalidad'] === $nacionalidad->name
@@ -288,25 +288,25 @@ assert($periodoActual instanceof Periodo);
       echo '<div class="row justify-content-center">';
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
+        'validacion' => 'Debe tener mínimo 1 nombre',
+        'pattern' => '(\s?[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}){1,5}',
         'name' => 'padre[nombres]',
         'required' => false,
         'placeholder' => 'Nombres',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 mr-md-2',
         'value' => @$_SESSION['datos']['padre']['nombres']
       ]);
 
       $vistas->render('componentes/Input', [
-        'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
+        'validacion' => 'Debe tener mínimo 2 apellidos',
+        'pattern' => '[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s{1}([a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s?){1,3}',
         'name' => 'padre[apellidos]',
         'required' => false,
         'placeholder' => 'Apellidos',
         'minlength' => 3,
         'maxlength' => 40,
-        'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
         'class' => 'col-md-5 ml-md-2',
         'value' => @$_SESSION['datos']['padre']['apellidos']
       ]);
@@ -338,7 +338,7 @@ assert($periodoActual instanceof Periodo);
         'name' => 'padre[estado_civil]',
         'required' => false,
         'placeholder' => 'Estado civil',
-        'opciones' => array_map(static fn (EstadoCivil $estado): array => [
+        'opciones' => array_map(static fn(EstadoCivil $estado): array => [
           'value' => $estado->name,
           'children' => $estado->name,
           'selected' => @$_SESSION['datos']['padre']['estado_civil'] === $estado->name
@@ -351,7 +351,7 @@ assert($periodoActual instanceof Periodo);
         'name' => 'padre[nacionalidad]',
         'required' => false,
         'placeholder' => 'Nacionalidad',
-        'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
+        'opciones' => array_map(static fn(Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
           'children' => $nacionalidad->name,
           'selected' => @$_SESSION['datos']['padre']['nacionalidad'] === $nacionalidad->name

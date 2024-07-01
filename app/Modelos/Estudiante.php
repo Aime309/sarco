@@ -85,13 +85,14 @@ final class Estudiante extends Modelo implements Stringable {
 
   /** @throws InvalidArgumentException */
   static function asegurarValidez(array $datos): void {
-    $validacionNombresYApellidos = '/^(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}$/';
+    $validacionNombres = '/^(\s?[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}){1,5}$/';
+    $validacionApellidos = '/^[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s{1}([a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s?){1,3}$/';
     $edad = self::calcularEdad($datos['fecha_nacimiento'] ?? null);
 
-    if (!preg_match($validacionNombresYApellidos,  $datos['nombres'] ?? '')) {
-      throw new InvalidArgumentException('Los nombres sólo pueden contener letras con iniciales en mayúscula');
-    } elseif (!preg_match($validacionNombresYApellidos, $datos['apellidos'] ?? '')) {
-      throw new InvalidArgumentException('Los apellidos sólo pueden contener letras con iniciales en mayúscula');
+    if (!preg_match($validacionNombres,  $datos['nombres'] ?? '')) {
+      throw new InvalidArgumentException('Debe tener mínimo 1 nombre');
+    } elseif (!preg_match($validacionApellidos, $datos['apellidos'] ?? '')) {
+      throw new InvalidArgumentException('Debe tener mínimo 2 apellidos');
     } elseif ($edad > 5) {
       throw new InvalidArgumentException('Debe tener máximo 5 años de edad');
     }

@@ -23,22 +23,22 @@ scripts('./recursos/js/validarFormulario.js');
   <?php
 
   $vistas->render('componentes/Input', [
-    'validacion' => 'Los nombres sólo pueden contener letras con iniciales en mayúscula',
+    'validacion' => 'Debe tener mínimo 1 nombre',
+    'pattern' => '(\s?[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}){1,5}',
     'name' => 'nombres',
     'placeholder' => 'Nombres',
     'minlength' => 3,
-    'maxlength' => 40,
-    'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
+    'maxlength' => 41,
     'value' => @$_SESSION['datos']['nombres']
   ]);
 
   $vistas->render('componentes/Input', [
-    'validacion' => 'Los apellidos sólo pueden contener letras con iniciales en mayúscula',
+    'validacion' => 'Debe tener mínimo 2 apellidos',
+    'pattern' => '[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s{1}([a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s?){1,3}',
     'name' => 'apellidos',
     'placeholder' => 'Apellidos',
     'minlength' => 3,
-    'maxlength' => 40,
-    'pattern' => '(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}',
+    'maxlength' => 41,
     'value' => @$_SESSION['datos']['apellidos']
   ]);
 
@@ -124,7 +124,6 @@ scripts('./recursos/js/validarFormulario.js');
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
     'contenido' => 'Registrar',
-    'onclick' => 'this.form.submit()'
   ]);
 
   ?>

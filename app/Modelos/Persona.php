@@ -37,14 +37,15 @@ abstract class Persona extends Modelo {
 
   /** @throws InvalidArgumentException */
   static function asegurarValidez(array $datos): void {
-    $validacionNombresYApellidos = '/^(\s?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,19}){2,3}$/';
+    $validacionNombres = '/^(\s?[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}){1,5}$/';
+    $validacionApellidos = '/^[a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s{1}([a-záéíóúñA-ZÁÉÍÓÚÑ]{1,20}\s?){1,3}$/';
     $cedula = $datos['cedula'] ?? -1;
     $edad = self::calcularEdad($datos['fecha_nacimiento'] ?? null);
 
-    if (!preg_match($validacionNombresYApellidos,  $datos['nombres'] ?? '')) {
-      throw new InvalidArgumentException('Los nombres sólo pueden contener letras con iniciales en mayúscula');
-    } elseif (!preg_match($validacionNombresYApellidos, $datos['apellidos'] ?? '')) {
-      throw new InvalidArgumentException('Los apellidos sólo pueden contener letras con iniciales en mayúscula');
+    if (!preg_match($validacionNombres,  $datos['nombres'] ?? '')) {
+      throw new InvalidArgumentException('Debe tener mínimo 1 nombre');
+    } elseif (!preg_match($validacionApellidos, $datos['apellidos'] ?? '')) {
+      throw new InvalidArgumentException('Debe tener mínimo 2 apellidos');
     } elseif ($cedula < 1_000_000 || $cedula > 31_000_000) {
       throw new InvalidArgumentException('La cédula debe estar entre 1.000.000 y 31.000.000');
     } elseif (($datos['fecha_nacimiento'] ?? '') < '1906-01-01') {
