@@ -388,6 +388,7 @@ assert($periodoActual instanceof Periodo);
       $vistas->render('componentes/Boton', [
         'tipo' => 'submit',
         'contenido' => 'Inscribir'
+        'onclick' => 'this.form.checkValidity() && this.form.submit()'
       ]);
 
       ?>
