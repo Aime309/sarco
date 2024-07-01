@@ -22,7 +22,7 @@ return function (Router $router): void {
 
     App::render('paginas/maestros/listado', compact('maestros'), 'pagina');
     App::render('plantillas/privada', ['titulo' => 'Maestros']);
-  });
+  })->addMiddleware(autorizar(Rol::Director, Rol::Secretario));
 
   $router->get('/@cedula', function (string $cedula): void {
     $rol = Rol::Docente->value;

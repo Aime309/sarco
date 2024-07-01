@@ -98,28 +98,30 @@ if (!$usuario->esDocente()) {
   ];
 }
 
-$enlaces[] = [
-  'icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>',
-  'titulo' => 'Maestros',
-  'subenlaces' => [
-    [
-      'href' => 'usuarios/nuevo?rol=maestro',
-      'icono' => '<i class="fas fa-plus fa-fw"></i>',
-      'titulo' => 'Registrar Maestro'
-    ],
-    [
-      'href' => 'maestros',
-      'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
-      'titulo' => 'Lista de Maestros'
-    ],
-    [
-      'href' => '#buscar-maestro',
-      'icono' => '<i class="fas fa-search fa-fw"></i>',
-      'titulo' => 'Buscar maestro',
-      'data-toggle' => 'modal'
-    ],
-  ]
-];
+if (!$usuario->esDocente()) {
+  $enlaces[] = [
+    'icono' => '<i class="fas fa-person-chalkboard fa-fw"></i>',
+    'titulo' => 'Maestros',
+    'subenlaces' => [
+      [
+        'href' => 'usuarios/nuevo?rol=maestro',
+        'icono' => '<i class="fas fa-plus fa-fw"></i>',
+        'titulo' => 'Registrar Maestro'
+      ],
+      [
+        'href' => 'maestros',
+        'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+        'titulo' => 'Lista de Maestros'
+      ],
+      [
+        'href' => '#buscar-maestro',
+        'icono' => '<i class="fas fa-search fa-fw"></i>',
+        'titulo' => 'Buscar maestro',
+        'data-toggle' => 'modal'
+      ],
+    ]
+  ];
+}
 
 $enlaces[] = [
   'icono' => '<i class="fas fa-people-roof fa-fw"></i>',
