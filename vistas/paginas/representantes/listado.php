@@ -16,6 +16,23 @@ $representantes = (fn (Representante ...$representantes) => $representantes)(...
 </div>
 
 <div class="container-fluid">
+  <ul class="full-box list-unstyled page-nav-tabs">
+    <li class="mx-0">
+      <a class="active" href="./estudiantes">
+        <i class="fas fa-clipboard-list fa-fw"></i>
+        &nbsp; Lista de estudiante
+      </a>
+    </li>
+    <li class="mx-0">
+      <a href="#buscar-representante" data-toggle="modal">
+        <i class="fas fa-search fa-fw"></i>
+        &nbsp; Buscar representante
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="container-fluid">
   <div class="table-responsive">
     <table class="table table-dark table-sm">
       <thead>

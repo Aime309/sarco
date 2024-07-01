@@ -124,7 +124,19 @@ $enlaces[] = [
 $enlaces[] = [
   'icono' => '<i class="fas fa-people-roof fa-fw"></i>',
   'titulo' => 'Representantes',
-  'href' => 'representantes'
+  'subenlaces' => [
+    [
+      'href' => 'representantes',
+      'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+      'titulo' => 'Lista de representantes'
+    ],
+    [
+      'href' => '#buscar-representante',
+      'icono' => '<i class="fas fa-search fa-fw"></i>',
+      'titulo' => 'Buscar representante',
+      'data-toggle' => 'modal'
+    ]
+  ]
 ];
 
 if ($usuario->esDirector()) {
@@ -234,5 +246,6 @@ if ($usuario->esDirector()) {
 
 $vistas->render('componentes/BuscadorDeEstudiantes');
 $vistas->render('componentes/BuscadorDeMaestros');
+$vistas->render('componentes/BuscadorDeRepresentantes');
 
 ?>

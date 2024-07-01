@@ -5,6 +5,7 @@ use SARCO\App;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Estudiante;
 use SARCO\Modelos\Maestro;
+use SARCO\Modelos\Representante;
 use SARCO\Repositorios\RepositorioDeUsuarios;
 
 App::post('/api/ingresar', function (): void {
@@ -79,6 +80,28 @@ return function (Router $router): void {
     }
 
     App::json($maestros);
+  });
+
+  $router->get('/representantes', function (): void {
+    $cedula = $_GET['cedula'] ?? '';
+
+    if ($cedula) {
+      $representantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula,
+        fecha_nacimiento as fechaNacimiento, estado_civil as estadoCivil,
+        nacionalidad, telefono, correo, fecha_registro as fechaRegistro
+        FROM representantes WHERE cedula LIKE '$cedula%'
+      ")->fetchAll(PDO::FETCH_CLASS, Representante::class);
+    } else {
+      $representantes = bd()->query("
+        SELECT id, nombres, apellidos, cedula,
+        fecha_nacimiento as fechaNacimiento, estado_civil as estadoCivil,
+        nacionalidad, telefono, correo, fecha_registro as fechaRegistro
+        FROM representantes
+      ")->fetchAll(PDO::FETCH_CLASS, Representante::class);
+    }
+
+    App::json($representantes);
   });
 
   $router->get(
