@@ -118,6 +118,16 @@ if ($informacionLaboral) {
                 <?= $maestro->direccion ?>
               </td>
             </tr>
+            <tr>
+              <th>Estado:</th>
+              <td>
+                <?php if ($maestro->estaActivo) : ?>
+                  <span class="badge badge-success">Activo</span>
+                <?php else : ?>
+                  <span class="badge badge-danger">Inactivo</span>
+                <?php endif ?>
+              </td>
+            </tr>
           </table>
         </div>
       </div>
@@ -143,16 +153,6 @@ if ($informacionLaboral) {
             <div class="tab-pane fade <?= $periodo === $periodoSeleccionado ? 'show active' : '' ?>" id="estado-laboral-<?= $periodo ?>">
               <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                  <tr>
-                    <th>Estado actual:</th>
-                    <td>
-                      <?php if ($maestro->estaActivo) : ?>
-                        <span class="badge badge-success">Activo</span>
-                      <?php else : ?>
-                        <span class="badge badge-danger">Inactivo</span>
-                      <?php endif ?>
-                    </td>
-                  </tr>
                   <tr>
                     <th>Sala asignada:</th>
                     <td><?= $informacion['sala'] ?></td>
@@ -229,25 +229,25 @@ if ($informacionLaboral) {
               </div>
             </div>
           <?php endforeach ?>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  const $inputsPeriodoEstadoLaboral = document.querySelectorAll('button[disabled]')
+  <script>
+    const $inputsPeriodoEstadoLaboral = document.querySelectorAll('button[disabled]')
 
-  function imprimir() {
-    if (!document.querySelector('.nav-lateral').classList.contains('active')) {
-      document.querySelector('.show-nav-lateral').click()
+    function imprimir() {
+      if (!document.querySelector('.nav-lateral').classList.contains('active')) {
+        document.querySelector('.show-nav-lateral').click()
+      }
+
+      print()
     }
 
-    print()
-  }
-
-  function cambiarPeriodo(periodo) {
-    $inputsPeriodoEstadoLaboral.forEach($inputPeriodoEstadoLaboral => {
-      $inputPeriodoEstadoLaboral.textContent = periodo
-    })
-  }
-</script>
+    function cambiarPeriodo(periodo) {
+      $inputsPeriodoEstadoLaboral.forEach($inputPeriodoEstadoLaboral => {
+        $inputPeriodoEstadoLaboral.textContent = periodo
+      })
+    }
+  </script>
