@@ -3,9 +3,10 @@
 use SARCO\Modelos\Inscripcion;
 use SARCO\Modelos\Usuario;
 
-assert($usuario instanceof Usuario);
-
-$inscripciones = (fn (Inscripcion ...$inscripciones) => $inscripciones)(...$inscripciones);
+/**
+ * @var Inscripcion[] $inscripciones
+ * @var Usuario $usuario
+ */
 
 ?>
 
@@ -36,18 +37,28 @@ $inscripciones = (fn (Inscripcion ...$inscripciones) => $inscripciones)(...$insc
 </div>
 
 <div class="container-fluid">
+  <input class="form-control mb-3" placeholder="Buscar estudiante..." oninput="w3.filterHTML('#inscripciones', '.inscripcion', this.value)">
   <div class="table-responsive">
-    <table class="table table-dark table-sm">
+    <table class="table table-dark table-sm" id="inscripciones">
       <thead>
         <tr class="text-center roboto-medium">
-          <th>Período</th>
-          <th>Estudiante</th>
-          <th>Fecha de registro</th>
+          <th onclick="w3.sortHTML('#inscripciones', '.inscripcion', 'td:nth-child(1)')">
+            Período
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#inscripciones', '.inscripcion', 'td:nth-child(2)')">
+            Estudiante
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#inscripciones', '.inscripcion', 'td:nth-child(3)')">
+            Fecha de registro
+            <i class="fa fa-sort"></i>
+          </th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($inscripciones as $inscripcion) : ?>
-          <tr class="text-center">
+          <tr class="text-center inscripcion">
             <td><?= $inscripcion->periodo() ?></td>
             <td>
               <a target="_blank" href="./estudiantes/<?= $inscripcion->cedulaEstudiante ?>">

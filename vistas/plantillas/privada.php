@@ -42,6 +42,7 @@ unset($_SESSION['mensajes.advertencia']);
   <link rel="stylesheet" href="recursos/css/botones.css" />
 
   <link rel="preload" href="recursos/imagenes/logo.jpg" as="image" />
+  <script src="recursos/libs/w3/w3.js"></script>
   <style>
     th,
     td {

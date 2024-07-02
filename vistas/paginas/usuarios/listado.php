@@ -36,24 +36,45 @@ $usuarioAutenticado = $usuario;
 </div>
 
 <div class="container-fluid">
+  <input class="form-control mb-3" placeholder="Buscar usuario..." oninput="w3.filterHTML('#usuarios', '.usuario', this.value)">
   <div class="table-responsive">
-    <table class="table table-dark table-sm">
+    <table class="table table-dark table-sm" id="usuarios">
       <thead>
         <tr class="text-center roboto-medium">
-          <th></th>
-          <th>Cédula</th>
-          <th>Nombre completo</th>
-          <th>Edad</th>
-          <th>Teléfono</th>
-          <th>Correo</th>
-          <th>Dirección</th>
-          <th>Rol</th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(1)')">
+            Cédula
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(2)')">
+            Nombre completo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(3)')">
+            Edad
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(4)')">
+            Teléfono
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(5)')">
+            Correo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(6)')">
+            Dirección
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#usuarios', '.usuario', 'td:nth-child(7)')">
+            Rol
+            <i class="fa fa-sort"></i>
+          </th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($usuarios as $usuarioIterado) : ?>
-          <tr class="text-center <?= !$usuarioIterado->estaActivo ? 'bg-light' : '' ?>">
+          <tr class="text-center usuario <?= !$usuarioIterado->estaActivo ? 'bg-light' : '' ?>">
             <td><?= $usuarioIterado->cedula ?></td>
             <td><?= $usuarioIterado->nombreCompleto() ?></td>
             <td><?= $usuarioIterado->edad() ?></td>
