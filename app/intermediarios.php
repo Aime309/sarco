@@ -1,8 +1,11 @@
 <?php
 
+use Illuminate\Container\Container;
 use SARCO\App;
 use SARCO\Enumeraciones\Rol;
+use SARCO\Modelos\Boletin;
 use SARCO\Modelos\Usuario;
+use SARCO\Repositorios\RepositorioDeBoletines;
 use SARCO\Repositorios\RepositorioDeUsuarios;
 
 function autorizar(Rol ...$roles): callable {
@@ -141,6 +144,27 @@ function notificarSiLimiteDePeriodoExcedido(): callable {
 
     if ($fechaActual >= $fechaPreLimite) {
       $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
+    }
+  };
+}
+
+function permitirEditarBoletinesSoloDelDocenteAutenticado(): callable {
+  return function (): void {
+    $usuarioAutenticado = obtenerComo(App::view()->get('usuario'), Usuario::class);
+    $idDelBoletin = App::router()->current()->params['id'];
+
+    $boletin = obtenerComo(App::get('contenedor')
+      ->get(RepositorioDeBoletines::class)
+      ->buscar($idDelBoletin), Boletin::class);
+
+    if (
+      $boletin->puedeSerEditadoPor($usuarioAutenticado)
+      || $usuarioAutenticado->rol() === Rol::Director
+    ) {
+      return;
+    } else {
+      $_SESSION['mensajes.error'] = 'No tienes permisos para editar este boletín';
+      exit(App::redirect(App::request()->referrer));
     }
   };
 }

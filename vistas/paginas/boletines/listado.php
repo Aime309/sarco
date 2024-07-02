@@ -14,17 +14,6 @@ $boletines = (fn (Boletin ...$boletines) => $boletines)(...$boletines);
 </div>
 
 <div class="container-fluid">
-  <ul class="full-box list-unstyled page-nav-tabs">
-    <li>
-      <a class="active" href="./estudiantes/boletines">
-        <i class="fas fa-clipboard-list fa-fw"></i>
-        &nbsp; Lista de boletines
-      </a>
-    </li>
-  </ul>
-</div>
-
-<div class="container-fluid">
   <div class="table-responsive">
     <table class="table table-dark table-sm">
       <thead>
@@ -46,7 +35,7 @@ $boletines = (fn (Boletin ...$boletines) => $boletines)(...$boletines);
             <td><?= $boletin->proyecto ?></td>
             <td><?= $boletin->fechaRegistro() ?></td>
             <td>
-              <a href="./estudiantes/boletines/<?= $boletin->id ?>" class="btn btn-success">
+              <a href="./estudiantes/boletines/<?= $boletin->id ?>/editar" class="btn btn-success">
                 Editar
               </a>
             </td>

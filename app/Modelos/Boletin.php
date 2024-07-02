@@ -15,8 +15,25 @@ final class Boletin extends Modelo {
   public readonly string $cedulaEstudiante;
   public readonly string $momento;
 
+  /** @var Usuario[] */
+  private array $docentes = [];
+
   function estudiante(): string {
     return "$this->nombresEstudiante $this->apellidosEstudiante";
+  }
+
+  function asignarDocentes(Usuario ...$docentes): void {
+    $this->docentes = $docentes;
+  }
+
+  function puedeSerEditadoPor(Usuario $docente): bool {
+    foreach ($this->docentes as $docenteIterado) {
+      if ($docenteIterado->id === $docente->id) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   function momento(): string {

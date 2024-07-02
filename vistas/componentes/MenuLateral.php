@@ -56,15 +56,15 @@ $enlaces[] = [
       'titulo' => 'Lista de estudiantes'
     ],
     [
+      'href' => 'estudiantes/boletines',
+      'icono' => '<i class="fas fa-clipboard-list fa-fw"></i>',
+      'titulo' => 'Lista de boletines'
+    ],
+    [
       'href' => '#buscar-estudiante',
       'icono' => '<i class="fas fa-search fa-fw"></i>',
       'titulo' => 'Buscar estudiante',
       'data-toggle' => 'modal'
-    ],
-    [
-      'href' => 'estudiantes/boletines',
-      'icono' => '<i class="fas fa-search fa-fw"></i>',
-      'titulo' => 'Lista de boletines'
     ],
     $usuario->esDocente() ?: [
       'href' => 'estudiantes/inscribir',

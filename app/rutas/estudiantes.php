@@ -25,7 +25,10 @@ return function (Router $router): void {
     ->get('/boletines', [ControladorDeBoletines::class, 'mostrarListado']);
 
   $router->group('/boletines/@id', function (Router $router): void {
-    $router->get('/', [ControladorDeBoletines::class, 'mostrarEdicion']);
+    $router->get('/editar', [ControladorDeBoletines::class, 'mostrarEdicion']);
     $router->post('/', [ControladorDeBoletines::class, 'actualizar']);
-  }, [autorizar(Rol::Docente)]);
+  }, [
+    autorizar(Rol::Docente, Rol::Director),
+    permitirEditarBoletinesSoloDelDocenteAutenticado()
+  ]);
 };

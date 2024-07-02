@@ -36,8 +36,8 @@ final readonly class ControladorDeBoletines {
       nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
       descripcion_ambiente as descripcionAmbiente, recomendaciones,
       b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
-      e.apellidos as apellidosEstudiante, e.cedula_escolar as cedulaEstudiante,
-      m.numero_momento as momento FROM boletines b JOIN estudiantes e
+      e.apellidos as apellidosEstudiante, e.cedula as cedulaEstudiante,
+      m.numero as momento FROM boletines b JOIN estudiantes e
       JOIN momentos m ON b.id_estudiante = e.id AND b.id_momento = m.id
       WHERE b.id = '$id'
     ")->fetchObject(Boletin::class);
