@@ -16,7 +16,7 @@ assert($vistas instanceof View);
   <p class="text-justify"></p>
 </header>
 
-<form method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+<form action="./estudiantes/boletines/<?= $boletin->id ?>" method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <?php
 
   $vistas->render('componentes/Input', [
