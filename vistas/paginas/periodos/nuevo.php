@@ -39,6 +39,8 @@ $siguienteAño = $ultimoAño + 1;
 <form method="post" action="./periodos" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <?php
 
+  $inicio = $_SESSION['datos']['anio_inicio'] ?? $ultimoAño;
+
   $vistas->render('componentes/Input', [
     'validacion' => 'El año de inicio es requerido',
     'name' => 'anio_inicio',
@@ -46,8 +48,17 @@ $siguienteAño = $ultimoAño + 1;
     'type' => 'number',
     'min' => 2006,
     'max' => date('Y') + 1,
-    'value' => $_SESSION['datos']['anio_inicio'] ?? $ultimoAño,
-    'onkeyup' => 'actualizarMomentos()'
+    'value' => $inicio,
+    'onkeyup' => 'actualizarMomentos(); actualizarPeriodo(this.value)',
+  ]);
+
+  $vistas->render('componentes/Input', [
+    'validacion' => 'El período es requerido',
+    'name' => 'periodo',
+    'placeholder' => 'Período',
+    'readonly' => true,
+    'disabled' => true,
+    'value' => $inicio . '-' . $inicio + 1
   ]);
 
   echo <<<html
@@ -55,61 +66,61 @@ $siguienteAño = $ultimoAño + 1;
   <h5>Primer momento</h5>
   <div class="row">
     {$vistas->fetch('componentes/Input', [
-      'class' => 'col mr-2',
-      'validacion' => 'La fecha de inicio es requerida',
-      'name' => 'momentos[1][inicio]',
-      'placeholder' => 'Inicio',
-      'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][1]['inicio'] ?? "$ultimoAño-09-15"
-    ])}
+    'class' => 'col mr-2',
+    'validacion' => 'La fecha de inicio es requerida',
+    'name' => 'momentos[1][inicio]',
+    'placeholder' => 'Inicio',
+    'type' => 'date',
+    'value' =>$_SESSION['datos']['momentos'][1]['inicio'] ?? "$ultimoAño-09-15"
+  ])}
     {$vistas->fetch('componentes/Input', [
-      'class' => 'col ml-2',
-      'validacion' => 'La fecha de fin es requerida',
-      'name' => 'momentos[1][fin]',
-      'placeholder' => 'Fin',
-      'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][1]['fin'] ?? "$ultimoAño-12-12"
-    ])}
+    'class' => 'col ml-2',
+    'validacion' => 'La fecha de fin es requerida',
+    'name' => 'momentos[1][fin]',
+    'placeholder' => 'Fin',
+    'type' => 'date',
+    'value' =>$_SESSION['datos']['momentos'][1]['fin'] ?? "$ultimoAño-12-12"
+  ])}
   </div>
   <hr />
   <h5>Segundo momento</h5>
   <div class="row">
     {$vistas->fetch('componentes/Input', [
-      'class' => 'col mr-2',
-      'validacion' => 'La fecha de inicio es requerida',
-      'name' => 'momentos[2][inicio]',
-      'placeholder' => 'Inicio',
-      'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][2]['inicio'] ?? "$siguienteAño-01-17"
-    ])}
+    'class' => 'col mr-2',
+    'validacion' => 'La fecha de inicio es requerida',
+    'name' => 'momentos[2][inicio]',
+    'placeholder' => 'Inicio',
+    'type' => 'date',
+    'value' =>$_SESSION['datos']['momentos'][2]['inicio'] ?? "$siguienteAño-01-17"
+  ])}
     {$vistas->fetch('componentes/Input', [
-      'class' => 'col ml-2',
-      'validacion' => 'La fecha de fin es requerida',
-      'name' => 'momentos[2][fin]',
-      'placeholder' => 'Fin',
-      'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][2]['fin'] ?? "$siguienteAño-04-01"
-    ])}
+    'class' => 'col ml-2',
+    'validacion' => 'La fecha de fin es requerida',
+    'name' => 'momentos[2][fin]',
+    'placeholder' => 'Fin',
+    'type' => 'date',
+    'value' =>$_SESSION['datos']['momentos'][2]['fin'] ?? "$siguienteAño-04-01"
+  ])}
   </div>
   <hr />
   <h5>Tercer momento</h5>
   <div class="row">
     {$vistas->fetch('componentes/Input', [
-      'class' => 'col mr-2',
-      'validacion' => 'La fecha de inicio es requerida',
-      'name' => 'momentos[3][inicio]',
-      'placeholder' => 'Inicio',
-      'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][3]['inicio'] ?? "$siguienteAño-05-10"
-    ])}
+    'class' => 'col mr-2',
+    'validacion' => 'La fecha de inicio es requerida',
+    'name' => 'momentos[3][inicio]',
+    'placeholder' => 'Inicio',
+    'type' => 'date',
+    'value' =>$_SESSION['datos']['momentos'][3]['inicio'] ?? "$siguienteAño-05-10"
+  ])}
     {$vistas->fetch('componentes/Input', [
-      'class' => 'col ml-2',
-      'validacion' => 'La fecha de fin es requerida',
-      'name' => 'momentos[3][fin]',
-      'placeholder' => 'Fin',
-      'type' => 'date',
-      'value' => $_SESSION['datos']['momentos'][3]['fin'] ?? "$siguienteAño-06-30"
-    ])}
+    'class' => 'col ml-2',
+    'validacion' => 'La fecha de fin es requerida',
+    'name' => 'momentos[3][fin]',
+    'placeholder' => 'Fin',
+    'type' => 'date',
+    'value' =>$_SESSION['datos']['momentos'][3]['fin'] ?? "$siguienteAño-06-30"
+  ])}
   </div>
   html;
 
@@ -142,5 +153,11 @@ $siguienteAño = $ultimoAño + 1;
 
       $momento.value = `${parseInt($añoInicio.value) + 1}-${mes}-${dia}`
     })
+  }
+
+  $periodo = document.querySelector('[name="periodo"]')
+
+  function actualizarPeriodo(inicio) {
+    $periodo.setAttribute('value', `${inicio}-${parseInt(inicio) + 1}`)
   }
 </script>
