@@ -2,7 +2,7 @@
 
 use SARCO\Modelos\Boletin;
 
-$boletines = (fn (Boletin ...$boletines) => $boletines)(...$boletines);
+$boletines = (fn(Boletin ...$boletines) => $boletines)(...$boletines);
 
 ?>
 
@@ -19,23 +19,24 @@ $boletines = (fn (Boletin ...$boletines) => $boletines)(...$boletines);
     <table class="table table-dark table-sm" id="boletines">
       <thead>
         <tr class="text-center roboto-medium">
-          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(1)')">
+          <th></th>
+          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(2)')">
             Momento
             <i class="fa fa-sort"></i>
           </th>
-          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(2)')">
+          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(3)')">
             Estudiante
             <i class="fa fa-sort"></i>
           </th>
-          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(3)')">
+          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(4)')">
             Inasistencias
             <i class="fa fa-sort"></i>
           </th>
-          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(4)')">
+          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(5)')">
             Proyecto
             <i class="fa fa-sort"></i>
           </th>
-          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(5)')">
+          <th onclick="w3.sortHTML('#boletines', '.boletin', 'td:nth-child(6)')">
             Fecha de registro
             <i class="fa fa-sort"></i>
           </th>
@@ -45,6 +46,11 @@ $boletines = (fn (Boletin ...$boletines) => $boletines)(...$boletines);
       <tbody>
         <?php foreach ($boletines as $boletin) : ?>
           <tr class="text-center boletin">
+            <td>
+              <a href="./estudiantes/boletines/<?= $boletin->id ?>" target="_blank" class="btn btn-secondary">
+                Imprimir
+              </a>
+            </td>
             <td><?= $boletin->momento() ?></td>
             <td><?= $boletin->estudiante() ?></td>
             <td><?= $boletin->inasistencias ?></td>

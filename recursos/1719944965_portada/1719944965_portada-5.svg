@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="195" height="246">
+	<defs />
+	<g>
+		<g transform="translate(1.5,1.5)">
+			<path d="M0,0 L192,0 L192,0 L192,243 L192,243 L0,243 Z" stroke-width="3" stroke-miterlimit="13.33333" stroke="#000000" fill="none" fill-rule="evenodd" />
+		</g>
+	</g>
+</svg>

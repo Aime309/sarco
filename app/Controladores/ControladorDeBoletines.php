@@ -6,9 +6,13 @@ use PDO;
 use PDOException;
 use SARCO\App;
 use SARCO\Modelos\Boletin;
+use SARCO\Repositorios\RepositorioDeBoletines;
 
 final readonly class ControladorDeBoletines {
-  function __construct(private PDO $pdo) {
+  function __construct(
+    private PDO $pdo,
+    private RepositorioDeBoletines $repositorio
+  ) {
   }
 
   function mostrarListado(): void {
@@ -69,5 +73,11 @@ final readonly class ControladorDeBoletines {
     } catch (PDOException $error) {
       throw $error;
     }
+  }
+
+  function imprimir(string $id): void {
+    $boletin = $this->repositorio->buscar($id);
+
+    App::render('paginas/boletines/detalles', compact('boletin'));
   }
 }

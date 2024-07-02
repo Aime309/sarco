@@ -26,6 +26,11 @@ final class Boletin extends Modelo {
     $this->docentes = $docentes;
   }
 
+  /** @return Usuario[] */
+  function docentes(): array {
+    return $this->docentes;
+  }
+
   function puedeSerEditadoPor(Usuario $docente): bool {
     foreach ($this->docentes as $docenteIterado) {
       if ($docenteIterado->id === $docente->id) {
