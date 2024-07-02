@@ -107,7 +107,22 @@ final readonly class ControladorDeInscripciones {
       $idDelPapa ??= null;
       [$añoDeNacimiento] = explode('-', $inscripcion['estudiante']['fecha_nacimiento']);
       $ultimosDigitosAñoNacimiento = substr($añoDeNacimiento, 2);
-      $cedulaEscolar = "v-1{$ultimosDigitosAñoNacimiento}{$inscripcion['madre']['cedula']}";
+
+      $prefijoCedula = 1;
+
+      while (true) {
+        $cedulaEscolar = "v-{$prefijoCedula}{$ultimosDigitosAñoNacimiento}{$inscripcion['madre']['cedula']}";
+
+        $estudianteEncontrado = $this->pdo->query("
+          SELECT cedula FROM estudiantes WHERE cedula = '$cedulaEscolar'
+        ")->fetch(PDO::FETCH_ASSOC);
+
+        if (!$estudianteEncontrado) {
+          break;
+        } else {
+          ++$prefijoCedula;
+        }
+      }
 
       $sentencia = $this->pdo->prepare("
         INSERT INTO estudiantes (id, nombres, apellidos, cedula,
