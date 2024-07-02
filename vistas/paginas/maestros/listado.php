@@ -45,23 +45,42 @@ $maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
 </div>
 
 <div class="container-fluid">
+  <input class="form-control mb-3" placeholder="Buscar maestro..." oninput="w3.filterHTML('#maestros', '.maestro', this.value)">
   <div class="table-responsive">
-    <table class="table table-dark table-sm">
+    <table class="table table-dark table-sm" id="maestros">
       <thead>
         <tr class="text-center roboto-medium">
-          <th></th>
-          <th>Cédula</th>
-          <th>Nombre completo</th>
-          <th>Edad</th>
-          <th>Teléfono</th>
-          <th>Correo</th>
-          <th>Dirección</th>
+          <th onclick="w3.sortHTML('#maestros', '.maestro', 'td:nth-child(2)')">
+            <th>
+            Cédula
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#maestros', '.maestro', 'td:nth-child(3)')">
+            Nombre completo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#maestros', '.maestro', 'td:nth-child(4)')">
+            Edad
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#maestros', '.maestro', 'td:nth-child(5)')">
+            Teléfono
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#maestros', '.maestro', 'td:nth-child(6)')">
+            Correo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#maestros', '.maestro', 'td:nth-child(7)')">
+            Dirección
+            <i class="fa fa-sort"></i>
+          </th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($maestros as $maestroIterado) : ?>
-          <tr class="text-center <?= !$maestroIterado->estaActivo ? 'bg-light' : '' ?>">
+          <tr class="text-center maestro <?= !$maestroIterado->estaActivo ? 'bg-light' : '' ?>">
             <td>
               <a href="./maestros/<?= $maestroIterado->cedula ?>" class="btn btn-secondary">
                 Detalles

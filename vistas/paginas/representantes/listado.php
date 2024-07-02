@@ -33,22 +33,36 @@ $representantes = (fn (Representante ...$representantes) => $representantes)(...
 </div>
 
 <div class="container-fluid">
+   <input class="form-control mb-3" placeholder="Buscar representantes..." oninput="w3.filterHTML('#representantes', '.representante', this.value)">
   <div class="table-responsive">
-    <table class="table table-dark table-sm">
+    <table class="table table-dark table-sm" id="representantes">
       <thead>
-        <tr class="text-center roboto-medium">
-          <th></th>
-          <th>Cédula</th>
-          <th>Nombre completo</th>
-          <th>Edad</th>
-          <th>Teléfono</th>
-          <th>Correo</th>
+        <th></th>
+         <th onclick="w3.sortHTML('#representantes', '.representante', 'td:nth-child(2)')">
+           Cédula
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#representantes', '.representante', 'td:nth-child(3)')">
+            Nombre completo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#representantes', '.representante', 'td:nth-child(4)')">
+            Edad
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#representantes', '.representante', 'td:nth-child(5)')">
+            Teléfono
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#representantes', '.representante', 'td:nth-child(6)')">
+           Correo
+            <i class="fa fa-sort"></i>
+          </th>
           <th></th>
         </tr>
-      </thead>
-      <tbody>
+       <tbody>
         <?php foreach ($representantes as $representante) : ?>
-          <tr class="text-center">
+          <tr class="text-center representante">
             <td>
               <a href="./representantes/<?= $representante->cedula ?>" class="btn btn-secondary">
                 Detalles

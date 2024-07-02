@@ -31,20 +31,30 @@ $aulas = (static fn (Aula ...$aulas) => $aulas)(...$aulas);
 </div>
 
 <div class="container-fluid">
+  <input class="form-control mb-3" placeholder="Buscar aulas..." oninput="w3.filterHTML('#aulas', '.aula', this.value)">
   <div class="table-responsive">
-    <table class="table table-dark table-sm">
+    <table class="table table-dark table-sm" id="aulas">
       <thead>
         <tr class="text-center roboto-medium">
-          <th>Código</th>
-          <th>Tipo</th>
-          <th>Capacidad</th>
+          <th onclick="w3.sortHTML('#aulas', '.aula', 'td:nth-child(2)')">
+            Nombre
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#aulas', '.aula', 'td:nth-child(3)')">
+            Tipo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#aulas', '.aula', 'td:nth-child(4)')">
+            Cantidad
+            <i class="fa fa-sort"></i>
+          </th>
           <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($aulas as $aula) : ?>
-          <tr class="text-center">
+          <tr class="text-center aula">
             <td><?= $aula ?></td>
             <td>
               <?= $aula->tipo ?>
@@ -57,17 +67,11 @@ $aulas = (static fn (Aula ...$aulas) => $aulas)(...$aulas);
             </td>
             <td>
               <?php if ($aula->sePuedeEliminar) : ?>
-                <a
-                  href="./aulas/<?= $aula->codigo ?>/eliminar"
-                  class="btn btn-danger">
+                <a href="./aulas/<?= $aula->codigo ?>/eliminar" class="btn btn-danger">
                   Eliminar
                 </a>
               <?php else : ?>
-                <a
-                  data-bs-toggle="popover"
-                  data-content="Esta aula ya ha sido asignada"
-                  class="btn btn-danger disabled"
-                  style="pointer-events: initial; cursor: not-allowed">
+                <a data-bs-toggle="popover" data-content="Esta aula ya ha sido asignada" class="btn btn-danger disabled" style="pointer-events: initial; cursor: not-allowed">
                   Eliminar
                 </a>
               <?php endif ?>

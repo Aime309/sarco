@@ -31,14 +31,24 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
 </div>
 
 <div class="container-fluid">
+  <input class="form-control mb-3" placeholder="Buscar sala..." oninput="w3.filterHTML('#salas', '.sala', this.value)">
   <div class="table-responsive">
-    <table class="table table-dark table-sm">
+    <table class="table table-dark table-sm" id="salas">
       <thead>
         <tr class="text-center roboto-medium">
           <th></th>
-          <th>Nombre</th>
-          <th>Edad mínima</th>
-          <th>Edad máxima</th>
+          <th onclick="w3.sortHTML('#salas', '.sala', 'td:nth-child(2)')">
+            Nombre
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#salas', '.sala', 'td:nth-child(3)')">
+            Edad Minima
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#salas', '.sala', 'td:nth-child(4)')">
+            Edad Maxima
+            <i class="fa fa-sort"></i>
+          </th>
           <th></th>
           <th></th>
           <th></th>
@@ -46,7 +56,7 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
       </thead>
       <tbody>
         <?php foreach ($salas as $sala) : ?>
-          <tr class="text-center">
+          <tr class="text-center sala">
             <td>
               <a href="./salas/<?= $sala->id ?>" class="btn btn-secondary">
                 Detalles
@@ -75,17 +85,11 @@ $salas = (fn (Sala ...$salas) => $salas)(...$salas);
             </td>
             <td>
               <?php if ($sala->sePuedeEliminar) : ?>
-                <a
-                  href="./salas/<?= $sala->id ?>/eliminar"
-                  class="btn btn-danger">
+                <a href="./salas/<?= $sala->id ?>/eliminar" class="btn btn-danger">
                   Eliminar
                 </a>
               <?php else : ?>
-                <a
-                  data-bs-toggle="popover"
-                  data-content="Esta sala ya ha sido asignada"
-                  class="btn btn-danger disabled"
-                  style="pointer-events: initial; cursor: not-allowed">
+                <a data-bs-toggle="popover" data-content="Esta sala ya ha sido asignada" class="btn btn-danger disabled" style="pointer-events: initial; cursor: not-allowed">
                   Eliminar
                 </a>
               <?php endif ?>

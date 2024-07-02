@@ -42,24 +42,46 @@ $estudiantes = (fn (Estudiante ...$estudiantes) => $estudiantes)(...$estudiantes
 </div>
 
 <div class="container-fluid">
-  <div class="table-responsive">
-    <table class="table table-dark table-sm">
+  <input class="form-control mb-3" placeholder="Buscar estudiante..." oninput="w3.filterHTML('#estudiantes', '.estudiante', this.value)">
+
+<div class="table-responsive">
+    <table class="table table-dark table-sm" id="estudiantes">
       <thead>
-        <tr class="text-center roboto-medium">
-          <th></th>
-          <th>Cédula</th>
-          <th>Nombre completo</th>
-          <th>Edad</th>
-          <th>Lugar de nacimiento</th>
-          <th>Género</th>
-          <th>Grupo sanguíneo</th>
-          <th>Fecha de registro</th>
+        <th></th>
+         <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(2)')">
+            Cédula
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(3)')">
+            Nombre completo
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(4)')">
+            Edad
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(5)')">
+            Lugar de Nacimiento
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(6)')">
+            Genéro
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(7)')">
+            Grupo Sanguinio
+            <i class="fa fa-sort"></i>
+          </th>
+          <th onclick="w3.sortHTML('#estudiantes', '.estudiante', 'td:nth-child(8)')">
+            Fecha de Registro
+            <i class="fa fa-sort"></i>
+          </th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($estudiantes as $estudiante) : ?>
-          <tr class="text-center">
+          <tr class="text-center estudiante">
             <td>
               <a href="./estudiantes/<?= $estudiante->cedula ?>" class="btn btn-secondary">
                 Detalles
