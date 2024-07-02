@@ -49,14 +49,13 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El período es requerido',
         'name' => 'id_periodo',
         'placeholder' => 'Período',
-        'opciones' => array_map(static fn(Periodo $periodo): array => [
-          'value' => $periodo->id,
-          'children' => $periodo,
-          'selected' => (
-            @$_SESSION['datos']['id_periodo'] === $periodo->id
-            || $periodo == $periodoActual
-          )
-        ], $periodos)
+        'opciones' => [
+          [
+            'value' => $periodoActual->id,
+            'children' => $periodoActual,
+            'selected' => true
+          ]
+        ]
       ]);
 
       echo '<fieldset class="mt-5 row justify-content-center"><legend>Datos del estudiante</legend>';
@@ -116,7 +115,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El género es requerido',
         'name' => 'estudiante[genero]',
         'placeholder' => 'Género',
-        'opciones' => array_map(static fn(Genero $genero): array => [
+        'opciones' => array_map(static fn (Genero $genero): array => [
           'value' => $genero->name,
           'children' => $genero->name,
           'selected' => @$_SESSION['datos']['estudiante']['genero'] === $genero->name
@@ -128,7 +127,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El tipo de sangre es requerido',
         'name' => 'estudiante[grupo_sanguineo]',
         'placeholder' => 'Tipo de sangre',
-        'opciones' => array_map(static fn(GrupoSanguineo $grupo): array => [
+        'opciones' => array_map(static fn (GrupoSanguineo $grupo): array => [
           'value' => $grupo->value,
           'children' => $grupo->value,
           'selected' => @$_SESSION['datos']['estudiante']['grupo_sanguineo'] === $grupo->value
@@ -242,7 +241,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'El estado civil es requerido',
         'name' => 'madre[estado_civil]',
         'placeholder' => 'Estado civil',
-        'opciones' => array_map(static fn(EstadoCivil $estado): array => [
+        'opciones' => array_map(static fn (EstadoCivil $estado): array => [
           'value' => $estado->name,
           'children' => $estado->name,
           'selected' => @$_SESSION['datos']['madre']['estado_civil'] === $estado->name
@@ -254,7 +253,7 @@ assert($periodoActual instanceof Periodo);
         'validacion' => 'La nacionalidad es requerido',
         'name' => 'madre[nacionalidad]',
         'placeholder' => 'Nacionalidad',
-        'opciones' => array_map(static fn(Nacionalidad $nacionalidad): array => [
+        'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
           'children' => $nacionalidad->name,
           'selected' => @$_SESSION['datos']['madre']['nacionalidad'] === $nacionalidad->name
@@ -338,7 +337,7 @@ assert($periodoActual instanceof Periodo);
         'name' => 'padre[estado_civil]',
         'required' => false,
         'placeholder' => 'Estado civil',
-        'opciones' => array_map(static fn(EstadoCivil $estado): array => [
+        'opciones' => array_map(static fn (EstadoCivil $estado): array => [
           'value' => $estado->name,
           'children' => $estado->name,
           'selected' => @$_SESSION['datos']['padre']['estado_civil'] === $estado->name
@@ -351,7 +350,7 @@ assert($periodoActual instanceof Periodo);
         'name' => 'padre[nacionalidad]',
         'required' => false,
         'placeholder' => 'Nacionalidad',
-        'opciones' => array_map(static fn(Nacionalidad $nacionalidad): array => [
+        'opciones' => array_map(static fn (Nacionalidad $nacionalidad): array => [
           'value' => $nacionalidad->name,
           'children' => $nacionalidad->name,
           'selected' => @$_SESSION['datos']['padre']['nacionalidad'] === $nacionalidad->name

@@ -25,11 +25,13 @@ assert($vistas instanceof View);
     'validacion' => 'El período es requerido',
     'name' => 'id_periodo',
     'placeholder' => 'Período',
-    'opciones' => array_map(static fn (Periodo $periodo): array => [
-      'value' => $periodo->id,
-      'children' => $periodo->inicio,
-      'selected' => $periodo == $periodoActual
-    ], $periodos),
+    'opciones' => [
+      [
+        'value' => $periodoActual->id,
+        'children' => $periodoActual,
+        'selected' => true
+      ]
+    ],
     'onchange' => 'resetearSelectores()'
   ]);
 
