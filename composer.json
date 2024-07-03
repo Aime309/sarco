@@ -13,8 +13,7 @@
     "post-install-cmd": [
       "php -r \"if (!file_exists('.env')) copy('.env.dist', '.env');\""
     ],
-    "dev": "start php -S localhost:80",
-    "test": "phpunit"
+    "dev": "start php -S localhost:80"
   },
   "autoload": {
     "psr-4": {
