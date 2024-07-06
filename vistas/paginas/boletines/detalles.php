@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>SARCO | <?= $titulo ?></title>
     <base href="<?= $root ?>/" />
+    <link rel="icon" href="recursos/imagenes/favicon.png" />
     <link rel="stylesheet" href="recursos/css/fuentes.css" />
     <link rel="stylesheet" href="recursos/css/boletin.css" />
   </head>

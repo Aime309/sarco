@@ -14,12 +14,23 @@ final class Boletin extends Modelo {
   public readonly string $apellidosEstudiante;
   public readonly string $cedulaEstudiante;
   public readonly string $momento;
+  private ?Estudiante $estudiante = null;
 
   /** @var Usuario[] */
   private array $docentes = [];
 
   function estudiante(): string {
     return "$this->nombresEstudiante $this->apellidosEstudiante";
+  }
+
+  function asignarEstudiante(Estudiante $estudiante): self {
+    $this->estudiante = $estudiante;
+
+    return $this;
+  }
+
+  function obtenerEstudiante(): ?Estudiante {
+    return $this->estudiante;
   }
 
   function asignarDocentes(Usuario ...$docentes): void {
