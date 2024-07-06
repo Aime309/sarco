@@ -21,5 +21,7 @@ return function (Router $router): void {
   $router->group('/@cedula:[0-9]{7,8}', function (Router $router): void {
     $router->get('/activar', [ControladorDeUsuarios::class, 'activar']);
     $router->get('/desactivar', [ControladorDeUsuarios::class, 'desactivar']);
+    $router->get('/restablecer-clave', [ControladorDeUsuarios::class, 'mostrarFormularioDeRestablecerClave']);
+    $router->post('/restablecer-clave', [ControladorDeUsuarios::class, 'restablecerClave']);
   }, [autorizar(Rol::Director)]);
 };

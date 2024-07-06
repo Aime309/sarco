@@ -2,9 +2,11 @@
 
 use SARCO\Modelos\Usuario;
 
-assert($usuario instanceof Usuario);
+/**
+ * @var Usuario[] $usuarios
+ * @var Usuario $usuario
+ */
 
-$usuarios = (fn (Usuario ...$usuarios) => $usuarios)(...$usuarios);
 $usuarioAutenticado = $usuario;
 
 ?>
@@ -70,6 +72,7 @@ $usuarioAutenticado = $usuario;
             <i class="fa fa-sort"></i>
           </th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -93,6 +96,13 @@ $usuarioAutenticado = $usuario;
                     Activar
                   </a>
                 <?php endif ?>
+              <?php endif ?>
+            </td>
+            <td>
+              <?php if ($usuarioAutenticado->esDirector()) : ?>
+                <a href="./usuarios/<?= $usuarioAutenticado->cedula ?>/restablecer-clave" class="btn btn-secondary">
+                  Restablecer contraseña
+                </a>
               <?php endif ?>
             </td>
           </tr>

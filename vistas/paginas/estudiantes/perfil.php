@@ -226,7 +226,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
                   <table class="table table-striped table-sm">
                     <caption class="h3 d-flex justify-content-between flex-col flex-md-row" style="caption-side: top">
                       <span>Momento <?= $boletin->momento ?></span>
-                      <a href="./estudiantes/boletines/<?= $boletin->id ?>" class="btn btn-success">
+                      <a href="./estudiantes/boletines/<?= $boletin->id ?>/editar" class="btn btn-success">
                         Editar
                       </a>
                     </caption>

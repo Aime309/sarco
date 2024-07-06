@@ -70,4 +70,11 @@ final readonly class ControladorDeUsuarios {
     $_SESSION['mensajes.exito'] = 'Usuario desactivado existósamente';
     App::redirect(App::request()->referrer);
   }
+
+  function mostrarFormularioDeRestablecerClave(int $cedula): void {
+    $usuario = $this->repositorio->buscar($cedula);
+
+    App::render('paginas/usuarios/restablecer', compact('usuario'), 'pagina');
+    App::render('plantillas/privada', ['titulo' => 'Restablecer contraseña']);
+  }
 }
