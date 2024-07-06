@@ -9,7 +9,8 @@ use SARCO\Modelos\Usuario;
 final readonly class RepositorioDeBoletines {
   function __construct(
     private PDO $pdo,
-    private RepositorioDeUsuarios $repositorioDeUsuarios
+    private RepositorioDeUsuarios $repositorioDeUsuarios,
+    private RepositorioDeEstudiantes $repositorioDeEstudiantes
   ) {
   }
 
@@ -38,7 +39,7 @@ final readonly class RepositorioDeBoletines {
       recomendaciones, e.nombres as nombresEstudiante,
       e.apellidos as apellidosEstudiante,
       e.cedula as cedulaEstudiante,
-      m.numero as momento, id_asignacion_sala
+      m.numero as momento, id_asignacion_sala, id_estudiante
       FROM boletines b JOIN estudiantes e
       JOIN momentos m
       ON b.id_estudiante = e.id AND b.id_momento = m.id
@@ -70,6 +71,12 @@ final readonly class RepositorioDeBoletines {
       }, $ids);
 
       $boletin->asignarDocentes(...$docentes);
+
+      $estudiante = $this
+        ->repositorioDeEstudiantes
+        ->buscarPorId($boletin->id_estudiante);
+
+      $boletin->asignarEstudiante($estudiante);
     }
 
     return $boletin;

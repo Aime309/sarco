@@ -15,6 +15,10 @@ abstract class Persona extends Modelo {
   public string $correo;
   public string $genero;
 
+  function __toString(): string {
+    return $this->nombreCompleto();
+  }
+
   function nombreCompleto(): string {
     return "$this->nombres $this->apellidos";
   }

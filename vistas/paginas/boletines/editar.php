@@ -61,7 +61,7 @@ assert($vistas instanceof View);
     'name' => 'formacion',
     'placeholder' => 'Descripción de formación',
     'minlength' => 3,
-    'maxlength' => 40,
+    'maxlength' => 200,
     'value' => $boletin->descripcionFormacion !== 'No establecida'
       ? $boletin->descripcionFormacion
       : ''
@@ -72,7 +72,7 @@ assert($vistas instanceof View);
     'name' => 'ambiente',
     'placeholder' => 'Descripción de ambiente',
     'minlength' => 3,
-    'maxlength' => 40,
+    'maxlength' => 200,
     'value' => $boletin->descripcionAmbiente !== 'No establecida'
       ? $boletin->descripcionAmbiente
       : ''
@@ -83,7 +83,7 @@ assert($vistas instanceof View);
     'name' => 'recomendaciones',
     'placeholder' => 'Recomendaciones',
     'minlength' => 3,
-    'maxlength' => 40,
+    'maxlength' => 150,
     'value' => $boletin->recomendaciones !== 'No establecidas'
       ? $boletin->recomendaciones
       : ''

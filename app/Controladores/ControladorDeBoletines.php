@@ -5,13 +5,17 @@ namespace SARCO\Controladores;
 use PDO;
 use PDOException;
 use SARCO\App;
+use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Boletin;
+use SARCO\Modelos\Usuario;
 use SARCO\Repositorios\RepositorioDeBoletines;
+use SARCO\Repositorios\RepositorioDeUsuarios;
 
 final readonly class ControladorDeBoletines {
   function __construct(
     private PDO $pdo,
-    private RepositorioDeBoletines $repositorio
+    private RepositorioDeBoletines $repositorioDeBoletines,
+    private RepositorioDeUsuarios $repositorioDeUsuarios
   ) {
   }
 
@@ -76,9 +80,21 @@ final readonly class ControladorDeBoletines {
   }
 
   function imprimir(string $id): void {
-    $boletin = $this->repositorio->buscar($id);
+    $boletin = $this->repositorioDeBoletines->buscar($id);
+    $directores = $this->repositorioDeUsuarios->todosPorRol(Rol::Director);
+
+    $directoresActivos = array_filter(
+      $directores,
+      fn (Usuario $director) => $director->estaActivo
+    );
+
+    [$director] = $directoresActivos;
     $titulo = 'Detalles de boletín';
 
-    App::render('paginas/boletines/detalles', compact('boletin', 'titulo'));
+    App::render('paginas/boletines/detalles', compact(
+      'boletin',
+      'titulo',
+      'director'
+    ));
   }
 }

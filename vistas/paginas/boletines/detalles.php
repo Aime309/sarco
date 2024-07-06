@@ -1,3 +1,17 @@
+<?php
+
+use SARCO\Modelos\Boletin;
+use SARCO\Modelos\Usuario;
+
+/**
+ * @var Boletin $boletin
+ * @var Usuario $director
+ */
+
+$edadEstudiante = $boletin->obtenerEstudiante()->edad();
+
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -35,70 +49,90 @@
       <article class="page__student-data">
         <div class="page__student-row">
           <span class="page__student-property">Nombres y apellidos:</span>
-          <u class="page__student-value">Nombres y apellidos</u>
+          <u class="page__student-value"><?= $boletin->obtenerEstudiante() ?></u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">Lugar y fecha de nacimiento:</span>
-          <u class="page__student-value">Lugar y fecha de nacimiento</u>
+          <u class="page__student-value">
+            <?= $boletin->obtenerEstudiante()->lugarNacimiento ?>
+            /
+            <?= $boletin->obtenerEstudiante()->fechaNacimiento() ?>
+          </u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">Edad:</span>
-          <u class="page__student-value">Edad</u>
+          <u class="page__student-value">
+            <?= $edadEstudiante === 1 ? '1 año' : "$edadEstudiante años" ?>
+          </u>
           <span class="page__student-property">Cédula escolar:</span>
-          <u class="page__student-value">Cédula</u>
+          <u class="page__student-value">
+            <?= $boletin->obtenerEstudiante()->cedula ?>
+          </u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">Representante:</span>
-          <u class="page__student-value">Representante</u>
+          <u class="page__student-value">
+            <?= $boletin->obtenerEstudiante()->mama()->nombreCompleto() ?>
+          </u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">C.I. V-</span>
-          <u class="page__student-value">Cédula</u>
+          <u class="page__student-value"><?= $boletin->obtenerEstudiante()->mama()->cedula ?></u>
         </div>
         <div class="page__student-row">
-          <span class="page__student-property">Dirección:</span>
-          <u class="page__student-value">Dirección</u>
+          <!-- <span class="page__student-property">Dirección:</span> -->
+          <!-- <u class="page__student-value">Dirección</u> -->
         </div>
         <div class="page__student-row">
           <span class="page__student-property">Docentes:</span>
-          <u class="page__student-value">Docentes</u>
+          <u class="page__student-value"><?= join(', ', $boletin->docentes()) ?></u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">Director:</span>
-          <u class="page__student-value">Director</u>
+          <u class="page__student-value"><?= $director ?></u>
         </div>
       </article>
     </div>
     <div class="page page--3-rows page--padding">
       <h2 class="page__title">MIS PROGRESOS DURANTE EL PRIMER LAPSO</h2>
-      <article>
+      <article class="page__descriptions">
         <div class="page__student-row">
           <span class="page__student-property">Estatura del niño(a):</span>
-          <u class="page__student-value">Estatura</u>
+          <u class="page__student-value">__________</u>
           <span class="page__student-property">Peso:</span>
-          <u class="page__student-value">Peso</u>
+          <u class="page__student-value">_________</u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">N° de inasistencias del niño(a):</span>
-          <u class="page__student-value">Inasistencias</u>
+          <u class="page__student-value">
+            __<?= $boletin->inasistencias ?>____
+          </u>
         </div>
         <div class="page__student-row">
           <span class="page__student-property">
             Breve descripción: Formación personal, social y comunicación:
           </span>
-          <u class="page__student-value">Formación personal</u>
+          <u class="page__student-value">
+            <?= $boletin->descripcionFormacion . str_repeat('_', 175 - mb_strlen($boletin->descripcionFormacion) ?: 0) ?>
+          </u>
         </div>
+        <br />
         <div class="page__student-row">
           <span class="page__student-property">
             Breve descripción: Relación entre los componentes del ambiente:
           </span>
-          <u class="page__student-value">Formación de ambiente</u>
+          <u class="page__student-value">
+            <?= $boletin->descripcionAmbiente . str_repeat('_', 170 - mb_strlen($boletin->descripcionAmbiente) ?: 0) ?>
+          </u>
         </div>
+        <br />
         <div class="page__student-row">
           <span class="page__student-property">
             Recomendaciones al representante:
           </span>
-          <u class="page__student-value">Recomendaciones</u>
+          <u class="page__student-value">
+            <?= $boletin->recomendaciones . str_repeat('_', 115 - mb_strlen($boletin->recomendaciones) ?: 0) ?>
+          </u>
         </div>
       </article>
       <footer class="page__signatures">
