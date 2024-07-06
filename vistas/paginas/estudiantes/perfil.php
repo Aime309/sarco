@@ -229,6 +229,9 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
                       <a href="./estudiantes/boletines/<?= $boletin->id ?>/editar" class="btn btn-success">
                         Editar
                       </a>
+                      <a href="./estudiantes/boletines/<?= $boletin->id ?>" class="btn btn-outline">
+                        Imprimir
+                      </a>
                     </caption>
                     <tr>
                       <th>Inasistencias:</th>
