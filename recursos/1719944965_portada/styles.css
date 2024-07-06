@@ -1,42 +1,50 @@
 @font-face {
-	font-family:'Arial';
-	font-style:normal;
-	font-weight:bold;
-	src:local('☺'), url('font1.woff') format('woff');
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: bold;
+  src: local('☺'), url('font1.woff') format('woff');
 }
+
 .wcdiv {
-	position:absolute;
+  position: absolute;
 }
+
 .wcspan {
-	position:absolute;
-	white-space:pre;
-	color:#000000;
-	font-size:12pt;
+  position: absolute;
+  white-space: pre;
+  color: #000000;
+  font-size: 12pt;
 }
+
 .wcimg {
-	position:absolute;
+  position: absolute;
 }
+
 .wcsvg {
-	position:absolute;
+  position: absolute;
 }
+
 .wcpage {
-	position:relative;
-	margin:10pt auto 10pt auto;
-	overflow:hidden;
+  position: relative;
+  margin: 10pt auto 10pt auto;
+  overflow: hidden;
 }
+
 @media print {
-	body {
-		margin:0pt;
-		padding:0pt;
-	}
-	.wcpage {
-		page-break-after:always;
-		margin:0pt;
-		padding:0pt;
-	}
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .wcpage {
+    page-break-after: always;
+    margin: 0;
+    padding: 0;
+  }
 }
+
 .wctext001 {
-	font-family:'Arial';
-	font-style:normal;
-	font-weight:bold;
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: bold;
 }

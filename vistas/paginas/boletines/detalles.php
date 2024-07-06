@@ -17,13 +17,12 @@ $docentes = array_map(fn (Usuario $usuario) => $usuario->nombreCompleto(), $doce
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
   <base href="<?= $root ?>" />
-  <title>
-  </title>
-  <link rel="stylesheet" type="text/css" href="recursos/1719944965_portada/styles.css" media="all" />
+  <title>SARCO | <?= $titulo ?></title>
+  <link rel="icon" href="recursos/imagenes/favicon.png" />
+  <link rel="stylesheet" href="recursos/1719944965_portada/styles.css" />
   <link rel="stylesheet" href="recursos/css/fuentes.css" />
   <style>
     .dancing-script {

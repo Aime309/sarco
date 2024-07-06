@@ -77,7 +77,8 @@ final readonly class ControladorDeBoletines {
 
   function imprimir(string $id): void {
     $boletin = $this->repositorio->buscar($id);
+    $titulo = 'Detalles de boletín';
 
-    App::render('paginas/boletines/detalles', compact('boletin'));
+    App::render('paginas/boletines/detalles', compact('boletin', 'titulo'));
   }
 }
