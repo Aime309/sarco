@@ -20,35 +20,14 @@ final readonly class ControladorDeBoletines {
   }
 
   function mostrarListado(): void {
-    $boletines = $this->pdo->query("
-      SELECT b.id, numero_inasistencias as inasistencias,
-      nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
-      descripcion_ambiente as descripcionAmbiente, recomendaciones,
-      b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
-      e.apellidos as apellidosEstudiante, e.cedula as cedulaEstudiante,
-      m.numero as momento, b.id_asignacion_sala as idAsignacion
-      FROM boletines b
-      JOIN estudiantes e
-      JOIN momentos m
-      ON b.id_estudiante = e.id
-      AND b.id_momento = m.id
-    ")->fetchAll(PDO::FETCH_CLASS, Boletin::class);
+    $boletines = $this->repositorioDeBoletines->todos();
 
     App::render('paginas/boletines/listado', compact('boletines'), 'pagina');
     App::render('plantillas/privada', ['titulo' => 'Boletines']);
   }
 
   function mostrarEdicion(string $id): void {
-    $boletin = $this->pdo->query("
-      SELECT b.id, numero_inasistencias as inasistencias,
-      nombre_proyecto as proyecto, descripcion_formacion as descripcionFormacion,
-      descripcion_ambiente as descripcionAmbiente, recomendaciones,
-      b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
-      e.apellidos as apellidosEstudiante, e.cedula as cedulaEstudiante,
-      m.numero as momento FROM boletines b JOIN estudiantes e
-      JOIN momentos m ON b.id_estudiante = e.id AND b.id_momento = m.id
-      WHERE b.id = '$id'
-    ")->fetchObject(Boletin::class);
+    $boletin = $this->repositorioDeBoletines->buscar($id);
 
     App::render('paginas/boletines/editar', compact('boletin'), 'pagina');
     App::render('plantillas/privada', ['titulo' => 'Editar boletín']);
@@ -80,7 +59,7 @@ final readonly class ControladorDeBoletines {
   }
 
   function imprimir(string $id): void {
-    $boletin = $this->repositorioDeBoletines->buscar($id);
+    $boletines = $this->repositorioDeBoletines->todosDelMismoPeriodoPorId($id);
     $directores = $this->repositorioDeUsuarios->todosPorRol(Rol::Director);
 
     $directoresActivos = array_filter(
@@ -92,7 +71,7 @@ final readonly class ControladorDeBoletines {
     $titulo = 'Detalles de boletín';
 
     App::render('paginas/boletines/detalles', compact(
-      'boletin',
+      'boletines',
       'titulo',
       'director'
     ));

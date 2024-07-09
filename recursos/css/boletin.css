@@ -54,6 +54,7 @@ img {
 .page__photo-placeholder {
   display: grid;
   place-content: center;
+  justify-content: stretch;
   border: medium solid black;
   min-height: 240px;
 }

@@ -29,6 +29,11 @@ final class Periodo extends Modelo implements Stringable {
     return $momento;
   }
 
+  /** @return Momento[] */
+  function momentos(): array {
+    return $this->momentos;
+  }
+
   function __toString(): string {
     return "$this->inicio-{$this->siguientePeriodo()}";
   }

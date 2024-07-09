@@ -13,7 +13,7 @@ final class Boletin extends Modelo {
   public readonly string $nombresEstudiante;
   public readonly string $apellidosEstudiante;
   public readonly string $cedulaEstudiante;
-  public readonly string $momento;
+  private ?Momento $momento;
   private ?Estudiante $estudiante = null;
 
   /** @var Usuario[] */
@@ -33,8 +33,16 @@ final class Boletin extends Modelo {
     return $this->estudiante;
   }
 
-  function asignarDocentes(Usuario ...$docentes): void {
+  function asignarDocentes(Usuario ...$docentes): self {
     $this->docentes = $docentes;
+
+    return $this;
+  }
+
+  function asignarMomento(Momento $momento): self {
+    $this->momento = $momento;
+
+    return $this;
   }
 
   /** @return Usuario[] */
@@ -52,7 +60,7 @@ final class Boletin extends Modelo {
     return false;
   }
 
-  function momento(): string {
-    return "Momento $this->momento";
+  function momento(): ?Momento {
+    return $this->momento;
   }
 }
