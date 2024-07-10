@@ -229,5 +229,10 @@ $lapsos = [
       <img class="page__recomendations-img page__recomendations-img--right" src="recursos/boletin/school-bus.png" />
       <img class="page__recomendations-img page__recomendations-img--left" src="recursos/boletin/family.png" />
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        window.print()
+      })
+    </script>
   </body>
 </html>
