@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Container\Container;
 use SARCO\App;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Boletin;
+use SARCO\Modelos\Momento;
+use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Usuario;
 use SARCO\Repositorios\RepositorioDeBoletines;
 use SARCO\Repositorios\RepositorioDeUsuarios;
@@ -112,6 +113,35 @@ function notificarSiLimiteDePeriodoExcedido(): callable {
       '/periodos/nuevo',
       '/periodos/nuevo/'
     ];
+
+    $ultimoMomento = null;
+
+    $ultimoPeriodo = bd()->query("
+      SELECT id, anio_inicio as inicio, fecha_registro as fechaRegistro
+      FROM periodos ORDER BY inicio DESC LIMIT 1
+    ")->fetchObject(Periodo::class) ?: null;
+
+    if ($ultimoPeriodo instanceof Periodo) {
+      $mesActual = (int) date('m');
+
+      $ultimoMomento = bd()->query("
+        SELECT id, numero, mes_inicio as mesInicio,
+        dia_inicio as diaInicio, fecha_registro as fechaRegistro,
+        id_periodo as idPeriodo
+        FROM momentos
+        WHERE idPeriodo = '{$ultimoPeriodo->id}'
+        AND mesInicio >= $mesActual
+        ORDER BY mesInicio ASC
+        LIMIT 1
+      ")->fetchObject(Momento::class);
+    }
+
+    if ($ultimoMomento === false) {
+      $ultimoMomento = null;
+    }
+
+    App::view()->set('ultimoPeriodo', $ultimoPeriodo);
+    App::view()->set('ultimoMomento', $ultimoMomento);
 
     $ultimoPeriodo = bd()->query('
       SELECT anio_inicio + 1 FROM periodos ORDER BY anio_inicio DESC

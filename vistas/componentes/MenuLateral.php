@@ -1,12 +1,16 @@
 <?php
 
 use flight\template\View;
+use SARCO\Modelos\Momento;
+use SARCO\Modelos\Periodo;
 use SARCO\Modelos\Usuario;
 
 assert($usuario instanceof Usuario);
 
 /**
  * @var View $vistas
+ * @var ?Periodo $ultimoPeriodo
+ * @var ?Momento $ultimoMomento
  * @var array{
  *   href: string,
  *   icono: string,
@@ -205,6 +209,9 @@ if ($usuario->esDirector()) {
       <figcaption class="roboto-medium text-center d-flex flex-column">
         <?= $usuario->nombreCompleto() ?>
         <small class="roboto-condensed-light"><?= $usuario->rol ?></small>
+        <time class="roboto-condensed-light">
+          <?= "$ultimoPeriodo - $ultimoMomento" ?>
+        </time>
       </figcaption>
     </figure>
     <div class="full-box nav-lateral-bar"></div>
