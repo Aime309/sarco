@@ -266,11 +266,20 @@ return function (Router $router): void {
         $salasAsignadas[] = $sala;
       }
 
+      $cantidadDeInscripciones = bd()->query("
+        SELECT COUNT(id) FROM inscripciones WHERE id_periodo = '$periodo->id'
+      ")->fetchColumn();
+
       $detalles['salas'] = $salas;
       $detalles['salasAsignadas'] = $salasAsignadas ?? [];
       $detalles['nuevosEstudiantes'] = $nuevosEstudiantes ?? [];
 
-      App::render('paginas/periodos/detalles', compact('periodo', 'detalles'), 'pagina');
+      App::render(
+        'paginas/periodos/detalles',
+        compact('periodo', 'detalles', 'cantidadDeInscripciones'),
+        'pagina'
+      );
+
       App::render('plantillas/privada', ['titulo' => "Periodo $periodo"]);
     });
 
