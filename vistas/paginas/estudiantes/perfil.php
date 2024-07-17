@@ -239,19 +239,19 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
                     </tr>
                     <tr>
                       <th>Proyecto:</th>
-                      <td><?= $boletin->proyecto ?></td>
+                      <td><?= mb_substr($boletin->proyecto, 0, 14) ?>...</td>
                     </tr>
                     <tr>
                       <th>Descripción de formación:</th>
-                      <td><?= $boletin->descripcionFormacion ?></td>
+                      <td><?= mb_substr($boletin->descripcionFormacion, 0, 14) ?>...</td>
                     </tr>
                     <tr>
                       <th>Descripción de ambiente:</th>
-                      <td><?= $boletin->descripcionAmbiente ?></td>
+                      <td><?= mb_substr($boletin->descripcionAmbiente, 0, 14) ?>...</td>
                     </tr>
                     <tr>
                       <th>Recomendaciones:</th>
-                      <td><?= $boletin->recomendaciones ?></td>
+                      <td><?= mb_substr($boletin->recomendaciones, 0, 14) ?>...</td>
                     </tr>
                   </table>
                 </div>
