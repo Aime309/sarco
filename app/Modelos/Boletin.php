@@ -13,6 +13,7 @@ final class Boletin extends Modelo {
   public readonly string $nombresEstudiante;
   public readonly string $apellidosEstudiante;
   public readonly string $cedulaEstudiante;
+  public readonly int $numeroMomento;
   private ?Momento $momento;
   private ?Estudiante $estudiante = null;
 
@@ -62,5 +63,11 @@ final class Boletin extends Modelo {
 
   function momento(): ?Momento {
     return $this->momento;
+  }
+
+  function __get(string $propiedad): mixed {
+    if ($propiedad === 'momento') {
+      return $this->numeroMomento;
+    }
   }
 }

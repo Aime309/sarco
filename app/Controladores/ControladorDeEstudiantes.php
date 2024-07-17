@@ -82,7 +82,7 @@ final readonly class ControladorDeEstudiantes {
         descripcion_ambiente as descripcionAmbiente, recomendaciones,
         b.fecha_registro as fechaRegistro, e.nombres as nombresEstudiante,
         e.apellidos as apellidosEstudiante, e.cedula as cedulaEstudiante,
-        m.numero as momento, b.id_asignacion_sala as idAsignacion
+        m.numero as numeroMomento, b.id_asignacion_sala as idAsignacion
         FROM boletines b
         JOIN estudiantes e
         JOIN momentos m
@@ -90,7 +90,7 @@ final readonly class ControladorDeEstudiantes {
         AND b.id_momento = m.id
         WHERE b.id_estudiante = '$estudiante->id'
         AND m.id_periodo = '{$inscripcion['id_periodo']}'
-        ORDER BY momento
+        ORDER BY numeroMomento
       ")->fetchAll(PDO::FETCH_CLASS, Boletin::class);
 
       $sala = bd()->query("
