@@ -17,6 +17,10 @@ $lapsos = [
   3 => 'TERCER LAPSO'
 ];
 
+function obtenerVeces(int $entrada): int {
+  return $entrada >= 0 ? $entrada : 0;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -178,7 +182,7 @@ $lapsos = [
             <div class="page__student-row">
               <span class="page__student-property">Nombre del proyecto:</span>
               <u class="page__student-value">
-                __<?= $boletin->proyecto . str_repeat('_', 30 - mb_strlen($boletin->proyecto) ?: 0) ?>
+                __<?= $boletin->proyecto . str_repeat('_', obtenerVeces(30 - mb_strlen($boletin->proyecto) ?: 0)) ?>
               </u>
             </div>
           <?php endif ?>
@@ -187,7 +191,7 @@ $lapsos = [
               Breve descripción: Formación personal, social y comunicación:
             </span>
             <u class="page__student-value">
-              <?= $boletin->descripcionFormacion . str_repeat('_', 155 - mb_strlen($boletin->descripcionFormacion) ?: 0) ?>
+              <?= $boletin->descripcionFormacion . str_repeat('_', obtenerVeces(155 - mb_strlen($boletin->descripcionFormacion) ?: 0)) ?>
             </u>
           </div>
           <br />
@@ -196,7 +200,7 @@ $lapsos = [
               Breve descripción: Relación entre los componentes del ambiente:
             </span>
             <u class="page__student-value">
-              <?= $boletin->descripcionAmbiente . str_repeat('_', 155 - mb_strlen($boletin->descripcionAmbiente) ?: 0) ?>
+              <?= $boletin->descripcionAmbiente . str_repeat('_', obtenerVeces(155 - mb_strlen($boletin->descripcionAmbiente) ?: 0)) ?>
             </u>
           </div>
           <br />
@@ -205,7 +209,7 @@ $lapsos = [
               Recomendaciones al representante:
             </span>
             <u class="page__student-value">
-              <?= $boletin->recomendaciones . str_repeat('_', 125 - mb_strlen($boletin->recomendaciones) ?: 0) ?>
+              <?= $boletin->recomendaciones . str_repeat('_', obtenerVeces(125 - mb_strlen($boletin->recomendaciones) ?: 0)) ?>
             </u>
           </div>
         </article>
