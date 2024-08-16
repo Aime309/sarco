@@ -72,7 +72,7 @@ $id = uniqid('input-password-');
 <?php if ($type === InputType::Password): ?>
   <div class="form-check px-4 mb-4 mostrar-clave" style="user-select: none">
     <input class="form-check-input" type="checkbox" id="<?= $id ?>">
-    <label class="form-check-label" for="<?= $id ?>">
+    <label for="<?= $id ?>" style="display: inline-block">
       Mostrar contraseña
     </label>
   </div>
