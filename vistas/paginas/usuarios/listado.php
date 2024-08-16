@@ -99,7 +99,7 @@ $usuarioAutenticado = $usuario;
               <?php endif ?>
             </td>
             <td>
-              <?php if ($usuarioAutenticado->esDirector()) : ?>
+              <?php if ($usuarioAutenticado->esDirector() || $usuarioAutenticado->esSecretario()) : ?>
                 <a href="./usuarios/<?= $usuarioIterado->cedula ?>/restablecer-clave" class="btn btn-secondary">
                   Restablecer contraseña
                 </a>

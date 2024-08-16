@@ -9,6 +9,7 @@ use SARCO\Modelos\Usuario;
  */
 
 $maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
+$usuarioAutenticado = $usuario;
 
 ?>
 
@@ -76,6 +77,7 @@ $maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
             <i class="fa fa-sort"></i>
           </th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -103,6 +105,13 @@ $maestros = (fn (Maestro ...$maestros) => $maestros)(...$maestros);
                     Activar
                   </a>
                 <?php endif ?>
+              <?php endif ?>
+            </td>
+            <td>
+              <?php if ($usuarioAutenticado->esDirector() || $usuarioAutenticado->esSecretario()) : ?>
+                <a href="./usuarios/<?= $maestroIterado->cedula ?>/restablecer-clave" class="btn btn-secondary">
+                  Restablecer contraseña
+                </a>
               <?php endif ?>
             </td>
           </tr>
