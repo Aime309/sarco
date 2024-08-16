@@ -5,6 +5,7 @@ assert(is_string($pagina));
 assert(is_string($root));
 
 scripts('recursos/js/alertas.js');
+scripts('recursos/js/contraseñas.js');
 
 $mensajes = [
   'error' => @$_SESSION['mensajes.error'],

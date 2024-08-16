@@ -17,7 +17,7 @@ use SARCO\Modelos\Usuario;
   </h1>
 </header>
 
-<form method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
+<form id="formulario-restablecer-clave" method="post" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <?php
 
   $vistas->render('componentes/Input', [
@@ -27,7 +27,8 @@ use SARCO\Modelos\Usuario;
     'placeholder' => 'Nueva contraseña',
     'type' => 'password',
     'pattern' => '(?=.*\d)(?=.*[A-ZÑ])(?=.*\W).{8,}',
-    'minlength' => 8
+    'minlength' => 8,
+    'value' => $_SESSION['datos.contraseñas']['nueva_clave'] ?? ''
   ]);
 
   $vistas->render('componentes/Input', [
@@ -36,7 +37,8 @@ use SARCO\Modelos\Usuario;
     'placeholder' => 'Confirmar contraseña',
     'type' => 'password',
     'pattern' => '(.+){8,}',
-    'minlength' => 8
+    'minlength' => 8,
+    'value' => $_SESSION['datos.contraseñas']['confirmar_clave'] ?? ''
   ]);
 
   echo '<div class="row">';
@@ -61,6 +63,10 @@ use SARCO\Modelos\Usuario;
 </form>
 
 <script>
+  document
+    .querySelector('#formulario-restablecer-clave')
+    .addEventListener('submit', evento => evento.preventDefault())
+
   async function preguntarSiConfirma(form, event) {
     const result = await Swal.fire({
       title: '¿Estás seguro que deseas restablecer la contraseña de <?= $usuario ?>?',

@@ -84,6 +84,7 @@ unset($_SESSION['mensajes.advertencia']);
   <script src="node_modules/noty/lib/noty.min.js"></script>
   <script src="recursos/js/alertas.js"></script>
   <script src="recursos/js/cerrar-sesion.js"></script>
+  <script src="recursos/js/contraseñas.js"></script>
   <script>
     const $loader = document.querySelector('.loader')
 

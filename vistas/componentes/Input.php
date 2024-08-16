@@ -37,6 +37,8 @@ $type = (isset($type) and is_string($type))
   ? InputType::from($type)
   : InputType::Text;
 
+$id = uniqid('input-password-');
+
 ?>
 
 <label
@@ -66,3 +68,12 @@ $type = (isset($type) and is_string($type))
   <span class="input-group__focus"></span>
   <span class="input-group__label"><?= $placeholder ?></span>
 </label>
+
+<?php if ($type === InputType::Password): ?>
+  <div class="form-check px-4 mb-4 mostrar-clave" style="user-select: none">
+    <input class="form-check-input" type="checkbox" id="<?= $id ?>">
+    <label class="form-check-label" for="<?= $id ?>">
+      Mostrar contraseña
+    </label>
+  </div>
+<?php endif ?>

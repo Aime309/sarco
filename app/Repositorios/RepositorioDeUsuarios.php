@@ -5,7 +5,6 @@ namespace SARCO\Repositorios;
 use PDO;
 use PDOException;
 use SARCO\Resultado;
-use SARCO\Enumeraciones\Genero;
 use SARCO\Enumeraciones\Rol;
 use SARCO\Modelos\Usuario;
 use Symfony\Component\Uid\UuidV4;
@@ -115,15 +114,30 @@ final readonly class RepositorioDeUsuarios {
    *   fecha_nacimiento: string,
    *   telefono: string,
    *   correo: string,
-   *   direccion: string
-   * } $datos
+   *   direccion: string,
+   *   clave: string
+   * } | Usuario $datos
    * @return Resultado<null>
    */
-  function actualizar(string $id, array $datos): Resultado {
+  function actualizar(string $id, array|Usuario $datos): Resultado {
+    if ($datos instanceof Usuario) {
+      $datos = [
+        'nombres' => $datos->nombres,
+        'apellidos' => $datos->apellidos,
+        'cedula' => $datos->cedula,
+        'fechaNacimiento' => $datos->fechaNacimiento,
+        'direccion' => $datos->direccion,
+        'telefono' => $datos->telefono,
+        'correo' => $datos->correo,
+        'clave' => $datos->clave
+      ];
+    }
+
     $sentencia = $this->pdo->prepare("
       UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos,
       cedula = :cedula, fecha_nacimiento = :fechaNacimiento,
-      direccion = :direccion, telefono = :telefono, correo = :correo
+      direccion = :direccion, telefono = :telefono, correo = :correo,
+      clave = :clave
       WHERE id = :id
     ");
 
@@ -136,7 +150,8 @@ final readonly class RepositorioDeUsuarios {
         ':fechaNacimiento' => $datos['fechaNacimiento'],
         ':direccion' => $datos['direccion'],
         ':telefono' => $datos['telefono'],
-        ':correo' => $datos['correo']
+        ':correo' => $datos['correo'],
+        ':clave' => $datos['clave']
       ]);
 
       return Resultado::exito(null);

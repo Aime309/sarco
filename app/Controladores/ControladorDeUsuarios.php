@@ -77,4 +77,35 @@ final readonly class ControladorDeUsuarios {
     App::render('paginas/usuarios/restablecer', compact('usuario'), 'pagina');
     App::render('plantillas/privada', ['titulo' => 'Restablecer contraseña']);
   }
+
+  function restablecerClave(int $cedula) {
+    $contraseñas = App::request()->data->getData();
+
+    if ($contraseñas['nueva_clave'] !== $contraseñas['confirmar_clave']) {
+      $this->redirigirConError('Ambas contraseñas deben coincidir');
+    }
+
+    $usuario = $this->repositorio->buscar($cedula);
+
+    if (!$usuario) {
+      $this->redirigirConError('Usuario no encontrado');
+    }
+
+    $usuario->cambiarClave($contraseñas['nueva_clave']);
+    $resultado = $this->repositorio->actualizar($usuario->id, $usuario);
+
+    if ($resultado->tuvoExito) {
+      $_SESSION['mensajes.exito'] = 'Contraseña actualizada exitósamente';
+      unset($_SESSION['datos.contraseñas']);
+      App::redirect('/usuarios');
+    } else {
+      $this->redirigirConError('Ha ocurrido un error, intente con otra contraseña');
+    }
+  }
+
+  private function redirigirConError(string $error) {
+    $_SESSION['mensajes.error'] = $error;
+    $_SESSION['datos.contraseñas'] = App::request()->data->getData();
+    App::redirect(App::request()->referrer);
+  }
 }

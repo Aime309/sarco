@@ -100,7 +100,7 @@ $usuarioAutenticado = $usuario;
             </td>
             <td>
               <?php if ($usuarioAutenticado->esDirector()) : ?>
-                <a href="./usuarios/<?= $usuarioAutenticado->cedula ?>/restablecer-clave" class="btn btn-secondary">
+                <a href="./usuarios/<?= $usuarioIterado->cedula ?>/restablecer-clave" class="btn btn-secondary">
                   Restablecer contraseña
                 </a>
               <?php endif ?>

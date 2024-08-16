@@ -40,6 +40,12 @@ class Usuario extends Persona {
     return $this->rol() === Rol::Secretario;
   }
 
+  function cambiarClave(string $clave): static {
+    $this->clave = password_hash($clave, PASSWORD_DEFAULT);
+
+    return $this;
+  }
+
   static function encriptar(string $clave): string {
     return password_hash($clave, PASSWORD_DEFAULT);
   }
