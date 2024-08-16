@@ -4,7 +4,7 @@ btnSalir.addEventListener('click', event => {
   event.preventDefault()
 
   Swal.fire({
-    title: 'Quieres salir del sistema?',
+    title: '¿Quieres salir del sistema?',
     text: 'La sesion actual se cerrara y saldras del sistema',
     icon: 'question',
     showCancelButton: true,

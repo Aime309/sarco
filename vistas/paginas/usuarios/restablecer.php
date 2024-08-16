@@ -43,8 +43,8 @@ use SARCO\Modelos\Usuario;
 
   $vistas->render('componentes/Boton', [
     'tipo' => 'submit',
-    'contenido' => 'Registrar',
-    'onclick' => 'this.form.checkValidity() && this.form.submit()',
+    'contenido' => 'Restablecer contraseña',
+    'onclick' => 'this.form.checkValidity() && preguntarSiConfirma(form, event)',
     'class' => 'col-md-7 mt-3 mr-md-2'
   ]);
 
@@ -59,3 +59,24 @@ use SARCO\Modelos\Usuario;
 
   ?>
 </form>
+
+<script>
+  async function preguntarSiConfirma(form, event) {
+    const result = await Swal.fire({
+      title: '¿Estás seguro que deseas restablecer la contraseña de <?= $usuario ?>?',
+      text: 'Esta acción es irreversible',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, restablecer',
+      cancelButtonText: 'No, cancelar'
+    })
+
+    if (result.value) {
+      form.submit()
+    } else {
+      event.preventDefault()
+    }
+  }
+</script>
