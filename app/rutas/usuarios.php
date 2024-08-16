@@ -23,5 +23,5 @@ return function (Router $router): void {
     $router->get('/desactivar', [ControladorDeUsuarios::class, 'desactivar']);
     $router->get('/restablecer-clave', [ControladorDeUsuarios::class, 'mostrarFormularioDeRestablecerClave']);
     $router->post('/restablecer-clave', [ControladorDeUsuarios::class, 'restablecerClave']);
-  }, [autorizar(Rol::Director)]);
+  }, [autorizar(Rol::Director, Rol::Secretario)]);
 };
