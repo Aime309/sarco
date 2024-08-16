@@ -233,10 +233,10 @@ function obtenerVeces(int $entrada): int {
         </footer>
       </div>
     <?php endforeach ?>
-    <!-- <script>
+    <script>
       document.addEventListener('DOMContentLoaded', () => {
         window.print()
       })
-    </script> -->
+    </script>
   </body>
 </html>
