@@ -34,7 +34,7 @@ $lapsos = [
     <div class="page">
       <header class="page__header-container">
         <div class="page__header-img">
-          <img src="recursos/boletin/1719944965_portada-3.png" width="84" />
+          <img src="recursos/boletin/1719944965_portada-3.png" width="60" />
           <img src="recursos/boletin/1719944965_portada-4.png" />
         </div>
         <h2 class="page__header">
@@ -48,9 +48,9 @@ $lapsos = [
       </header>
       <div class="page__photo-container">
         <picture class="page__photo-placeholder">
-          <img src="recursos/imagenes/logo.jpg" width="100%" />
+          <img src="recursos/imagenes/logo.jpg" height="120" />
         </picture>
-        <img src="recursos/boletin/1719944965_portada-7.png" height="300" />
+        <img src="recursos/boletin/1719944965_portada-7.png" height="200" />
       </div>
       <img class="page__title" src="recursos/boletin/titulo.png" />
       <article class="page__student-data">
@@ -100,77 +100,6 @@ $lapsos = [
         </div>
       </article>
     </div>
-    <?php foreach ($boletines as $index => $boletin) : ?>
-      <div class="page page--3-rows page--padding">
-        <h2 class="page__title">MIS PROGRESOS DURANTE EL <?= $lapsos[$boletin->momento()->numero] ?></h2>
-        <article class="page__descriptions">
-          <div class="page__student-row">
-            <span class="page__student-property">Estatura del niño(a):</span>
-            <u class="page__student-value">__________</u>
-            <span class="page__student-property">Peso:</span>
-            <u class="page__student-value">_________</u>
-          </div>
-          <div class="page__student-row">
-            <span class="page__student-property">N° de inasistencias del niño(a):</span>
-            <u class="page__student-value">
-              __<?= $boletin->inasistencias ?>____
-            </u>
-          </div>
-          <?php if ($boletin->momento()->numero !== 1) : ?>
-            <div class="page__student-row">
-              <span class="page__student-property">Nombre del proyecto:</span>
-              <u class="page__student-value">
-                __<?= $boletin->proyecto ?>____
-              </u>
-            </div>
-          <?php endif ?>
-          <div class="page__student-row">
-            <span class="page__student-property">
-              Breve descripción: Formación personal, social y comunicación:
-            </span>
-            <u class="page__student-value">
-              <?= $boletin->descripcionFormacion . str_repeat('_', 175 - mb_strlen($boletin->descripcionFormacion) ?: 0) ?>
-            </u>
-          </div>
-          <br />
-          <div class="page__student-row">
-            <span class="page__student-property">
-              Breve descripción: Relación entre los componentes del ambiente:
-            </span>
-            <u class="page__student-value">
-              <?= $boletin->descripcionAmbiente . str_repeat('_', 170 - mb_strlen($boletin->descripcionAmbiente) ?: 0) ?>
-            </u>
-          </div>
-          <br />
-          <div class="page__student-row">
-            <span class="page__student-property">
-              Recomendaciones al representante:
-            </span>
-            <u class="page__student-value">
-              <?= $boletin->recomendaciones . str_repeat('_', 115 - mb_strlen($boletin->recomendaciones) ?: 0) ?>
-            </u>
-          </div>
-        </article>
-        <footer class="page__signatures">
-          <div class="page__signature">
-            <hr />
-            <span>Docente</span>
-          </div>
-          <div class="page__signature">
-            <hr />
-            <span>Director(a)</span>
-          </div>
-          <div class="page__signature">
-            <hr />
-            <span>Docente</span>
-          </div>
-          <div class="page__signature">
-            <hr />
-            <span>Representante</span>
-          </div>
-        </footer>
-      </div>
-    <?php endforeach ?>
     <div class="page page--padding">
       <h2 class="page__title">
         CONSTITUCIÓN DE LA REPÚBLICA BOLIVARIANA DE VENEZUELA
@@ -229,10 +158,81 @@ $lapsos = [
       <img class="page__recomendations-img page__recomendations-img--right" src="recursos/boletin/school-bus.png" />
       <img class="page__recomendations-img page__recomendations-img--left" src="recursos/boletin/family.png" />
     </div>
-    <script>
+    <?php foreach ($boletines as $index => $boletin) : ?>
+      <div class="page page--3-rows page--padding">
+        <h2 class="page__title">MIS PROGRESOS DURANTE EL <?= $lapsos[$boletin->momento()->numero] ?></h2>
+        <article class="page__descriptions">
+          <div class="page__student-row">
+            <span class="page__student-property">Estatura del niño(a):</span>
+            <u class="page__student-value">__________</u>
+            <span class="page__student-property">Peso:</span>
+            <u class="page__student-value">_________</u>
+          </div>
+          <div class="page__student-row">
+            <span class="page__student-property">N° de inasistencias del niño(a):</span>
+            <u class="page__student-value">
+              _<?= $boletin->inasistencias ?>_
+            </u>
+          </div>
+          <?php if ($boletin->momento()->numero !== 1) : ?>
+            <div class="page__student-row">
+              <span class="page__student-property">Nombre del proyecto:</span>
+              <u class="page__student-value">
+                __<?= $boletin->proyecto . str_repeat('_', 30 - mb_strlen($boletin->proyecto) ?: 0) ?>
+              </u>
+            </div>
+          <?php endif ?>
+          <div class="page__student-row">
+            <span class="page__student-property">
+              Breve descripción: Formación personal, social y comunicación:
+            </span>
+            <u class="page__student-value">
+              <?= $boletin->descripcionFormacion . str_repeat('_', 155 - mb_strlen($boletin->descripcionFormacion) ?: 0) ?>
+            </u>
+          </div>
+          <br />
+          <div class="page__student-row">
+            <span class="page__student-property">
+              Breve descripción: Relación entre los componentes del ambiente:
+            </span>
+            <u class="page__student-value">
+              <?= $boletin->descripcionAmbiente . str_repeat('_', 155 - mb_strlen($boletin->descripcionAmbiente) ?: 0) ?>
+            </u>
+          </div>
+          <br />
+          <div class="page__student-row">
+            <span class="page__student-property">
+              Recomendaciones al representante:
+            </span>
+            <u class="page__student-value">
+              <?= $boletin->recomendaciones . str_repeat('_', 125 - mb_strlen($boletin->recomendaciones) ?: 0) ?>
+            </u>
+          </div>
+        </article>
+        <footer class="page__signatures">
+          <div class="page__signature">
+            <hr />
+            <span>Docente</span>
+          </div>
+          <div class="page__signature">
+            <hr />
+            <span>Director(a)</span>
+          </div>
+          <div class="page__signature">
+            <hr />
+            <span>Docente</span>
+          </div>
+          <div class="page__signature">
+            <hr />
+            <span>Representante</span>
+          </div>
+        </footer>
+      </div>
+    <?php endforeach ?>
+    <!-- <script>
       document.addEventListener('DOMContentLoaded', () => {
         window.print()
       })
-    </script>
+    </script> -->
   </body>
 </html>
