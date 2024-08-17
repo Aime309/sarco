@@ -67,7 +67,7 @@ img {
 }
 
 .page__header-img {
-  width: 10em;
+  width: 8em;
 }
 
 .page__photo-container {
@@ -108,10 +108,15 @@ img {
 .page__student-data {
   border: thin solid black;
   padding: 1em;
+  max-height: 276px;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
 }
 
 .page__student-row {
   display: block;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
 }
 
 .page__student-property {
@@ -124,6 +129,19 @@ img {
   font-size: 1.25em;
   line-break: anywhere;
   word-break: break-all;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+}
+
+.page--3-rows .page__descriptions {
+  display: grid;
+  grid-template-rows: 2em 2em 4em repeat(3, 125px);
+  place-content: start;
+  gap: 1em;
+}
+
+.page__student-value--fixed {
+  display: block;
 }
 
 .page__signatures {

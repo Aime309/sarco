@@ -181,35 +181,35 @@ function obtenerVeces(int $entrada): int {
           <?php if ($boletin->momento()->numero !== 1) : ?>
             <div class="page__student-row">
               <span class="page__student-property">Nombre del proyecto:</span>
-              <u class="page__student-value">
-                __<?= $boletin->proyecto . str_repeat('_', obtenerVeces(30 - mb_strlen($boletin->proyecto) ?: 0)) ?>
+              <u class="page__student-value page__student-value--fixed">
+                __<?= $boletin->proyecto . str_repeat('_', obtenerVeces(100 - mb_strlen($boletin->proyecto) ?: 0)) ?>
               </u>
             </div>
+          <?php else : ?>
+            <div></div>
           <?php endif ?>
           <div class="page__student-row">
             <span class="page__student-property">
               Breve descripción: Formación personal, social y comunicación:
             </span>
-            <u class="page__student-value">
-              <?= $boletin->descripcionFormacion . str_repeat('_', obtenerVeces(155 - mb_strlen($boletin->descripcionFormacion) ?: 0)) ?>
+            <u class="page__student-value page__student-value--fixed">
+              <?= $boletin->descripcionFormacion . str_repeat('_', obtenerVeces(200 - mb_strlen($boletin->descripcionFormacion) ?: 0)) ?>
             </u>
           </div>
-          <br />
           <div class="page__student-row">
             <span class="page__student-property">
               Breve descripción: Relación entre los componentes del ambiente:
             </span>
-            <u class="page__student-value">
-              <?= $boletin->descripcionAmbiente . str_repeat('_', obtenerVeces(155 - mb_strlen($boletin->descripcionAmbiente) ?: 0)) ?>
+            <u class="page__student-value page__student-value--fixed">
+              <?= $boletin->descripcionAmbiente . str_repeat('_', obtenerVeces(200 - mb_strlen($boletin->descripcionAmbiente) ?: 0)) ?>
             </u>
           </div>
-          <br />
           <div class="page__student-row">
             <span class="page__student-property">
               Recomendaciones al representante:
             </span>
-            <u class="page__student-value">
-              <?= $boletin->recomendaciones . str_repeat('_', obtenerVeces(125 - mb_strlen($boletin->recomendaciones) ?: 0)) ?>
+            <u class="page__student-value page__student-value--fixed">
+              <?= $boletin->recomendaciones . str_repeat('_', obtenerVeces(200 - mb_strlen($boletin->recomendaciones) ?: 0)) ?>
             </u>
           </div>
         </article>
@@ -235,7 +235,7 @@ function obtenerVeces(int $entrada): int {
     <?php endforeach ?>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        window.print()
+        // window.print()
       })
     </script>
   </body>
