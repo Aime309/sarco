@@ -1323,4 +1323,32 @@ App::group('/', function (Router $router): void {
 
     return;
   }
+}, function (): void {
+  $excepciones = [
+    '/periodos/nuevo',
+    '/periodos/nuevo/'
+  ];
+
+  $ultimoPeriodo = bd()->query('
+    SELECT anio_inicio + 1 FROM periodos ORDER BY anio_inicio DESC
+    LIMIT 1
+  ')->fetchColumn();
+
+  $fechaActual = date('Y-m-d');
+  $fechaLimite = "$ultimoPeriodo-08-01";
+  $fechaPreLimite = "$ultimoPeriodo-07-15";
+
+  if ($fechaActual >= $fechaLimite) {
+    $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
+
+    if (!in_array(App::request()->url, $excepciones)) {
+      App::redirect('/periodos/nuevo');
+    }
+
+    return;
+  }
+
+  if ($fechaActual >= $fechaPreLimite) {
+    $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
+  }
 }]);

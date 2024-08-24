@@ -14,4 +14,11 @@ if (mensajes.error) {
     theme,
     timeout: 3000
   }).show()
+} else if (mensajes.advertencia) {
+  new Noty({
+    text: `<span style="margin-right: 1em">⚠️</span> ${mensajes.advertencia}`,
+    type: 'warning',
+    theme,
+    timeout: 3000
+  }).show()
 }

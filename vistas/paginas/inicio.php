@@ -18,12 +18,6 @@ $contadores = [];
 
 if (!$usuario->esDocente()) {
   $contadores[] = [
-    'href' => './salas/asignar',
-    'title' => 'Asignar sala',
-    'icon' => '<i class="fas fa-pen-to-square fa-fw"></i>'
-  ];
-
-  $contadores[] = [
     'href' => './usuarios',
     'title' => 'Usuarios',
     'icon' => '<i class="fas fa-users fa-fw"></i>',
@@ -40,31 +34,13 @@ if (!$usuario->esDocente()) {
   ];
 }
 
-$contadores += [
-  [
-    'href' => './estudiantes',
-    'title' => 'Estudiantes',
-    'icon' => '<i class="fas fa-graduation-cap fa-fw"></i>',
-    'footer' => "$cantidadDeEstudiantes inscrito" . (
-      $cantidadDeEstudiantes > 1 ? 's' : ''
-    )
-  ],
-  [
-    'href' => './representantes',
-    'title' => 'Representantes',
-    'icon' => '<i class="fas fa-people-roof fa-fw"></i>',
-    'footer' => "$cantidadDeRepresentantes registrado" . (
-      $cantidadDeRepresentantes > 1 ? 's' : ''
-    )
-  ],
-  [
-    'href' => './maestros',
-    'title' => 'Maestros',
-    'icon' => '<i class="fas fa-person-chalkboard fa-fw"></i>',
-    'footer' => "$cantidadDeMaestros registrado" . (
-      $cantidadDeMaestros > 1 ? 's' : ''
-    )
-  ],
+$contadores[] = [
+  'href' => './estudiantes',
+  'title' => 'Estudiantes',
+  'icon' => '<i class="fas fa-graduation-cap fa-fw"></i>',
+  'footer' => "$cantidadDeEstudiantes inscrito" . (
+    $cantidadDeEstudiantes > 1 ? 's' : ''
+  )
 ];
 
 $fechaActual = Date::now()->format('l j \d\e F');

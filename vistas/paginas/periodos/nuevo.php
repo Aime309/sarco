@@ -12,12 +12,29 @@ $siguienteAño = $ultimoAño + 1;
 ?>
 
 <header class="full-box page-header">
-  <h1 class="text-left">
+  <h3 class="text-left">
     <i class="fab fa-dashcube fa-fw"></i>
     Aperturar período
-  </h1>
+  </h3>
   <p class="text-justify"></p>
 </header>
+
+<div class="container-fluid">
+  <ul class="full-box list-unstyled page-nav-tabs">
+    <li>
+      <a class="active" href="./periodos/nuevo">
+        <i class="fas fa-plus fa-fw"></i>
+        &nbsp; Aperturar período
+      </a>
+    </li>
+    <li>
+      <a href="./periodos/">
+        <i class="fas fa-clipboard-list fa-fw"></i>
+        &nbsp; Lista de períodos
+      </a>
+    </li>
+  </ul>
+</div>
 
 <form method="post" action="./periodos" class="form form--bordered form--with-validation form--with-padding form--threequarter form--centered">
   <?php

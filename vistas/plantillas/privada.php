@@ -11,11 +11,13 @@ assert($usuario instanceof Usuario);
 
 $mensajes = [
   'error' => @$_SESSION['mensajes.error'],
-  'exito' => @$_SESSION['mensajes.exito']
+  'exito' => @$_SESSION['mensajes.exito'],
+  'advertencia' => @$_SESSION['mensajes.advertencia'],
 ];
 
 unset($_SESSION['mensajes.error']);
 unset($_SESSION['mensajes.exito']);
+unset($_SESSION['mensajes.advertencia']);
 
 scripts('recursos/js/alertas.js');
 scripts('recursos/js/cerrar-sesion.js');
