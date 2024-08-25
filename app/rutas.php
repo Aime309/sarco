@@ -124,6 +124,7 @@ App::group('/api', function (Router $router): void {
 App::route('GET /salir', function (): void {
   unset($_SESSION['usuario.id']);
   unset($_SESSION['usuario.recordar']);
+
   App::redirect('/');
 });
 

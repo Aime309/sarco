@@ -1,6 +1,6 @@
 Sistema:
-  ☐ Presenta autenticación de usuarios
-  ☐ El sistema Autoriza los usuarios (inicia sesión según privilegio)
+  ✔ Presenta autenticación de usuarios @done (25/08/2024 17:46:32)
+  ✔ El sistema Autoriza los usuarios (inicia sesión según privilegio) @done (25/08/2024 17:47:24)
   ☐ Permite Insertar registros a la base de datos desde los módulos
   ☐ Permite consultar datos registrados
   ☐ Se pueden modificar los registros
@@ -18,5 +18,5 @@ Sistema:
   ☐ Añadir la búsqueda de estudiante
   ☐ Listar y editar los boletines asociados al docente autenticado
   ☐ Añadir la acción de eliminar registros que no hayan sido asignados
-  ☐ Arreglar la redirección cuando se excede el límite de un período
-  ☐ Redirigir a la apertura de período cuando no haya períodos aperturados
+  ✔ Arreglar la redirección cuando se excede el límite de un período @done (25/08/2024 17:44:12)
+  ✔ Redirigir a la apertura de período cuando no haya períodos aperturados @done (25/08/2024 17:46:24)

@@ -83,22 +83,30 @@ function notificarSiLimiteDePeriodoExcedido(): callable {
     ];
 
     $ultimoPeriodo = bd()->query('
-    SELECT anio_inicio + 1 FROM periodos ORDER BY anio_inicio DESC
-    LIMIT 1
-  ')->fetchColumn();
+      SELECT anio_inicio + 1 FROM periodos ORDER BY anio_inicio DESC
+      LIMIT 1
+    ')->fetchColumn();
+
+    $usuarioAutenticado = App::view()->get('usuario');
+    assert($usuarioAutenticado instanceof Usuario);
 
     $fechaActual = date('Y-m-d');
     $fechaLimite = "$ultimoPeriodo-08-01";
     $fechaPreLimite = "$ultimoPeriodo-07-15";
 
     if ($fechaActual >= $fechaLimite) {
-      $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
+      if ($usuarioAutenticado->esDirector()) {
+        $_SESSION['mensajes.advertencia'] = "Período $ultimoPeriodo excedido, debe aperturar un nuevo período escolar";
 
-      if (!in_array(App::request()->url, $excepciones)) {
-        App::redirect('/periodos/nuevo');
+        if (!in_array(App::request()->url, $excepciones)) {
+          App::redirect('/periodos/nuevo');
+        }
+
+        return;
       }
 
-      return;
+      $_SESSION['mensajes.error'] = "Período $ultimoPeriodo excedido, por favor consulte con el director para la apertura de un nuevo período";
+      exit(App::redirect('/salir'));
     }
 
     if ($fechaActual >= $fechaPreLimite) {
