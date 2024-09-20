@@ -58,7 +58,7 @@ $boletines = (fn(Boletin ...$boletines) => $boletines)(...$boletines);
             <td><?= $boletin->fechaRegistro() ?></td>
             <td>
               <a href="./estudiantes/boletines/<?= $boletin->id ?>/editar" class="btn btn-success">
-                Editar
+                Llenar boletín
               </a>
             </td>
           </tr>

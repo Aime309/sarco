@@ -17,7 +17,7 @@ use SARCO\Modelos\Usuario;
  * }> $informacionAcademica
  *
  * @var Estudiante $estudiante
-*/
+ */
 
 assert($vistas instanceof View);
 
@@ -227,7 +227,7 @@ $periodoSeleccionado = (string) max(array_keys($informacionAcademica));
                     <caption class="h3 d-flex justify-content-between flex-col flex-md-row" style="caption-side: top">
                       <span>Momento <?= $boletin->momento ?></span>
                       <a href="./estudiantes/boletines/<?= $boletin->id ?>/editar" class="btn btn-success">
-                        Editar
+                        Llenar boletín
                       </a>
                       <a href="./estudiantes/boletines/<?= $boletin->id ?>" class="btn btn-outline">
                         Imprimir
