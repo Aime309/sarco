@@ -1,7 +1,7 @@
 Sistema:
   ✔ Presenta autenticación de usuarios @done (25/08/2024 17:46:32)
   ✔ El sistema Autoriza los usuarios (inicia sesión según privilegio) @done (25/08/2024 17:47:24)
-  ☐ Permite Insertar registros a la base de datos desde los módulos
+  ☐ Permite insertar registros a la base de datos desde los módulos
   ☐ Permite consultar datos registrados
   ☐ Se pueden modificar los registros
   ✔ Se pueden eliminar los registros @done (26/05/2024 12:19:24)
@@ -76,3 +76,4 @@ Lista de Sugerencias:
   ☐ Agregar modificar claves en administradores.
   ✔ Eliminar menú maestro de docente. @done (01/07/2024 14:31:32)
   ✔ Sólo dejar estudiantes, representantes y boletines en el usuario docente. @done (01/07/2024 14:31:33)
+  ☐ Destacar los estudiantes de X maestro, inhabilitando acciones para el resto.
