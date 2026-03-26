@@ -5,7 +5,7 @@
     "ext-pdo_sqlite": "*",
     "symfony/dotenv": "^7.0",
     "illuminate/container": "^11.5",
-    "flightphp/core": "^3.10",
+    "flightphp/core": "v4.x-dev",
     "jenssegers/date": "^4.0",
     "symfony/uid": "^7.0"
   },
