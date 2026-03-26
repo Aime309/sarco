@@ -157,16 +157,16 @@
     },
     {
       "name": "illuminate/container",
-      "version": "v11.5.0",
+      "version": "v11.51.0",
       "source": {
         "type": "git",
         "url": "https://github.com/illuminate/container.git",
-        "reference": "af979ecfd6dfa6583eae5dfe2e9a8840358f4ca7"
+        "reference": "79bf9149ad7ddd7e14326ebcdd41197d2c4ee36a"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/illuminate/container/zipball/af979ecfd6dfa6583eae5dfe2e9a8840358f4ca7",
-        "reference": "af979ecfd6dfa6583eae5dfe2e9a8840358f4ca7",
+        "url": "https://api.github.com/repos/illuminate/container/zipball/79bf9149ad7ddd7e14326ebcdd41197d2c4ee36a",
+        "reference": "79bf9149ad7ddd7e14326ebcdd41197d2c4ee36a",
         "shasum": ""
       },
       "require": {
@@ -204,7 +204,7 @@
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
       },
-      "time": "2024-04-04T17:36:49+00:00"
+      "time": "2025-03-24T11:54:20+00:00"
     },
     {
       "name": "illuminate/contracts",
@@ -277,16 +277,16 @@
       },
       "type": "library",
       "extra": {
-        "branch-alias": {
-          "dev-master": "3.1-dev"
-        },
         "laravel": {
-          "providers": [
-            "Jenssegers\\Date\\DateServiceProvider"
-          ],
           "aliases": {
             "Date": "Jenssegers\\Date\\Date"
-          }
+          },
+          "providers": [
+            "Jenssegers\\Date\\DateServiceProvider"
+          ]
+        },
+        "branch-alias": {
+          "dev-master": "3.1-dev"
         }
       },
       "autoload": {
