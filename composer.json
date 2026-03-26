@@ -3,11 +3,11 @@
     "php": ">=8.2",
     "ext-sqlite3": "*",
     "ext-pdo_sqlite": "*",
-    "symfony/dotenv": "^7.0",
-    "illuminate/container": "^11.5",
+    "symfony/dotenv": "^7.4",
+    "illuminate/container": "^12.56",
     "flightphp/core": "v4.x-dev",
     "jenssegers/date": "^4.0",
-    "symfony/uid": "^7.0"
+    "symfony/uid": "^7.4"
   },
   "scripts": {
     "post-install-cmd": [
@@ -18,13 +18,12 @@
   "autoload": {
     "psr-4": {
       "SARCO\\": [
-        "app",
-        "src"
+        "app"
       ]
     }
   },
   "require-dev": {
-    "filp/whoops": "^2.15",
-    "symfony/var-dumper": "^7.0"
+    "filp/whoops": "^2.18",
+    "symfony/var-dumper": "^7.4"
   }
 }
