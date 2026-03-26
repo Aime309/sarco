@@ -16,9 +16,10 @@
     "translate_tabs_to_spaces": true,
     "tab_size": 2,
     "detect_indentation": true,
-    "trim_automatic_white_space": true,
+    "trim_trailing_white_space_on_save": "not_on_caret",
     "ensure_newline_at_eof_on_save": true,
     "default_line_ending": "unix",
+    "default_encoding": "UTF-8",
     "rulers": [
       80
     ],
