@@ -6,6 +6,13 @@
     }
   ],
   "settings": {
+    "SublimeLinter.linters.oxlint.disable": true,
+    "SublimeLinter.linters.ecs.disable": true,
+    "SublimeLinter.linters.phpcs.disable": true,
+    "SublimeLinter.linters.phpcsfixer.disable": true,
+    "SublimeLinter.linters.phpmd.disable": true,
+    "SublimeLinter.linters.rector.disable": true,
+    "SublimeLinter.linters.phpstan.disable": true,
     "translate_tabs_to_spaces": true,
     "tab_size": 2,
     "detect_indentation": true,
